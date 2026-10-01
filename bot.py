@@ -14,7 +14,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(reply_text)
 
 if __name__ == '__main__':
-    TOKEN = "8904241919:AAF4zd42fM_TmKMsgec6T7D_Dkkeqshwzkg"
+    TOKEN ="8904241919:AAF4zd42fM_TmkM5gac6T7D_Dkkegshwzkg"
     app = ApplicationBuilder().token(TOKEN).build()
     app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
     print("Bot ishga tushdi...")
