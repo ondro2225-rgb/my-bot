@@ -1,0 +1,21 @@
+import logging
+from telegram import Update
+from telegram.ext import ApplicationBuilder, ContextTypes, MessageHandler, filters
+
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+)
+
+async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_text = update.message.text
+    # Sun'iy intellekt uslubidagi javob strukturasi
+    reply_text = f"🤖 Sun'iy intellekt javobi:\nSiz yozdingiz: «{user_text}»\n\n(Bu yerga kelgusida ChatGPT yoki boshqa AI xizmatlarini ulab, haqiqiy aqlli javoblar olishingiz mum
+    await update.message.reply_text(reply_text)
+
+if __name__ == '__main__':
+    TOKEN = "8904241919:AAF4zd42fM_TmKMsgec6T7D_Dkkeqshwzkg"
+    app = ApplicationBuilder().token(TOKEN).build()
+    app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
+    print("Bot ishga tushdi...")
+    app.run_polling()
