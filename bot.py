@@ -10,7 +10,7 @@ logging.basicConfig(
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_text = update.message.text
     # Sun'iy intellekt uslubidagi javob strukturasi
-    reply_text = f"🤖 Sun'iy intellekt javobi:\nSiz yozdingiz: «{user_text}»\n\n(Bu yerga kelgusida ChatGPT yoki boshqa AI xizmatlarini ulab, haqiqiy aqlli javoblar olishingiz mum
+    reply_text = f"Sun'iy intellekt javobi: Siz yozdingiz: {user_text}"
     await update.message.reply_text(reply_text)
 
 if __name__ == '__main__':
