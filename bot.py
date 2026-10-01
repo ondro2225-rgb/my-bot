@@ -1,21 +1,32 @@
-import logging
+import os
 from telegram import Update
-from telegram.ext import ApplicationBuilder, ContextTypes, MessageHandler, filters
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
 
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
-)
+# Tokenni Render muhit o'zgaruvchisidan olish
+TOKEN = os.environ.get("BOT_TOKEN")
 
-async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_text = update.message.text
-    # Sun'iy intellekt uslubidagi javob strukturasi
-    reply_text = f"Sun'iy intellekt javobi: Siz yozdingiz: {user_text}"
-    await update.message.reply_text(reply_text)
-if __name__ == '__main__':
-    import os
-    TOKEN = os.environ.get("BOT_TOKEN")
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Salom! Botingiz muvaffaqiyatli ishga tushdi va ishlayapti!")
+
+async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    text = update.message.text
+    await update.message.reply_text(f"Siz yozdingiz: {text}")
+
+def main():
+    if not TOKEN:
+        print("Xatolik: BOT_TOKEN topilmadi!")
+        return
+
     app = ApplicationBuilder().token(TOKEN).build()
-    app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
+
+    # /start buyrug'i uchun handler
+    app.add_handler(CommandHandler("start", start))
+    
+    # Oddiy matnli xabarlarga javob berish uchun handler
+    app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), echo))
+
     print("Bot ishga tushdi...")
     app.run_polling()
+
+if __name__ == "__main__":
+    main()
