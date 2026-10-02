@@ -12,26 +12,18 @@ if api_key:
     try:
         genai.configure(api_key=api_key)
         
-        # Mavjud modelni avtomatik topamiz
-        available_models = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
+        # Eng so'nggi tavsiya etilgan modelni ishlatamiz
+        model = genai.GenerativeModel('gemini-3.8-flash')
         
-        if available_models:
-            # Birinchi topilgan mos modelni tanlaymiz
-            selected_model = available_models[0].replace("models/", "")
-            model = genai.GenerativeModel(selected_model)
-            
-            user_prompt = st.text_input("Savolingizni yozing:")
-            
-            if st.button("Javob olish") and user_prompt:
-                with st.spinner("Sun'iy intellekt o'ylamoqda..."):
-                    response = model.generate_content(user_prompt)
-                    st.success("Javob:")
-                    st.write(response.text)
-        else:
-            st.error("Sizning API kalitingiz uchun mos modellar topilmadi.")
+        user_prompt = st.text_input("Savolingizni yozing:")
+        
+        if st.button("Javob olish") and user_prompt:
+            with st.spinner("Sun'iy intellekt o'ylamoqda..."):
+                response = model.generate_content(user_prompt)
+                st.success("Javob:")
+                st.write(response.text)
                 
     except Exception as e:
         st.error(f"Xatolik yuz berdi: {e}")
 else:
     st.info("Iltimos, saytdan foydalanish uchun o'zingizning Google AI Studio API kalitingizni kiriting.")
-    
