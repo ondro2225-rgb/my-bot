@@ -14,7 +14,8 @@ if api_key:
     try:
         # API kalitni sozlaymiz
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-pro')
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        
         
         # Foydalanuvchidan savol qabul qilish
         user_prompt = st.text_input("Savolingizni yozing:")
