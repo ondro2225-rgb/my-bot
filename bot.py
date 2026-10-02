@@ -35,14 +35,13 @@ def run_flask():
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_message = update.message.text
     try:
-        # Gemini AI'dan javob olish
+        # Gemini AI'dan javob olish (model nomi yangilandi)
         response = ai_client.models.generate_content(
-            model='gemini-1.5-flash',
+            model='gemini-2.0-flash',
             contents=user_message,
         )
         await update.message.reply_text(response.text)
     except Exception as e:
-        # Xatolik chiqsa, sababini to'g'ridan-to'g'ri Telegram'ga yozadi
         await update.message.reply_text(f"Xatolik yuz berdi: {str(e)}")
 
 def main():
