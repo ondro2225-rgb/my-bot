@@ -42,10 +42,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         await update.message.reply_text(response.text)
     except Exception as e:
-        await update.message.reply_text("Kechirasiz, javob olishda xatolik yuz berdi.")
+        # Xatolik chiqsa, sababini to'g'ridan-to'g'ri Telegram'ga yozadi
+        await update.message.reply_text(f"Xatolik yuz berdi: {str(e)}")
 
 def main():
-    # Flask'ni alohida oqimda (thread) ishga tushiramiz
+    # Flask'ni alohida oqimda ishga tushiramiz
     flask_thread = threading.Thread(target=run_flask)
     flask_thread.daemon = True
     flask_thread.start()
