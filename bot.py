@@ -3,7 +3,7 @@ import threading
 from flask import Flask
 from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, MessageHandler, filters
-from google import genai
+import google.generativeai as genai
 
 # Tokenlarni tekshirish
 BOT_TOKEN = os.getenv("BOT_TOKEN")
@@ -17,8 +17,9 @@ if not GEMINI_API_KEY:
     print("Xatolik: GEMINI_API_KEY topilmadi!")
     exit(1)
 
-# Google GenAI mijozini sozlash
-ai_client = genai.Client(api_key=GEMINI_API_KEY)
+# Gemini API ni sozlash
+genai.configure(api_key=GEMINI_API_KEY)
+model = genai.GenerativeModel('gemini-1.5-flash')
 
 # Flask server (Render port talabini qondirish uchun)
 app = Flask(__name__)
@@ -35,11 +36,7 @@ def run_flask():
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_message = update.message.text
     try:
-        # Gemini AI'dan javob olish (model nomi yangilandi)
-        response = ai_client.models.generate_content(
-            model='gemini-2.0-flash',
-            contents=user_message,
-        )
+        response = model.generate_content(user_message)
         await update.message.reply_text(response.text)
     except Exception as e:
         await update.message.reply_text(f"Xatolik yuz berdi: {str(e)}")
