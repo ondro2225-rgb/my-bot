@@ -19,7 +19,7 @@ if not GEMINI_API_KEY:
 
 # Gemini API ni to'g'ri sozlash
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel('gemini-1.5-flash')
+model = genai.GenerativeModel('gemini-pro')
 
 # Flask server (Render talabini bajarish uchun)
 app = Flask(__name__)
