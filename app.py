@@ -12,15 +12,29 @@ st.set_page_config(
 if "GOOGLE_API_KEY" in st.secrets:
   api_key = st.secrets["GOOGLE_API_KEY"]
 elif "GEMINI_API_KEY" in st.secrets:
-  api_key = st.secrets["GEMINI_API_KEY"]
+  api_key = st.GEMINI_API_KEY
 else:
   st.error("Iltimos, ilova sozlamalarida (Secrets) API kalitini to'g'ri kiriting.")
   st.stop()
 
 genai.configure(api_key=api_key)
 
-# Eng tezkor va ommabop model
-model = genai.GenerativeModel("gemini-1.5-flash")
+
+# Ishlaydigan modelni avtomatik topish funksiyasi
+def get_working_model():
+  try:
+    # Avval eng so'nggi va tezkor modellarni sinab ko'ramiz
+    for m in genai.list_models():
+      if "generateContent" in m.supported_generation_methods:
+        if "flash" in m.name or "pro" in m.name:
+          return m.name
+  except Exception:
+    pass
+  return "gemini-1.5-flash"  # Zaxira variant
+
+
+model_name = get_working_model()
+model = genai.GenerativeModel(model_name)
 
 # Sarlavha dizayni
 st.markdown(
@@ -83,7 +97,6 @@ if user_query := st.chat_input("Savolingizni yozing..."):
     assistant_response = ""
     try:
       with st.spinner("Zeed AI javob bermoqda..."):
-        # Streaming (tezkor so'zma-so'z chiqish)
         response = model.generate_content(contents, stream=True)
         assistant_response = st.write_stream(chunk.text for chunk in response)
     except Exception as e:
@@ -93,3 +106,4 @@ if user_query := st.chat_input("Savolingizni yozing..."):
     st.session_state.messages.append(
         {"role": "assistant", "content": assistant_response}
     )
+Nima qilish kerak:
