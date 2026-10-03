@@ -1,29 +1,35 @@
-import streamlit as st
 import google.generativeai as genai
+import streamlit as st
 
-# Sahifa sozlamalari
-st.set_page_config(page_title="Zeed AI - Sun'iy Intellekt Yordamchi", page_icon="⚡")
+# Secrets ichidan kalitni qidirish (ikkala variantni ham qo'llab-quvvatlaydi)
+if "GOOGLE_API_KEY" in st.secrets:
+  api_key = st.secrets["GOOGLE_API_KEY"]
+elif "GEMINI_API_KEY" in st.secrets:
+  api_key = st.secrets["GEMINI_API_KEY"]
+else:
+  st.error("Iltimos, ilova sozlamalarida (Secrets) API kalitini to'g'ri kiriting.")
+  st.stop()
 
-# Asosiy interfeys
-st.title("⚡ Zeed AI")
-st.write("Salom! Men **Zeed AI** — sizning shaxsiy sun'iy intellekt yordamchingizman. Marhamat, savolingizni bering va tezkor javob oling.")
+genai.configure(api_key=api_key)
 
-# Streamlit maxfiy joyidan API kalitni olamiz
-try:
-    api_key = st.secrets["GEMINI_API_KEY"]
-    genai.configure(api_key=api_key)
-    
-    # Modelni sozlaymiz
-    model = genai.GenerativeModel('gemini-1.5-flash')
-    
-    # Foydalanuvchidan savol qabul qilish
-    user_prompt = st.text_input("Savolingizni yozing:")
-    
-    if st.button("Javob olish") and user_prompt:
-        with st.spinner("Zeed AI o'ylamoqda..."):
-            response = model.generate_content(user_prompt)
-            st.success("Javob:")
-            st.write(response.text)
-            
-except Exception as e:
-    st.error("Iltimos, ilova sozlamalarida (Secrets) API kalitni to'g'ri kiriting.")
+# Modelni sozlash
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+# Zeed AI interfeysi
+st.markdown("# ⚡ Zeed AI")
+st.write(
+    "Salom! Men Zeed AI — sizning shaxsiy sun'iy intellekt yordamchingiz."
+    " Marhamat, savolingizni bering va tezkor javob oling."
+)
+
+user_query = st.text_input("Savolingizni yozing:")
+
+if st.button("Javob olish"):
+  if user_query:
+    try:
+      response = model.generate_content(user_query)
+      st.success(response.text)
+    except Exception as e:
+      st.error(f"Xatolik yuz berdi: {e}")
+  else:
+      st.warning("Iltimos, savol kiriting!")
