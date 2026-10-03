@@ -19,8 +19,8 @@ else:
 
 genai.configure(api_key=api_key)
 
-# Hozirgi kunda eng barqaror va tez ishlaydigan rasmiy model
-model = genai.GenerativeModel("gemini-1.5-flash-latest")
+# Eng tezkor va yangi model
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 # Sarlavha dizayni
 st.markdown(
@@ -74,7 +74,7 @@ if user_query := st.chat_input("Savolingizni yozing..."):
     if image:
       st.image(image, width=200)
 
-  # AI javobini tezkor shakllantirish (Stream orqali so'zma-so'z chiqadi)
+  # AI javobini tezkor shakllantirish
   with st.chat_message("assistant"):
     if image and user_query:
       contents = [image, user_query]
