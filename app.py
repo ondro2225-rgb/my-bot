@@ -1,3 +1,4 @@
+import time
 import google.generativeai as genai
 import streamlit as st
 
@@ -12,7 +13,7 @@ else:
 
 genai.configure(api_key=api_key)
 
-# Tavsiya etilgan eng yangi modelni ishlatamiz
+# Modelni sozlash
 model = genai.GenerativeModel("gemini-3.8-flash")
 
 st.markdown("# ⚡ Zeed AI")
@@ -25,10 +26,24 @@ user_query = st.text_input("Savolingizni yozing:")
 
 if st.button("Javob olish"):
   if user_query:
-    try:
-      response = model.generate_content(user_query)
-      st.success(response.text)
-    except Exception as e:
-      st.error(f"Xatolik yuz berdi: {e}")
+    # Limitga uchrasa, avtomatik kutib, qayta urinish funksiyasi
+    max_retries = 3
+    success = False
+
+    for attempt in range(max_retries):
+      try:
+        with st.spinner("Zeed AI javob tayyorlamoqda..."):
+          response = model.generate_content(user_query)
+          st.success(response.text)
+          success = True
+          break
+      except Exception as e:
+        if "429" in str(e) or "Quota exceeded" in str(e):
+          if attempt < max_retries - 1:
+            time.sleep(10)  # 10 soniya kutib, qayta urinib ko'radi
+            continue
+        st.error(f"Xatolik yuz berdi: {e}")
+        success = True
+        break
   else:
-      st.warning("Iltimos, savol kiriting!")
+    st.warning("Iltimos, savol kiriting!")
