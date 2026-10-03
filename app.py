@@ -12,12 +12,25 @@ else:
 
 genai.configure(api_key=api_key)
 
-# Barqaror model nomini ishlatamiz
-model = genai.GenerativeModel("gemini-pro")
+
+# Ishlaydigan modelni avtomatik topish funksiyasi
+@st.cache_resource
+def get_working_model():
+  try:
+    for m in genai.list_models():
+      if "generateContent" in m.supported_generation_methods:
+        return genai.GenerativeModel(m.name)
+  except Exception:
+    pass
+  # Zaxira variant
+  return genai.GenerativeModel("gemini-1.5-flash")
+
+
+model = get_working_model()
 
 st.markdown("# ⚡ Zeed AI")
 st.write(
-    "Salom! Men Zeed AI — sizning shaxsiy sun'iy intellakt yordamchingiz."
+    "Salom! Men Zeed AI — sizning shaxsiy sun'iy intellekt yordamchingiz."
     " Marhamat, savolingizni bering va tezkor javob oling."
 )
 
