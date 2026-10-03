@@ -106,4 +106,3 @@ if user_query := st.chat_input("Savolingizni yozing..."):
     st.session_state.messages.append(
         {"role": "assistant", "content": assistant_response}
     )
-Nima qilish kerak:
