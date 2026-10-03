@@ -1,111 +1,121 @@
-import time
-from PIL import Image
+import os
 import google.generativeai as genai
 import streamlit as st
 
+# Sahifa sozlamalari (keng ekran va sarlavha)
 st.set_page_config(
-    page_title="Zeed AI — Shaxsiy Yordamchi", page_icon="⚡", layout="centered"
+    page_title="Zeed AI — Professional Assistant",
+    page_icon="🤖",
+    layout="centered",
+    initial_sidebar_state="expanded",
 )
 
-# API kalitini xavfsiz o'qish
-if "GOOGLE_API_KEY" in st.secrets:
-  api_key = st.secrets["GOOGLE_API_KEY"]
-elif "GEMINI_API_KEY" in st.secrets:
-  api_key = st.secrets["GEMINI_API_KEY"]
-else:
-  st.error("Iltimos, Streamlit Secrets'da GOOGLE_API_KEY ni to'g'ri kiriting.")
-  st.stop()
-
-genai.configure(api_key=api_key)
-
-
-# Model topishda xatolik chiqmasligi uchun avtomatik funksiya
-@st.cache_resource
-def get_working_model():
-  try:
-    for m in genai.list_models():
-      if "generateContent" in m.supported_generation_methods:
-        if "flash" in m.name or "pro" in m.name:
-          return genai.GenerativeModel(m.name)
-  except Exception:
-    pass
-  return genai.GenerativeModel("gemini-1.5-flash")
-
-
-try:
-  model = get_working_model()
-except Exception as e:
-  st.error(f"Modelni yuklashda xatolik: {e}")
-  st.stop()
-
-# Sarlavha
+# Maxsus CSS dizayn va zamonaviy uslub berish
 st.markdown(
-    "<h1 style='text-align: center; color: #4F46E5;'>⚡ Zeed AI</h1>",
+    """
+    <style>
+    .main {
+        background-color: #0e1117;
+        color: #ffffff;
+    }
+    .stTextInput textarea {
+        color: #ffffff;
+    }
+    .css-164nlkn {
+        padding-top: 1rem;
+    }
+    </style>
+    """,
     unsafe_allow_html=True,
 )
-st.markdown(
-    "<p style='text-align: center; color: #6B7280;'>Sizning tezkor va aqlli"
-    " sun'iy intellekt yordamchingiz</p>",
-    unsafe_allow_html=True,
-)
-st.markdown("---")
 
-# Chap panel (Rasm yuklash)
+# Sidebar (Yon panel) dizayni va sozlamalari
 with st.sidebar:
-  st.markdown("### 📁 Fayl yuklash")
-  uploaded_file = st.file_uploader(
-      "Rasm yuklash (ixtiyoriy):", type=["jpg", "jpeg", "png"]
+  st.image(
+      "https://img.icons8.com/clouds/200/artificial-intelligence.png", width=120
+  )
+  st.title("Zeed AI Panel")
+  st.markdown("---")
+
+  # Modelni tanlash
+  model_choice = st.selectbox(
+      "Modelni tanlang:",
+      ["gemini-1.5-pro", "gemini-1.5-flash"],
+      help="Flash - tezkor, Pro - chuqur tahlil uchun",
   )
 
-  image = None
-  if uploaded_file is not None:
-    image = Image.open(uploaded_file)
-    st.image(image, caption="Yuklangan rasm", use_container_width=True)
+  # Kreativlik darajasi (Temperature)
+  temperature = st.slider(
+      "Kreativlik darajasi:",
+      min_value=0.0,
+      max_value=1.0,
+      value=0.7,
+      step=0.1,
+  )
 
   st.markdown("---")
-  st.markdown("### 💡 Ma'lumot")
-  st.write(
-      "Zeed AI yordamida matnli savollar berishingiz yoki rasm yuklab uning"
-      " tahlilini olishingiz mumkin."
+  st.info(
+      "💡 **Zeed AI** — Google Gemini quvvati asosida ishlaydigan aqlli yordamchi."
   )
 
-# Chat xotirasi
-if "messages" not in st.session_state:
-  st.session_state.messages = []
+# Asosiy ekran
+st.title("🤖 Zeed AI Workspace")
+st.markdown(
+    "Xohlagan savolingizni bering, matn yozing yoki kod tuzing. Sizga tez"
+    " va aniq javob beraman!"
+)
 
-for message in st.session_state.messages:
-  with st.chat_message(message["role"]):
-    st.markdown(message["content"])
-    if "image" in message and message["image"]:
-      st.image(message["image"], width=200)
+# API kalitni tekshirish
+api_key = os.getenv("GOOGLE_API_KEY")
 
-# Xabar yozish qismi
-if user_query := st.chat_input("Savolingizni yozing..."):
-  st.session_state.messages.append(
-      {"role": "user", "content": user_query, "image": image}
+if not api_key:
+  st.error(
+      "⚠️️ **Diqqat!** `GOOGLE_API_KEY` topilmadi. Iltimos, Render.com"
+      " sozlamalarida Environment Variables qismiga kalitni qo'shing."
   )
-  with st.chat_message("user"):
-    st.markdown(user_query)
-    if image:
-      st.image(image, width=200)
+else:
+  genai.configure(api_key=api_key)
 
-  with st.chat_message("assistant"):
-    if image and user_query:
-      contents = [image, user_query]
-    elif image:
-      contents = [image, "Bu rasmda nima tasvirlangan? Tushuntirib ber."]
-    else:
-      contents = user_query
+  # Chat tarixini xotirada saqlash uchun
+  if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-    assistant_response = ""
+  # Oldingi xabarlarni ekranga chiqarish
+  for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+      st.markdown(message["content"])
+
+  # Foydalanuvchidan habar olish
+  if prompt := st.chat_input("Savolingizni shu yerga yozing..."):
+    # Foydalanuvchi xabarini tarixga qo'shish
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+      st.markdown(prompt)
+
+    # Gemini modelini chaqirish
     try:
-      with st.spinner("Zeed AI javob bermoqda..."):
-        response = model.generate_content(contents, stream=True)
-        assistant_response = st.write_stream(chunk.text for chunk in response)
-    except Exception as e:
-      assistant_response = f"Xatolik yuz berdi: {e}"
-      st.error(assistant_response)
+      generation_config = {"temperature": temperature}
+      model = genai.GenerativeModel(
+          model_name=model_choice, generation_config=generation_config
+      )
 
-    st.session_state.messages.append(
-        {"role": "assistant", "content": assistant_response}
-    )
+      with st.chat_message("assistant"):
+        with st.spinner("Zeed AI o'ylamoqda..."):
+          # Suhbat tarixini formatlab uzatish
+          chat_history = [
+              {"role": m["role"], "parts": [m["content"]]}
+              for m in st.session_state.messages
+          ]
+          chat = model.start_chat(history=[])
+          response = chat.send_message(prompt)
+          bot_reply = response.text
+
+          st.markdown(bot_reply)
+
+          # Bot javobini tarixga qo'shish
+          st.session_state.messages.append(
+              {"role": "model", "content": bot_reply}
+          )
+
+    except Exception as e:
+      st.error(f"❌ Xatolik yuz berdi: {e}")
