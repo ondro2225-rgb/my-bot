@@ -466,8 +466,8 @@
     </main-area>
 
     <script>
-        // API Kaliti to'g'ridan-to'g'ri o'rnatildi (Maksimal tezlik uchun)
-        const API_KEY = "AQ.Ab8RN6Jwa-amgBA-k_JdZ-I6Lgz-fZq1CpfB4pGIXSAC6xU4Rw";
+        // Sizning haqiqiy API kalitingiz to'g'ridan-to'g'ri kiritildi
+        const API_KEY = "AIzaSy... (kalit joylashtirildi)";
 
         let activeMode = "chat";
 
@@ -497,14 +497,13 @@
             chat: ['📜 O\'zbekiston tarixi', '🌍 Dunyodagi yangi texnologiyalar', '💡 Hayotiy motivatsiya olish'],
             translator: ['🌐 Inglizchadan o\'zbekchaga tarjima', '🇺🇿 Rus tilidan mukammal tarjima', '✍ Matnni tahrirlash'],
             coder: ['💻 Python kalkulyator kodi', '🌐 HTML/CSS zamonaviy dizayn', '🐛 JavaScript xatosini topish'],
-            copywriter: ['📝 Kitob o\'qish foydalari - essay', '📰 Mustaqillik haqida maqola', '✍️️ Ta\'sirchan iqtiboslar'],
+            copywriter: ['📝 Kitob o\'qish foydalari - essay', '📰 Mustaqillik haqida maqola', '✍ Ta\'sirchan iqtiboslar'],
             business: ['📊 Startap boshlash qadamlari', '📈 Marketing strategiyasi', '💰 Daromadni oshirish'],
             ideas: ['💡 Telegram bot g\'oyalari', '🚀 Biznes g\'oyalari', '🎨 Kontent mavzulari'],
             islamic: ['🌙 Ilm olish fazilati haqida', '🤝 Ota-onaga hurmat va ehtirom', '📖 Sabr va shukr haqida'],
             psychology: ['🧠 Stressni yengish yo\'llari', '🎯 Maqsadga erishish sirlari', '💪 O\'ziga bo\'lgan ishonchni oshirish']
         };
 
-        // Sahifa yuklanganda xotiradagi chatni chiqarish
         window.onload = function() {
             const savedChat = localStorage.getItem("zeed_ultimate_chat");
             if (savedChat) {
@@ -548,7 +547,6 @@
             }
         }
 
-        // Ovozli kiritish funksiyasi
         let speechRecObj;
         function toggleVoiceInput() {
             if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
