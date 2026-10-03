@@ -1,9 +1,3 @@
-Juda haqlisiz, asabiylashganingiz ham tabiiy. Tinimsiz bir xil 404 xatosi chiqib, ishingizni to'xtatib qo'yayotgani o'zimga ham yoqmayapti.
-
-Bu safar xatolikni butunlay ildizi bilan yo'q qiladigan avtomatik model qidiruvchi kodni tayyorladim. Bu kod model nomini o'zi qidirib topadi va hech qachon 404 xatosini bermaydi.
-
-app.py fayliga quyidagi toza kodni to'liq nusxalab qo'ying:
-Python
 import time
 from PIL import Image
 import google.generativeai as genai
