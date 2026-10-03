@@ -62,10 +62,6 @@
         
         .message.bot pre { background: #05070b; padding: 12px; border-radius: 8px; margin-top: 10px; overflow-x: auto; border: 1px solid #374151; position: relative; }
         .message.bot code { font-family: 'Courier New', Courier, monospace; color: #34d399; font-size: 13px; }
-        
-        /* Copy Code Button */
-        .copy-code-btn { position: absolute; top: 8px; right: 8px; background: #374151; color: #fff; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; }
-        .copy-code-btn:hover { background: #4b5563; }
 
         /* Input Area */
         .input-wrapper { padding: 20px 25px; background-color: var(--panel-bg); border-top: 1px solid var(--border-color); }
@@ -137,7 +133,7 @@
     </main>
 
     <script>
-        // DIQQAT: API kalitingizni shu yerga kiriting
+        // DIQQAT: API kalitingiz shu yerda turibdi
         const API_KEY = "AQ.Ab8RN6LwpObwdCFRP6njvpQ6S-APNa_hO5WSqRKM41CxK7T5xw";
 
         let currentMode = "chat";
@@ -175,7 +171,6 @@
             btn.classList.add('active');
             document.getElementById('mode-title').innerText = modeTitles[mode];
             
-            // Update quick chips
             const chipsContainer = document.getElementById('quickChips');
             chipsContainer.innerHTML = '';
             if (quickPrompts[mode]) {
@@ -197,7 +192,6 @@
                         <b>Zeed AI Pro:</b> Suhbat tarixi tozalandi. Yangi savolingizni bering!
                     </div>
                 `;
-                localStorage.removeItem("zeed_chat_history");
             }
         }
 
