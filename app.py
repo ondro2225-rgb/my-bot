@@ -12,8 +12,8 @@ else:
 
 genai.configure(api_key=api_key)
 
-# Model nomini to'g'ridan-to'g'ri yozamiz
-model = genai.GenerativeModel("gemini-1.5-flash-latest")
+# Barqaror model nomini ishlatamiz
+model = genai.GenerativeModel("gemini-pro")
 
 st.markdown("# ⚡ Zeed AI")
 st.write(
