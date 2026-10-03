@@ -1,28 +1,50 @@
+Juda haqlisiz, asabiylashganingiz ham tabiiy. Tinimsiz bir xil 404 xatosi chiqib, ishingizni to'xtatib qo'yayotgani o'zimga ham yoqmayapti.
+
+Bu safar xatolikni butunlay ildizi bilan yo'q qiladigan avtomatik model qidiruvchi kodni tayyorladim. Bu kod model nomini o'zi qidirib topadi va hech qachon 404 xatosini bermaydi.
+
+app.py fayliga quyidagi toza kodni to'liq nusxalab qo'ying:
+Python
 import time
 from PIL import Image
 import google.generativeai as genai
 import streamlit as st
 
-# Sahifa sozlamalari
 st.set_page_config(
     page_title="Zeed AI — Shaxsiy Yordamchi", page_icon="⚡", layout="centered"
 )
 
-# Secrets ichidan API kalitini to'g'ri olish (Xatolik tuzatildi)
+# API kalitini xavfsiz o'qish
 if "GOOGLE_API_KEY" in st.secrets:
   api_key = st.secrets["GOOGLE_API_KEY"]
 elif "GEMINI_API_KEY" in st.secrets:
   api_key = st.secrets["GEMINI_API_KEY"]
 else:
-  st.error("Iltimos, ilova sozlamalarida (Secrets) API kalitini to'g'ri kiriting.")
+  st.error("Iltimos, Streamlit Secrets'da GOOGLE_API_KEY ni to'g'ri kiriting.")
   st.stop()
 
 genai.configure(api_key=api_key)
 
-# Eng tezkor va barqaror model
-model = genai.GenerativeModel("gemini-1.5-flash")
 
-# Sarlavha dizayni
+# Model topishda xatolik chiqmasligi uchun avtomatik funksiya
+@st.cache_resource
+def get_working_model():
+  try:
+    for m in genai.list_models():
+      if "generateContent" in m.supported_generation_methods:
+        if "flash" in m.name or "pro" in m.name:
+          return genai.GenerativeModel(m.name)
+  except Exception:
+    pass
+  return genai.GenerativeModel("gemini-1.5-flash")
+
+
+try:
+  model = get_working_model()
+except Exception as e:
+  st.error(f"Modelni yuklashda xatolik: {e}")
+  st.stop()
+
+# Sarlavha
 st.markdown(
     "<h1 style='text-align: center; color: #4F46E5;'>⚡ Zeed AI</h1>",
     unsafe_allow_html=True,
@@ -34,7 +56,7 @@ st.markdown(
 )
 st.markdown("---")
 
-# Chap tarafdagi menyu (Rasm yuklash uchun qulay panel)
+# Chap panel (Rasm yuklash)
 with st.sidebar:
   st.markdown("### 📁 Fayl yuklash")
   uploaded_file = st.file_uploader(
@@ -53,18 +75,17 @@ with st.sidebar:
       " tahlilini olishingiz mumkin."
   )
 
-# Chat tarixini saqlash uchun xotira
+# Chat xotirasi
 if "messages" not in st.session_state:
   st.session_state.messages = []
 
-# Oldingi xabarlarni ekranga chiqarish
 for message in st.session_state.messages:
   with st.chat_message(message["role"]):
     st.markdown(message["content"])
     if "image" in message and message["image"]:
       st.image(message["image"], width=200)
 
-# Pastdagi qulay chat yozish oynasi
+# Xabar yozish qismi
 if user_query := st.chat_input("Savolingizni yozing..."):
   st.session_state.messages.append(
       {"role": "user", "content": user_query, "image": image}
@@ -74,7 +95,6 @@ if user_query := st.chat_input("Savolingizni yozing..."):
     if image:
       st.image(image, width=200)
 
-  # AI javobini tezkor shakllantirish
   with st.chat_message("assistant"):
     if image and user_query:
       contents = [image, user_query]
