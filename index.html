@@ -495,7 +495,6 @@
                     <i class="fa-solid fa-paper-plane"></i>
                 </button>
             </div>
-            <!-- Ogohlantirish yozuvi qo'shildi -->
             <div class="ai-disclaimer">
                 Zeed AI xato qilishi mumkin. Muhim ma'lumotlarni tekshiring.
             </div>
@@ -503,8 +502,8 @@
     </main-area>
 
     <script>
-        // Haqiqiy API kalitingiz kiritildi
-        const API_KEY = "AQ.Ab8RN6Jwa-amgBA-k_JdZ-I6Lgz-fZq1CpfB4pGIXSAC6xU4Rw";
+        // Tokeningiz to'g'ridan-to'g'ri o'rnatildi (OAuth 2 usuliga moslashtirildi)
+        const OAUTH_TOKEN = "AQ.Ab8RN6KJRea_e1jSCC949Y15QgIxnhBK1ULchX1F90gOxyBA";
 
         let activeMode = "chat";
         let conversationHistory = [];
@@ -543,11 +542,11 @@
         };
 
         window.onload = function() {
-            const savedChat = localStorage.getItem("zeed_ultimate_chat_v3");
+            const savedChat = localStorage.getItem("zeed_ultimate_chat_v4");
             if (savedChat) {
                 document.getElementById("chat-stream").innerHTML = savedChat;
             }
-            const savedHistory = localStorage.getItem("zeed_history_v3");
+            const savedHistory = localStorage.getItem("zeed_history_v4");
             if (savedHistory) {
                 conversationHistory = JSON.parse(savedHistory);
             }
@@ -555,8 +554,8 @@
 
         function persistChat() {
             const stream = document.getElementById("chat-stream");
-            localStorage.setItem("zeed_ultimate_chat_v3", stream.innerHTML);
-            localStorage.setItem("zeed_history_v3", JSON.stringify(conversationHistory));
+            localStorage.setItem("zeed_ultimate_chat_v4", stream.innerHTML);
+            localStorage.setItem("zeed_history_v4", JSON.stringify(conversationHistory));
         }
 
         function switchMode(mode, element) {
@@ -587,8 +586,8 @@
                     </div>
                 `;
                 conversationHistory = [];
-                localStorage.removeItem("zeed_ultimate_chat_v3");
-                localStorage.removeItem("zeed_history_v3");
+                localStorage.removeItem("zeed_ultimate_chat_v4");
+                localStorage.removeItem("zeed_history_v4");
             }
         }
 
@@ -659,9 +658,13 @@
                     ...conversationHistory
                 ];
 
-                const apiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                // So'rov OAuth 2 tokenni Bearer header orqali yuborishga moslashtirildi
+                const apiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${OAUTH_TOKEN}`
+                    },
                     body: JSON.stringify({ contents: contentsPayload })
                 });
 
@@ -689,7 +692,7 @@
                 } else if (responseJson.error) {
                     document.getElementById(loadIndicatorId).innerHTML = `<b>Xatolik:</b> ${responseJson.error.message}`;
                 } else {
-                    document.getElementById(loadIndicatorId).innerHTML = `<b>Xatolik:</b> API kalitni tekshiring!`;
+                    document.getElementById(loadIndicatorId).innerHTML = `<b>Xatolik:</b> Tokenda xatolik yoki ruxsat yetishmayapti!`;
                 }
             } catch (networkError) {
                 document.getElementById(loadIndicatorId).innerHTML = `<b>Xatolik:</b> Internet tarmog'ida uzilish yuz berdi.`;
@@ -700,6 +703,7 @@
         }
 
         function checkEnterKey(event) {
+            e.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
             if (event.key === "Enter") {
                 sendUserMessage();
             }
