@@ -19,8 +19,8 @@ else:
 
 genai.configure(api_key=api_key)
 
-# Eng tezkor va yangilangan model
-model = genai.GenerativeModel("gemini-1.5-flash")
+# Muammosiz ishlaydigan barqaror model
+model = genai.GenerativeModel("gemini-1.5-pro")
 
 # Sarlavha dizayni
 st.markdown(
