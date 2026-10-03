@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zeed AI Pro - Ultimate High-Performance AI Platform</title>
+    <title>Zeed AI Pro - Ultimate Professional AI Platform</title>
     
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -259,7 +259,7 @@
         }
 
         .chat-bubble {
-            max-width: 78%;
+            max-width: 82%;
             padding: 20px 24px;
             border-radius: 16px;
             line-height: 1.7;
@@ -267,6 +267,7 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             animation: slideUp 0.3s ease;
             word-break: break-word;
+            position: relative;
         }
 
         @keyframes slideUp {
@@ -296,6 +297,7 @@
             margin-top: 14px;
             overflow-x: auto;
             border: 1px solid var(--border-clr);
+            position: relative;
         }
 
         .chat-bubble.bot code {
@@ -304,9 +306,31 @@
             font-size: 13.5px;
         }
 
+        .msg-actions {
+            margin-top: 12px;
+            display: flex;
+            gap: 12px;
+            font-size: 13px;
+        }
+
+        .msg-action-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+
+        .msg-action-btn:hover {
+            color: var(--accent-clr);
+        }
+
         /* --- INPUT PANEL --- */
         .input-area-wrapper {
-            padding: 20px 30px;
+            padding: 16px 30px 20px 30px;
             background-color: var(--bg-panel);
             border-top: 1px solid var(--border-clr);
         }
@@ -382,6 +406,15 @@
             transform: scale(1.05);
         }
 
+        /* Disclaimer Notice */
+        .ai-disclaimer {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 10px;
+            letter-spacing: 0.2px;
+        }
+
         /* Scrollbar Design */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -441,9 +474,9 @@
         </top-header>
 
         <div class="chips-bar" id="chipsBar">
-            <div class="chip-item" onclick="insertChip('O\'zbekistonning eng qadimiy shaharlari haqida gapirib ber')">📜 O'zbekiston tarixi</div>
-            <div class="chip-item" onclick="insertChip('Python tilida fayl o\'qish va yozish kodi')">💻 Python dasturlash</div>
-            <div class="chip-item" onclick="insertChip('Vaqtni to\'g\'ri taqsimlash bo\'yicha maslahat ber')">⏰ Taym-menedjment</div>
+            <div class="chip-item" onclick="insertChip('O\'zbekistonning eng qadimiy shaharlari haqida batafsil ma\'lumot ber')">📜 O'zbekiston tarixi</div>
+            <div class="chip-item" onclick="insertChip('Python tilida mukammal ma\'lumotlar bazasi bilan ishlaydigan skript yoz')">💻 Python dasturlash</div>
+            <div class="chip-item" onclick="insertChip('Vaqtni samarali taqsimlash uchun pomodoro texnikasini tushuntir')">⏰ Taym-menedjment</div>
         </div>
 
         <div id="chat-stream">
@@ -462,24 +495,29 @@
                     <i class="fa-solid fa-paper-plane"></i>
                 </button>
             </div>
+            <!-- Ogohlantirish yozuvi qo'shildi -->
+            <div class="ai-disclaimer">
+                Zeed AI xato qilishi mumkin. Muhim ma'lumotlarni tekshiring.
+            </div>
         </div>
     </main-area>
 
     <script>
-        // Sizning haqiqiy API kalitingiz to'g'ridan-to'g'ri kiritildi
-        const API_KEY = "AIzaSy... (kalit joylashtirildi)";
+        // Haqiqiy API kalitingiz kiritildi
+        const API_KEY = "AQ.Ab8RN6Jwa-amgBA-k_JdZ-I6Lgz-fZq1CpfB4pGIXSAC6xU4Rw";
 
         let activeMode = "chat";
+        let conversationHistory = [];
 
         const systemPrompts = {
-            chat: "Siz jahon darajasidagi universal sun'iy intellekt yordamchisiz. O'zbek tilida tez, aniq va mukammal javob berasiz.",
-            translator: "Siz professional tarjimonsiz. Har qanday matnni o'zbek tiliga yoki boshqa tillarga xatosiz, ravon tarjima qilasiz.",
-            coder: "Siz tajribali senior dasturchisiz. Toza, xatosiz, tushunarli va optimallashtirilgan kod yozib berasiz.",
-            copywriter: "Siz professional publitsist va yozuvchisiz. Ta'sirchan, chuqur ma'noli maqolalar va essaylar yaratasiz.",
-            business: "Siz yetakchi biznes-konsultant va marketing mutaxassisisiz. Daromadli strategiyalar bo'yicha maslahat berasiz.",
-            ideas: "Siz kreativ g'oyalar generatorisiz. Loyihalar va biznes uchun noyob g'oyalar taqdim etasiz.",
-            islamic: "Siz islom tarixi, madaniyati va ma'rifati bo'yicha keng bilimga ega maslahatchisiz. Odob va hikmat bilan javob berasiz.",
-            psychology: "Siz professional psixolog va motivator-ustozsiz. Insonlarga ruhiy dalda va hayotiy yo'nalish ko'rsatasiz."
+            chat: "Siz jahon darajasidagi universal sun'iy intellekt yordamchisiz. O'zbek tilida tez, aniq, chuqur va mukammal javob berasiz.",
+            translator: "Siz professional tarjimonsiz. Har qanday matnni o'zbek tiliga yoki boshqa tillarga xatosiz, ravon va mazmunli tarjima qilasiz.",
+            coder: "Siz tajribali senior dasturchisiz. Toza, xatosiz, tushunarli izohlari bilan birga optimallashtirilgan kod yozib berasiz.",
+            copywriter: "Siz professional publitsist va yozuvchisiz. Ta'sirchan, chuqur ma'noli maqolalar va professional essaylar yaratasiz.",
+            business: "Siz yetakchi biznes-konsultant va marketing mutaxassisisiz. Daromadli strategiyalar va tahliliy maslahatlar berasiz.",
+            ideas: "Siz kreativ g'oyalar generatorisiz. Loyihalar va biznes uchun noyob, innovatsion g'oyalar taqdim etasiz.",
+            islamic: "Siz islom tarixi, madaniyati va ma'rifati bo'yicha keng bilimga ega maslahatchisiz. Odob, hikmat va aniq manbalar asosida javob berasiz.",
+            psychology: "Siz professional psixolog va motivator-ustozsiz. Insonlarga ruhiy dalda, ilhom va hayotiy to'g'ri yo'nalish ko'rsatasiz."
         };
 
         const modeTitles = {
@@ -505,15 +543,20 @@
         };
 
         window.onload = function() {
-            const savedChat = localStorage.getItem("zeed_ultimate_chat");
+            const savedChat = localStorage.getItem("zeed_ultimate_chat_v3");
             if (savedChat) {
                 document.getElementById("chat-stream").innerHTML = savedChat;
+            }
+            const savedHistory = localStorage.getItem("zeed_history_v3");
+            if (savedHistory) {
+                conversationHistory = JSON.parse(savedHistory);
             }
         };
 
         function persistChat() {
             const stream = document.getElementById("chat-stream");
-            localStorage.setItem("zeed_ultimate_chat", stream.innerHTML);
+            localStorage.setItem("zeed_ultimate_chat_v3", stream.innerHTML);
+            localStorage.setItem("zeed_history_v3", JSON.stringify(conversationHistory));
         }
 
         function switchMode(mode, element) {
@@ -543,7 +586,9 @@
                         <b>Zeed AI Pro:</b> Tarix tozalandi. Yangi savolingizni yozishingiz mumkin!
                     </div>
                 `;
-                localStorage.removeItem("zeed_ultimate_chat");
+                conversationHistory = [];
+                localStorage.removeItem("zeed_ultimate_chat_v3");
+                localStorage.removeItem("zeed_history_v3");
             }
         }
 
@@ -570,6 +615,26 @@
             speechRecObj.start();
         }
 
+        function copyTextToClipboard(text, btnElement) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalHTML = btnElement.innerHTML;
+                btnElement.innerHTML = `<i class="fa-solid fa-check"></i> Nusxalandi`;
+                setTimeout(() => { btnElement.innerHTML = originalHTML; }, 2000);
+            });
+        }
+
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) {
+                alert("Brauzeringiz ovozli o'qishni qo'llab-quvvatlamaydi!");
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const cleanText = text.replace(/<\/?[^>]+(>|$)/g, "");
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            utterance.lang = 'uz-UZ';
+            window.speechSynthesis.speak(utterance);
+        }
+
         async function sendUserMessage() {
             const inputElem = document.getElementById("userInputText");
             const streamBox = document.getElementById("chat-stream");
@@ -580,21 +645,24 @@
             streamBox.innerHTML += `<div class="chat-bubble user"><b>Siz:</b> ${escapeSpecialChars(queryText)}</div>`;
             inputElem.value = "";
             streamBox.scrollTop = streamBox.scrollHeight;
+
+            conversationHistory.push({ role: "user", parts: [{ text: queryText }] });
             persistChat();
 
             const loadIndicatorId = "load_" + Date.now();
-            streamBox.innerHTML += `<div id="${loadIndicatorId}" class="chat-bubble bot"><b>Zeed AI Pro:</b> Tezkor tahlil qilinmoqda...</div>`;
+            streamBox.innerHTML += `<div id="${loadIndicatorId}" class="chat-bubble bot"><b>Zeed AI Pro:</b> Mukammal javob tayyorlanmoqda...</div>`;
             streamBox.scrollTop = streamBox.scrollHeight;
 
             try {
-                const combinedPrompt = `${systemPrompts[activeMode]}\n\nSo'rov: ${queryText}`;
+                const contentsPayload = [
+                    { role: "user", parts: [{ text: systemPrompts[activeMode] }] },
+                    ...conversationHistory
+                ];
 
                 const apiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: combinedPrompt }] }]
-                    })
+                    body: JSON.stringify({ contents: contentsPayload })
                 });
 
                 const responseJson = await apiResponse.json();
@@ -603,7 +671,21 @@
                     let aiReplyText = responseJson.candidates[0].content.parts[0].text;
                     let renderedMarkdown = marked.parse(aiReplyText);
                     
-                    document.getElementById(loadIndicatorId).innerHTML = `<b>Zeed AI Pro:</b><br><br>${renderedMarkdown}`;
+                    conversationHistory.push({ role: "model", parts: [{ text: aiReplyText }] });
+
+                    const safeCleanText = aiReplyText.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+                    document.getElementById(loadIndicatorId).innerHTML = `
+                        <b>Zeed AI Pro:</b><br><br>${renderedMarkdown}
+                        <div class="msg-actions">
+                            <button class="msg-action-btn" onclick="copyTextToClipboard(\`${safeCleanText}\`, this)">
+                                <i class="fa-regular fa-copy"></i> Nusxalash
+                            </button>
+                            <button class="msg-action-btn" onclick="speakText(\`${safeCleanText}\`)">
+                                <i class="fa-solid fa-volume-high"></i> Ovozli tinglash
+                            </button>
+                        </div>
+                    `;
                 } else if (responseJson.error) {
                     document.getElementById(loadIndicatorId).innerHTML = `<b>Xatolik:</b> ${responseJson.error.message}`;
                 } else {
