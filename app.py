@@ -12,21 +12,8 @@ else:
 
 genai.configure(api_key=api_key)
 
-
-# Ishlaydigan modelni avtomatik topish funksiyasi
-@st.cache_resource
-def get_working_model():
-  try:
-    for m in genai.list_models():
-      if "generateContent" in m.supported_generation_methods:
-        return genai.GenerativeModel(m.name)
-  except Exception:
-    pass
-  # Zaxira variant
-  return genai.GenerativeModel("gemini-1.5-flash")
-
-
-model = get_working_model()
+# Tavsiya etilgan eng yangi modelni ishlatamiz
+model = genai.GenerativeModel("gemini-3.8-flash")
 
 st.markdown("# ⚡ Zeed AI")
 st.write(
