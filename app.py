@@ -12,15 +12,22 @@ st.set_page_config(
 if "GOOGLE_API_KEY" in st.secrets:
   api_key = st.secrets["GOOGLE_API_KEY"]
 elif "GEMINI_API_KEY" in st.secrets:
-  api_key = st.secrets["GEMINI_API_KEY"]
+  api_key = st.GEMINI_API_KEY
 else:
   st.error("Iltimos, ilova sozlamalarida (Secrets) API kalitini to'g'ri kiriting.")
   st.stop()
 
 genai.configure(api_key=api_key)
 
-# Eng tezkor va yangi model
-model = genai.GenerativeModel("gemini-1.5-flash")
+# Modelni to'g'ri va xatosiz chaqirish usuli
+for m in genai.list_models():
+  if "generateContent" in m.supported_generation_methods:
+    model_name = m.name
+    break
+else:
+  model_name = "models/gemini-1.5-flash"
+
+model = genai.GenerativeModel(model_name)
 
 # Sarlavha dizayni
 st.markdown(
