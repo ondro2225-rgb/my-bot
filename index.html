@@ -3,34 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zeed AI - Flash Assistant</title>
+    <title>Zeed AI Pro - Ultra Advanced Intelligence Platform</title>
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
     <style>
-        body { font-family: Arial, sans-serif; background-color: #0e1117; color: #fff; margin: 0; padding: 20px; display: flex; flex-direction: column; height: 100vh; box-sizing: border-box; }
-        h2 { text-align: center; color: #4f46e5; margin-top: 0; }
-        #chat-container { flex: 1; overflow-y: auto; border: 1px solid #374151; padding: 15px; border-radius: 8px; margin-bottom: 15px; background: #1f2937; }
-        .message { margin-bottom: 12px; padding: 12px; border-radius: 8px; line-height: 1.5; max-width: 80%; }
-        .user { background: #3b82f6; margin-left: auto; text-align: right; }
-        .bot { background: #374151; margin-right: auto; text-align: left; }
-        .input-area { display: flex; gap: 10px; }
-        input { flex: 1; padding: 14px; border-radius: 8px; border: 1px solid #4b5563; background: #111827; color: #fff; font-size: 16px; outline: none; }
-        input:focus { border-color: #4f46e5; }
-        button { padding: 14px 24px; background: #4f46e5; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; }
-        button:hover { background: #4338ca; }
+        :root {
+            --bg-color: #090d16;
+            --panel-bg: #111827;
+            --border-color: #1f2937;
+            --accent-color: #6366f1;
+            --accent-hover: #4f46e5;
+            --text-main: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --user-bubble: #4f46e5;
+            --bot-bubble: #1f2937;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Sidebar */
+        sidebar { width: 300px; background-color: var(--panel-bg); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 20px; z-index: 10; }
+        .logo { font-size: 20px; font-weight: 700; color: #818cf8; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+        .nav-title { font-size: 11px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 10px; letter-spacing: 1.2px; font-weight: 600; }
+        .menu-list { display: flex; flex-direction: column; gap: 6px; flex: 1; overflow-y: auto; }
+        .menu-item { background: transparent; border: none; color: var(--text-main); padding: 12px 14px; text-align: left; border-radius: 10px; cursor: pointer; transition: all 0.2s; font-size: 14px; display: flex; align-items: center; gap: 12px; font-weight: 500; }
+        .menu-item:hover, .menu-item.active { background-color: var(--accent-color); color: #fff; transform: translateX(4px); }
+        .menu-item i { width: 18px; text-align: center; }
+
+        .sidebar-footer { padding-top: 15px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 8px; }
+        .clear-btn { background: #dc2626; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
+        .clear-btn:hover { background: #b91c1c; }
+
+        /* Main Area */
+        main { flex: 1; display: flex; flex-direction: column; height: 100vh; background-color: var(--bg-color); position: relative; }
+        header { padding: 15px 25px; border-bottom: 1px solid var(--border-color); background-color: var(--panel-bg); display: flex; justify-content: space-between; align-items: center; }
+        .header-info h3 { font-size: 16px; font-weight: 600; }
+        .status-badge { background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+        .status-badge::before { content: ''; width: 8px; height: 8px; background: #10b981; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
+
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
+        /* Quick Suggestions Bar */
+        .quick-chips { padding: 10px 25px; background: rgba(17, 24, 39, 0.5); display: flex; gap: 10px; overflow-x: auto; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
+        .chip { background: var(--border-color); color: var(--text-secondary); padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; transition: 0.2s; border: 1px solid transparent; }
+        .chip:hover { background: var(--accent-color); color: white; border-color: #818cf8; }
+
+        /* Chat Container */
+        #chat-container { flex: 1; overflow-y: auto; padding: 25px; display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth; }
+        .message { max-width: 80%; padding: 16px 20px; border-radius: 14px; line-height: 1.6; font-size: 14.5px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: fadeIn 0.3s ease; word-break: break-word; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .message.user { background-color: var(--user-bubble); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .message.bot { background-color: var(--bot-bubble); border: 1px solid var(--border-color); color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 4px; }
+        
+        .message.bot pre { background: #05070b; padding: 12px; border-radius: 8px; margin-top: 10px; overflow-x: auto; border: 1px solid #374151; position: relative; }
+        .message.bot code { font-family: 'Courier New', Courier, monospace; color: #34d399; font-size: 13px; }
+        
+        /* Copy Code Button */
+        .copy-code-btn { position: absolute; top: 8px; right: 8px; background: #374151; color: #fff; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; }
+        .copy-code-btn:hover { background: #4b5563; }
+
+        /* Input Area */
+        .input-wrapper { padding: 20px 25px; background-color: var(--panel-bg); border-top: 1px solid var(--border-color); }
+        .input-box { display: flex; gap: 12px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 8px 15px; align-items: center; transition: 0.2s; }
+        .input-box:focus-within { border-color: var(--accent-color); box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2); }
+        
+        input[type="text"] { flex: 1; background: transparent; border: none; color: white; font-size: 15px; outline: none; padding: 8px; }
+        .icon-btn { background: transparent; border: none; color: var(--text-secondary); font-size: 18px; cursor: pointer; padding: 8px; transition: 0.2s; }
+        .icon-btn:hover { color: var(--accent-color); }
+        .icon-btn.recording { color: #ef4444; animation: pulse 1s infinite; }
+        
+        .send-btn { background-color: var(--accent-color); color: white; border: none; width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+        .send-btn:hover { background-color: var(--accent-hover); transform: scale(1.05); }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
     </style>
 </head>
 <body>
 
-    <h2>🤖 Zeed AI Workspace</h2>
-    <div id="chat-container"></div>
-    
-    <div class="input-area">
-        <input type="text" id="userInput" placeholder="Savolingizni shu yerga yozing..." onkeypress="handleKey(event)">
-        <button onclick="sendMessage()">Yuborish</button>
-    </div>
+    <sidebar>
+        <div class="logo"><i class="fa-solid fa-brain"></i> Zeed AI Pro</div>
+        <div class="nav-title">Sun'iy Intellekt Rejimlari</div>
+        <div class="menu-list" id="menuList">
+            <button class="menu-item active" onclick="setMode('chat', this)"><i class="fa-regular fa-comments"></i> Universal Yordamchi</button>
+            <button class="menu-item" onclick="setMode('translator', this)"><i class="fa-solid fa-language"></i> Professional Tarjimon</button>
+            <button class="menu-item" onclick="setMode('coder', this)"><i class="fa-solid fa-code"></i> Kod Yozish & Xatolar</button>
+            <button class="menu-item" onclick="setMode('copywriter', this)"><i class="fa-solid fa-pen-nib"></i> Publitsistika & Essay</button>
+            <button class="menu-item" onclick="setMode('business', this)"><i class="fa-solid fa-chart-line"></i> Biznes Reja & Marketing</button>
+            <button class="menu-item" onclick="setMode('ideas', this)"><i class="fa-solid fa-lightbulb"></i> G'oyalar Generator</button>
+        </div>
+        
+        <div class="sidebar-footer">
+            <button class="clear-btn" onclick="clearHistory()"><i class="fa-solid fa-trash-can"></i> Tarixni Tozalash</button>
+        </div>
+    </sidebar>
+
+    <main>
+        <header>
+            <div class="header-info">
+                <h3 id="mode-title">Universal Yordamchi</h3>
+            </div>
+            <span class="status-badge">Ultra Turbo Mode</span>
+        </header>
+
+        <!-- Tezkor savollar paneli -->
+        <div class="quick-chips" id="quickChips">
+            <div class="chip" onclick="sendChip('O\'zbekiston tarixi haqida qisqacha gapirib ber')">📜 O'zbekiston tarixi</div>
+            <div class="chip" onclick="sendChip('Python tilida oddiy kalkulyator kodi yozib ber')">💻 Python kalkulyator</div>
+            <div class="chip" onclick="sendChip('Sun\'iy intellekt kelajagi haqida publitsistik essay yoz')">📝 Essay yozish</div>
+        </div>
+
+        <div id="chat-container">
+            <div class="message bot">
+                <b>Zeed AI Pro:</b> Assalomu alaykum! Men to'liq takomillashtirilgan, o'ta tez va aqlli versiyadaman. Sizga qanday yordam bera olaman?
+            </div>
+        </div>
+
+        <div class="input-wrapper">
+            <div class="input-box">
+                <button class="icon-btn" id="micBtn" onclick="toggleVoice()" title="Ovozli yozish"><i class="fa-solid fa-microphone"></i></button>
+                <input type="text" id="userInput" placeholder="Xabaringizni yozing yoki ovozli kiriting..." onkeypress="handleKey(event)">
+                <button class="send-btn" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </main>
 
     <script>
-        // API kalitingiz joylandi
-        const API_KEY = "AQ.Ab8RN6KyHqo8kvY2t8rFPVLeFc8uWwOX4-6EVlTyq08efuI_rw";
+        // DIQQAT: API kalitingizni shu yerga kiriting
+        const API_KEY = "AQ.Ab8RN6LwpObwdCFRP6njvpQ6S-APNa_hO5WSqRKM41CxK7T5xw";
+
+        let currentMode = "chat";
+        
+        const systemPrompts = {
+            chat: "Siz jahon darajasidagi o'ta aqlli va tezkor sun'iy intellekt yordamchisiz. O'zbek tilida mukammal, ravon va aniq javob berasiz.",
+            translator: "Siz professional mutaxassis-tarjimon va muharrirsiz. Istalgan tildan o'zbek tiliga badiiy, ilmiy yoki publitsistik usulda xatosiz tarjima qilasiz.",
+            coder: "Siz yetakchi senior dasturchisiz. Foydalanuvchiga toza, optimallashtirilgan, xatosiz va tushunarli kodlar taqdim etasiz.",
+            copywriter: "Siz malakali yozuvchi va publitsistsiz. O'ta ta'sirchan, chuqur ma'noli maqolalar, essaylar va publitsistik matnlar yozasiz.",
+            business: "Siz tajribali biznes-konsultant va marketing mutaxassisisiz. Startaplar, daromad keltiruvchi loyihalar va strategiyalar bo'yicha eng yaxshi maslahat berasiz.",
+            ideas: "Siz kreativ g'oyalar generatorisiz. Loyihalar, bizneslar, kontentlar va ijodiy ishlar uchun noyob va samarali g'oyalar taklif qilasiz."
+        };
+
+        const modeTitles = {
+            chat: "Universal Yordamchi",
+            translator: "Professional Tarjimon",
+            coder: "Kod Yozish va Xatolarni Topish",
+            copywriter: "Publitsistik Maqola va Essay",
+            business: "Biznes Reja va Marketing",
+            ideas: "Kreativ G'oyalar Generator"
+        };
+
+        const quickPrompts = {
+            chat: ['📜 O\'zbekiston tarixi haqida qisqacha gapirib ber', '🌍 Dundagi eng yangi texnologiyalar haqida nima deysiz?', '💡 Hayotiy motivatsiya ber'],
+            translator: ['🌐 "Knowledge is power" matnini o\'zbekchaga o\'gir', '🇺🇿 Ingliz tilidan rus tiliga professional tarjima qilib ber', '✍️ Matnni publitsistik usulda tahrirlab ber'],
+            coder: ['💻 Python tilida kalkulyator kodi', '🌐 HTML/CSS da chiroyli tugma dizayni', '🐛 JavaScript xatoligini topish usullari'],
+            copywriter: ['📝 "Kitob o\'qish foydalari" mavzusida essay', '📰 Mustaqillik haqida publitsistik maqola', '✍️ Ta\'sirchan iqtiboslar yozib ber'],
+            business: ['📊 Noldan biznes boshlash uchun 3 ta qadam', '📈 Marketing strategiyasini tuzish', '💰 Daromadni oshirish yo\'llari'],
+            ideas: ['💡 Telegram bot uchun yangi g\'oya', '🚀 Kichik startap g\'oyalari', '🎨 Kontent yaratish uchun mavzular']
+        };
+
+        function setMode(mode, btn) {
+            currentMode = mode;
+            document.querySelectorAll('.menu-item').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('mode-title').innerText = modeTitles[mode];
+            
+            // Update quick chips
+            const chipsContainer = document.getElementById('quickChips');
+            chipsContainer.innerHTML = '';
+            if (quickPrompts[mode]) {
+                quickPrompts[mode].forEach(text => {
+                    chipsContainer.innerHTML += `<div class="chip" onclick="sendChip('${text}')">${text}</div>`;
+                });
+            }
+        }
+
+        function sendChip(text) {
+            document.getElementById("userInput").value = text;
+            sendMessage();
+        }
+
+        function clearHistory() {
+            if (confirm("Suhbat tarixini tozalashni xohlaysizmi?")) {
+                document.getElementById("chat-container").innerHTML = `
+                    <div class="message bot">
+                        <b>Zeed AI Pro:</b> Suhbat tarixi tozalandi. Yangi savolingizni bering!
+                    </div>
+                `;
+                localStorage.removeItem("zeed_chat_history");
+            }
+        }
+
+        // Voice Recognition setup
+        let recognition;
+        function toggleVoice() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                alert("Brauzeringiz ovozli kiritishni qo'llab-quvvatlamaydi!");
+                return;
+            }
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'uz-UZ';
+            
+            const micBtn = document.getElementById("micBtn");
+            
+            recognition.onstart = () => { micBtn.classList.add('recording'); };
+            recognition.onresult = (event) => {
+                document.getElementById("userInput").value = event.results[0][0].transcript;
+                micBtn.classList.remove('recording');
+            };
+            recognition.onerror = () => { micBtn.classList.remove('recording'); };
+            recognition.onend = () => { micBtn.classList.remove('recording'); };
+            
+            recognition.start();
+        }
 
         async function sendMessage() {
             const inputField = document.getElementById("userInput");
@@ -39,38 +232,39 @@
             
             if (!prompt) return;
 
-            // Foydalanuvchi xabarini ekranga chiqarish
-            chatContainer.innerHTML += `<div class="message user"><b>Siz:</b> ${prompt}</div>`;
+            chatContainer.innerHTML += `<div class="message user"><b>Siz:</b> ${escapeHtml(prompt)}</div>`;
             inputField.value = "";
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            // Kuting xabarini chiqarish
             const loadingId = "loading_" + Date.now();
-            chatContainer.innerHTML += `<div id="${loadingId}" class="message bot"><b>Zeed AI:</b> O'ylamoqda...</div>`;
+            chatContainer.innerHTML += `<div id="${loadingId}" class="message bot"><b>Zeed AI Pro:</b> Tezkor tahlil qilinmoqda...</div>`;
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
             try {
-                // To'g'ridan-to'g'ri gemini-1.5-flash orqali tezkor so'rov
+                const fullPrompt = `${systemPrompts[currentMode]}\n\nFoydalanuvchi so'rovi: ${prompt}`;
+
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }]
+                        contents: [{ parts: [{ text: fullPrompt }] }]
                     })
                 });
 
                 const data = await response.json();
                 
                 if (data.candidates && data.candidates[0].content) {
-                    const botReply = data.candidates[0].content.parts[0].text;
-                    document.getElementById(loadingId).innerHTML = `<b>Zeed AI:</b> ${botReply}`;
+                    let botReply = data.candidates[0].content.parts[0].text;
+                    let parsedHtml = marked.parse(botReply);
+                    
+                    document.getElementById(loadingId).innerHTML = `<b>Zeed AI Pro:</b><br><br>${parsedHtml}`;
                 } else if (data.error) {
                     document.getElementById(loadingId).innerHTML = `<b>Xatolik:</b> ${data.error.message}`;
                 } else {
-                    document.getElementById(loadingId).innerHTML = `<b>Xatolik:</b> API kalitni tekshiring.`;
+                    document.getElementById(loadingId).innerHTML = `<b>Xatolik:</b> API kalitni tekshiring!`;
                 }
             } catch (error) {
-                document.getElementById(loadingId).innerHTML = `<b>Xatolik:</b> Tarmoqqa ulanishda xatolik yuz berdi.`;
+                document.getElementById(loadingId).innerHTML = `<b>Xatolik:</b> Tarmoqqa ulanishda muammo yuz berdi.`;
             }
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
@@ -79,6 +273,10 @@
             if (event.key === "Enter") {
                 sendMessage();
             }
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
     </script>
 </body>
