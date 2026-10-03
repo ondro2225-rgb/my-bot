@@ -5,10 +5,10 @@ import streamlit as st
 
 # Sahifa sozlamalari
 st.set_page_config(
-    page_title="Zeed AI — Tezkor Yordamchi", page_icon="⚡", layout="centered"
+    page_title="Zeed AI — Shaxsiy Yordamchi", page_icon="⚡", layout="centered"
 )
 
-# Secrets ichidan kalitni to'g'ri olish
+# Secrets ichidan API kalitini xavfsiz olish
 if "GOOGLE_API_KEY" in st.secrets:
   api_key = st.secrets["GOOGLE_API_KEY"]
 elif "GEMINI_API_KEY" in st.secrets:
@@ -19,8 +19,8 @@ else:
 
 genai.configure(api_key=api_key)
 
-# Eng tezkor va ishonchli model
-model = genai.GenerativeModel("gemini-1.5-flash")
+# Hozirgi kunda eng barqaror va tez ishlaydigan rasmiy model
+model = genai.GenerativeModel("gemini-1.5-flash-latest")
 
 # Sarlavha dizayni
 st.markdown(
@@ -28,13 +28,13 @@ st.markdown(
     unsafe_allow_html=True,
 )
 st.markdown(
-    "<p style='text-align: center; color: #6B7280;'>Sizning eng tezkor va"
-    " aqlli yordamchingiz</p>",
+    "<p style='text-align: center; color: #6B7280;'>Sizning tezkor va aqlli"
+    " sun'iy intellekt yordamchingiz</p>",
     unsafe_allow_html=True,
 )
 st.markdown("---")
 
-# Chap tarafdagi menyu (Rasm yuklash uchun)
+# Chap tarafdagi menyu (Rasm yuklash uchun qulay panel)
 with st.sidebar:
   st.markdown("### 📁 Fayl yuklash")
   uploaded_file = st.file_uploader(
@@ -48,20 +48,23 @@ with st.sidebar:
 
   st.markdown("---")
   st.markdown("### 💡 Ma'lumot")
-  st.write("Zeed AI yordamida tezkor javoblar va rasm tahlilini oling.")
+  st.write(
+      "Zeed AI yordamida matnli savollar berishingiz yoki rasm yuklab uning"
+      " tahlilini olishingiz mumkin."
+  )
 
-# Chat tarixini saqlash
+# Chat tarixini saqlash uchun xotira
 if "messages" not in st.session_state:
   st.session_state.messages = []
 
-# Oldingi xabarlarni chiqarish
+# Oldingi xabarlarni ekranga chiqarish
 for message in st.session_state.messages:
   with st.chat_message(message["role"]):
     st.markdown(message["content"])
     if "image" in message and message["image"]:
       st.image(message["image"], width=200)
 
-# Pastdagi chat input oynasi
+# Pastdagi qulay chat yozish oynasi
 if user_query := st.chat_input("Savolingizni yozing..."):
   st.session_state.messages.append(
       {"role": "user", "content": user_query, "image": image}
@@ -71,7 +74,7 @@ if user_query := st.chat_input("Savolingizni yozing..."):
     if image:
       st.image(image, width=200)
 
-  # AI javobini tezkor shakllantirish
+  # AI javobini tezkor shakllantirish (Stream orqali so'zma-so'z chiqadi)
   with st.chat_message("assistant"):
     if image and user_query:
       contents = [image, user_query]
@@ -83,7 +86,6 @@ if user_query := st.chat_input("Savolingizni yozing..."):
     assistant_response = ""
     try:
       with st.spinner("Zeed AI javob bermoqda..."):
-        # Streaming (tezkor so'zma-so'z chiqish)
         response = model.generate_content(contents, stream=True)
         assistant_response = st.write_stream(chunk.text for chunk in response)
     except Exception as e:
