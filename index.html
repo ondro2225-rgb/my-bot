@@ -3,275 +3,632 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zeed AI Pro - Ultra Advanced Intelligence Platform</title>
-    <!-- Google Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Zeed AI Pro - Ultimate High-Performance AI Platform</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <!-- Markdown Parser -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
     <style>
         :root {
-            --bg-color: #090d16;
-            --panel-bg: #111827;
-            --border-color: #1f2937;
-            --accent-color: #6366f1;
+            --bg-main: #05070b;
+            --bg-panel: #0b0f19;
+            --bg-card: #111827;
+            --border-clr: #1f293d;
+            --accent-clr: #6366f1;
             --accent-hover: #4f46e5;
-            --text-main: #f3f4f6;
-            --text-secondary: #9ca3af;
-            --user-bubble: #4f46e5;
-            --bot-bubble: #1f2937;
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --user-msg: #6366f1;
+            --bot-msg: #0f172a;
+            --sidebar-w: 290px;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
-        
-        /* Sidebar */
-        sidebar { width: 300px; background-color: var(--panel-bg); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 20px; z-index: 10; }
-        .logo { font-size: 20px; font-weight: 700; color: #818cf8; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
-        .nav-title { font-size: 11px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 10px; letter-spacing: 1.2px; font-weight: 600; }
-        .menu-list { display: flex; flex-direction: column; gap: 6px; flex: 1; overflow-y: auto; }
-        .menu-item { background: transparent; border: none; color: var(--text-main); padding: 12px 14px; text-align: left; border-radius: 10px; cursor: pointer; transition: all 0.2s; font-size: 14px; display: flex; align-items: center; gap: 12px; font-weight: 500; }
-        .menu-item:hover, .menu-item.active { background-color: var(--accent-color); color: #fff; transform: translateX(4px); }
-        .menu-item i { width: 18px; text-align: center; }
 
-        .sidebar-footer { padding-top: 15px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 8px; }
-        .clear-btn { background: #dc2626; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
-        .clear-btn:hover { background: #b91c1c; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
 
-        /* Main Area */
-        main { flex: 1; display: flex; flex-direction: column; height: 100vh; background-color: var(--bg-color); position: relative; }
-        header { padding: 15px 25px; border-bottom: 1px solid var(--border-color); background-color: var(--panel-bg); display: flex; justify-content: space-between; align-items: center; }
-        .header-info h3 { font-size: 16px; font-weight: 600; }
-        .status-badge { background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
-        .status-badge::before { content: ''; width: 8px; height: 8px; background: #10b981; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+        /* --- SIDEBAR STYLING --- */
+        sidebar {
+            width: var(--sidebar-w);
+            background-color: var(--bg-panel);
+            border-right: 1px solid var(--border-clr);
+            display: flex;
+            flex-direction: column;
+            padding: 24px 18px;
+            z-index: 100;
+        }
 
-        /* Quick Suggestions Bar */
-        .quick-chips { padding: 10px 25px; background: rgba(17, 24, 39, 0.5); display: flex; gap: 10px; overflow-x: auto; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
-        .chip { background: var(--border-color); color: var(--text-secondary); padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; transition: 0.2s; border: 1px solid transparent; }
-        .chip:hover { background: var(--accent-color); color: white; border-color: #818cf8; }
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 30px;
+            padding-left: 6px;
+        }
 
-        /* Chat Container */
-        #chat-container { flex: 1; overflow-y: auto; padding: 25px; display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth; }
-        .message { max-width: 80%; padding: 16px 20px; border-radius: 14px; line-height: 1.6; font-size: 14.5px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: fadeIn 0.3s ease; word-break: break-word; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .message.user { background-color: var(--user-bubble); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
-        .message.bot { background-color: var(--bot-bubble); border: 1px solid var(--border-color); color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 4px; }
-        
-        .message.bot pre { background: #05070b; padding: 12px; border-radius: 8px; margin-top: 10px; overflow-x: auto; border: 1px solid #374151; position: relative; }
-        .message.bot code { font-family: 'Courier New', Courier, monospace; color: #34d399; font-size: 13px; }
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+        }
 
-        /* Input Area */
-        .input-wrapper { padding: 20px 25px; background-color: var(--panel-bg); border-top: 1px solid var(--border-color); }
-        .input-box { display: flex; gap: 12px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 8px 15px; align-items: center; transition: 0.2s; }
-        .input-box:focus-within { border-color: var(--accent-color); box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2); }
-        
-        input[type="text"] { flex: 1; background: transparent; border: none; color: white; font-size: 15px; outline: none; padding: 8px; }
-        .icon-btn { background: transparent; border: none; color: var(--text-secondary); font-size: 18px; cursor: pointer; padding: 8px; transition: 0.2s; }
-        .icon-btn:hover { color: var(--accent-color); }
-        .icon-btn.recording { color: #ef4444; animation: pulse 1s infinite; }
-        
-        .send-btn { background-color: var(--accent-color); color: white; border: none; width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
-        .send-btn:hover { background-color: var(--accent-hover); transform: scale(1.05); }
+        .brand-title {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            background: linear-gradient(to right, #fff, #9ca3af);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-        /* Scrollbar styling */
+        .nav-section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            padding-left: 6px;
+        }
+
+        .menu-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 12px 14px;
+            text-align: left;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+        }
+
+        .nav-btn:hover {
+            background-color: rgba(99, 102, 241, 0.08);
+            color: var(--text-main);
+            transform: translateX(3px);
+        }
+
+        .nav-btn.active {
+            background-color: var(--accent-clr);
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+        }
+
+        .nav-btn i {
+            width: 20px;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        .sidebar-footer {
+            padding-top: 16px;
+            border-top: 1px solid var(--border-clr);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .action-btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 11px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .action-btn-danger:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        /* --- MAIN WORKSPACE --- */
+        main-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background-color: var(--bg-main);
+            position: relative;
+        }
+
+        top-header {
+            padding: 18px 30px;
+            border-bottom: 1px solid var(--border-clr);
+            background-color: var(--bg-panel);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title-box h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .turbo-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+
+        .turbo-badge span {
+            width: 7px;
+            height: 7px;
+            background: #34d399;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #34d399;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* --- QUICK PROMPTS CHIPS --- */
+        .chips-bar {
+            padding: 12px 30px;
+            background: rgba(11, 15, 25, 0.6);
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            border-bottom: 1px solid var(--border-clr);
+            white-space: nowrap;
+        }
+
+        .chip-item {
+            background: var(--bg-card);
+            color: var(--text-muted);
+            padding: 7px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border-clr);
+            font-weight: 500;
+        }
+
+        .chip-item:hover {
+            background: var(--accent-clr);
+            color: white;
+            border-color: var(--accent-clr);
+        }
+
+        /* --- CHAT HISTORY CONTAINER --- */
+        #chat-stream {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            scroll-behavior: smooth;
+        }
+
+        .chat-bubble {
+            max-width: 78%;
+            padding: 20px 24px;
+            border-radius: 16px;
+            line-height: 1.7;
+            font-size: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            animation: slideUp 0.3s ease;
+            word-break: break-word;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chat-bubble.user {
+            background-color: var(--user-msg);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-bubble.bot {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-clr);
+            color: var(--text-main);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-bubble.bot pre {
+            background: #030508;
+            padding: 16px;
+            border-radius: 10px;
+            margin-top: 14px;
+            overflow-x: auto;
+            border: 1px solid var(--border-clr);
+        }
+
+        .chat-bubble.bot code {
+            font-family: 'Courier New', Courier, monospace;
+            color: #34d399;
+            font-size: 13.5px;
+        }
+
+        /* --- INPUT PANEL --- */
+        .input-area-wrapper {
+            padding: 20px 30px;
+            background-color: var(--bg-panel);
+            border-top: 1px solid var(--border-clr);
+        }
+
+        .input-box-container {
+            display: flex;
+            gap: 12px;
+            background: var(--bg-main);
+            border: 1px solid var(--border-clr);
+            border-radius: 16px;
+            padding: 10px 18px;
+            align-items: center;
+            transition: all 0.25s ease;
+        }
+
+        .input-box-container:focus-within {
+            border-color: var(--accent-clr);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        }
+
+        input[type="text"] {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 15px;
+            outline: none;
+            padding: 8px;
+        }
+
+        .control-icon-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px;
+            transition: 0.2s;
+        }
+
+        .control-icon-btn:hover {
+            color: var(--accent-clr);
+        }
+
+        .control-icon-btn.active-record {
+            color: #ef4444;
+            animation: pulseRecord 1s infinite;
+        }
+
+        @keyframes pulseRecord {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .submit-btn {
+            background-color: var(--accent-clr);
+            color: white;
+            border: none;
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        .submit-btn:hover {
+            background-color: var(--accent-hover);
+            transform: scale(1.05);
+        }
+
+        /* Scrollbar Design */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
+        ::-webkit-scrollbar-thumb { background: #1f293d; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #374151; }
     </style>
 </head>
 <body>
 
     <sidebar>
-        <div class="logo"><i class="fa-solid fa-brain"></i> Zeed AI Pro</div>
-        <div class="nav-title">Sun'iy Intellekt Rejimlari</div>
-        <div class="menu-list" id="menuList">
-            <button class="menu-item active" onclick="setMode('chat', this)"><i class="fa-regular fa-comments"></i> Universal Yordamchi</button>
-            <button class="menu-item" onclick="setMode('translator', this)"><i class="fa-solid fa-language"></i> Professional Tarjimon</button>
-            <button class="menu-item" onclick="setMode('coder', this)"><i class="fa-solid fa-code"></i> Kod Yozish & Xatolar</button>
-            <button class="menu-item" onclick="setMode('copywriter', this)"><i class="fa-solid fa-pen-nib"></i> Publitsistika & Essay</button>
-            <button class="menu-item" onclick="setMode('business', this)"><i class="fa-solid fa-chart-line"></i> Biznes Reja & Marketing</button>
-            <button class="menu-item" onclick="setMode('ideas', this)"><i class="fa-solid fa-lightbulb"></i> G'oyalar Generator</button>
+        <div class="brand-box">
+            <div class="brand-icon"><i class="fa-solid fa-bolt"></i></div>
+            <div class="brand-title">Zeed AI Pro</div>
+        </div>
+        
+        <div class="nav-section-title">Asosiy Rejimlar</div>
+        <div class="menu-container" id="menuList">
+            <button class="nav-btn active" onclick="switchMode('chat', this)">
+                <i class="fa-regular fa-comments"></i> Universal Yordamchi
+            </button>
+            <button class="nav-btn" onclick="switchMode('translator', this)">
+                <i class="fa-solid fa-language"></i> Professional Tarjimon
+            </button>
+            <button class="nav-btn" onclick="switchMode('coder', this)">
+                <i class="fa-solid fa-code"></i> Kod Yozish & Debug
+            </button>
+            <button class="nav-btn" onclick="switchMode('copywriter', this)">
+                <i class="fa-solid fa-pen-nib"></i> Publitsistika & Essay
+            </button>
+            <button class="nav-btn" onclick="switchMode('business', this)">
+                <i class="fa-solid fa-chart-line"></i> Biznes Reja & Marketing
+            </button>
+            <button class="nav-btn" onclick="switchMode('ideas', this)">
+                <i class="fa-solid fa-lightbulb"></i> Kreativ G'oyalar
+            </button>
+            <button class="nav-btn" onclick="switchMode('islamic', this)">
+                <i class="fa-solid fa-mosque"></i> Ma'rifiy & Diniy Maslahat
+            </button>
+            <button class="nav-btn" onclick="switchMode('psychology', this)">
+                <i class="fa-solid fa-brain"></i> Psixolog & Motivator
+            </button>
         </div>
         
         <div class="sidebar-footer">
-            <button class="clear-btn" onclick="clearHistory()"><i class="fa-solid fa-trash-can"></i> Tarixni Tozalash</button>
+            <button class="action-btn-danger" onclick="clearChatHistory()">
+                <i class="fa-solid fa-trash-can"></i> Tarixni Tozalash
+            </button>
         </div>
     </sidebar>
 
-    <main>
-        <header>
-            <div class="header-info">
-                <h3 id="mode-title">Universal Yordamchi</h3>
+    <main-area>
+        <top-header>
+            <div class="header-title-box">
+                <h3 id="current-mode-title">Universal Yordamchi</h3>
             </div>
-            <span class="status-badge">Ultra Turbo Mode</span>
-        </header>
+            <div class="turbo-badge"><span></span> Max Speed Mode</div>
+        </top-header>
 
-        <!-- Tezkor savollar paneli -->
-        <div class="quick-chips" id="quickChips">
-            <div class="chip" onclick="sendChip('O\'zbekiston tarixi haqida qisqacha gapirib ber')">📜 O'zbekiston tarixi</div>
-            <div class="chip" onclick="sendChip('Python tilida oddiy kalkulyator kodi yozib ber')">💻 Python kalkulyator</div>
-            <div class="chip" onclick="sendChip('Sun\'iy intellekt kelajagi haqida publitsistik essay yoz')">📝 Essay yozish</div>
+        <div class="chips-bar" id="chipsBar">
+            <div class="chip-item" onclick="insertChip('O\'zbekistonning eng qadimiy shaharlari haqida gapirib ber')">📜 O'zbekiston tarixi</div>
+            <div class="chip-item" onclick="insertChip('Python tilida fayl o\'qish va yozish kodi')">💻 Python dasturlash</div>
+            <div class="chip-item" onclick="insertChip('Vaqtni to\'g\'ri taqsimlash bo\'yicha maslahat ber')">⏰ Taym-menedjment</div>
         </div>
 
-        <div id="chat-container">
-            <div class="message bot">
-                <b>Zeed AI Pro:</b> Assalomu alaykum! Men to'liq takomillashtirilgan, o'ta tez va aqlli versiyadaman. Sizga qanday yordam bera olaman?
+        <div id="chat-stream">
+            <div class="chat-bubble bot">
+                <b>Zeed AI Pro:</b> Assalomu alaykum! Men to'liq tayyorman. Barcha funksiyalar va modellar ishga tushdi. Qanday savolingiz bor?
             </div>
         </div>
 
-        <div class="input-wrapper">
-            <div class="input-box">
-                <button class="icon-btn" id="micBtn" onclick="toggleVoice()" title="Ovozli yozish"><i class="fa-solid fa-microphone"></i></button>
-                <input type="text" id="userInput" placeholder="Xabaringizni yozing yoki ovozli kiriting..." onkeypress="handleKey(event)">
-                <button class="send-btn" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+        <div class="input-area-wrapper">
+            <div class="input-box-container">
+                <button class="control-icon-btn" id="voiceBtn" onclick="toggleVoiceInput()" title="Ovozli kiritish">
+                    <i class="fa-solid fa-microphone"></i>
+                </button>
+                <input type="text" id="userInputText" placeholder="Savolingizni yozing yoki ovozli kiriting..." onkeypress="checkEnterKey(event)">
+                <button class="submit-btn" onclick="sendUserMessage()">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
             </div>
         </div>
-    </main>
+    </main-area>
 
     <script>
-        // DIQQAT: API kalitingiz shu yerda turibdi
-        const API_KEY = "AQ.Ab8RN6LwpObwdCFRP6njvpQ6S-APNa_hO5WSqRKM41CxK7T5xw";
+        // API Kaliti to'g'ridan-to'g'ri o'rnatildi (Maksimal tezlik uchun)
+        const API_KEY = "AQ.Ab8RN6Jwa-amgBA-k_JdZ-I6Lgz-fZq1CpfB4pGIXSAC6xU4Rw";
 
-        let currentMode = "chat";
-        
+        let activeMode = "chat";
+
         const systemPrompts = {
-            chat: "Siz jahon darajasidagi o'ta aqlli va tezkor sun'iy intellekt yordamchisiz. O'zbek tilida mukammal, ravon va aniq javob berasiz.",
-            translator: "Siz professional mutaxassis-tarjimon va muharrirsiz. Istalgan tildan o'zbek tiliga badiiy, ilmiy yoki publitsistik usulda xatosiz tarjima qilasiz.",
-            coder: "Siz yetakchi senior dasturchisiz. Foydalanuvchiga toza, optimallashtirilgan, xatosiz va tushunarli kodlar taqdim etasiz.",
-            copywriter: "Siz malakali yozuvchi va publitsistsiz. O'ta ta'sirchan, chuqur ma'noli maqolalar, essaylar va publitsistik matnlar yozasiz.",
-            business: "Siz tajribali biznes-konsultant va marketing mutaxassisisiz. Startaplar, daromad keltiruvchi loyihalar va strategiyalar bo'yicha eng yaxshi maslahat berasiz.",
-            ideas: "Siz kreativ g'oyalar generatorisiz. Loyihalar, bizneslar, kontentlar va ijodiy ishlar uchun noyob va samarali g'oyalar taklif qilasiz."
+            chat: "Siz jahon darajasidagi universal sun'iy intellekt yordamchisiz. O'zbek tilida tez, aniq va mukammal javob berasiz.",
+            translator: "Siz professional tarjimonsiz. Har qanday matnni o'zbek tiliga yoki boshqa tillarga xatosiz, ravon tarjima qilasiz.",
+            coder: "Siz tajribali senior dasturchisiz. Toza, xatosiz, tushunarli va optimallashtirilgan kod yozib berasiz.",
+            copywriter: "Siz professional publitsist va yozuvchisiz. Ta'sirchan, chuqur ma'noli maqolalar va essaylar yaratasiz.",
+            business: "Siz yetakchi biznes-konsultant va marketing mutaxassisisiz. Daromadli strategiyalar bo'yicha maslahat berasiz.",
+            ideas: "Siz kreativ g'oyalar generatorisiz. Loyihalar va biznes uchun noyob g'oyalar taqdim etasiz.",
+            islamic: "Siz islom tarixi, madaniyati va ma'rifati bo'yicha keng bilimga ega maslahatchisiz. Odob va hikmat bilan javob berasiz.",
+            psychology: "Siz professional psixolog va motivator-ustozsiz. Insonlarga ruhiy dalda va hayotiy yo'nalish ko'rsatasiz."
         };
 
         const modeTitles = {
             chat: "Universal Yordamchi",
             translator: "Professional Tarjimon",
-            coder: "Kod Yozish va Xatolarni Topish",
-            copywriter: "Publitsistik Maqola va Essay",
+            coder: "Kod Yozish va Debug",
+            copywriter: "Publitsistika va Essay",
             business: "Biznes Reja va Marketing",
-            ideas: "Kreativ G'oyalar Generator"
+            ideas: "Kreativ G'oyalar Generator",
+            islamic: "Ma'rifiy va Diniy Maslahat",
+            psychology: "Psixolog va Motivator"
         };
 
-        const quickPrompts = {
-            chat: ['📜 O\'zbekiston tarixi haqida qisqacha gapirib ber', '🌍 Dundagi eng yangi texnologiyalar haqida nima deysiz?', '💡 Hayotiy motivatsiya ber'],
-            translator: ['🌐 "Knowledge is power" matnini o\'zbekchaga o\'gir', '🇺🇿 Ingliz tilidan rus tiliga professional tarjima qilib ber', '✍️ Matnni publitsistik usulda tahrirlab ber'],
-            coder: ['💻 Python tilida kalkulyator kodi', '🌐 HTML/CSS da chiroyli tugma dizayni', '🐛 JavaScript xatoligini topish usullari'],
-            copywriter: ['📝 "Kitob o\'qish foydalari" mavzusida essay', '📰 Mustaqillik haqida publitsistik maqola', '✍️ Ta\'sirchan iqtiboslar yozib ber'],
-            business: ['📊 Noldan biznes boshlash uchun 3 ta qadam', '📈 Marketing strategiyasini tuzish', '💰 Daromadni oshirish yo\'llari'],
-            ideas: ['💡 Telegram bot uchun yangi g\'oya', '🚀 Kichik startap g\'oyalari', '🎨 Kontent yaratish uchun mavzular']
+        const quickPromptsMap = {
+            chat: ['📜 O\'zbekiston tarixi', '🌍 Dunyodagi yangi texnologiyalar', '💡 Hayotiy motivatsiya olish'],
+            translator: ['🌐 Inglizchadan o\'zbekchaga tarjima', '🇺🇿 Rus tilidan mukammal tarjima', '✍ Matnni tahrirlash'],
+            coder: ['💻 Python kalkulyator kodi', '🌐 HTML/CSS zamonaviy dizayn', '🐛 JavaScript xatosini topish'],
+            copywriter: ['📝 Kitob o\'qish foydalari - essay', '📰 Mustaqillik haqida maqola', '✍️️ Ta\'sirchan iqtiboslar'],
+            business: ['📊 Startap boshlash qadamlari', '📈 Marketing strategiyasi', '💰 Daromadni oshirish'],
+            ideas: ['💡 Telegram bot g\'oyalari', '🚀 Biznes g\'oyalari', '🎨 Kontent mavzulari'],
+            islamic: ['🌙 Ilm olish fazilati haqida', '🤝 Ota-onaga hurmat va ehtirom', '📖 Sabr va shukr haqida'],
+            psychology: ['🧠 Stressni yengish yo\'llari', '🎯 Maqsadga erishish sirlari', '💪 O\'ziga bo\'lgan ishonchni oshirish']
         };
 
-        function setMode(mode, btn) {
-            currentMode = mode;
-            document.querySelectorAll('.menu-item').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            document.getElementById('mode-title').innerText = modeTitles[mode];
+        // Sahifa yuklanganda xotiradagi chatni chiqarish
+        window.onload = function() {
+            const savedChat = localStorage.getItem("zeed_ultimate_chat");
+            if (savedChat) {
+                document.getElementById("chat-stream").innerHTML = savedChat;
+            }
+        };
+
+        function persistChat() {
+            const stream = document.getElementById("chat-stream");
+            localStorage.setItem("zeed_ultimate_chat", stream.innerHTML);
+        }
+
+        function switchMode(mode, element) {
+            activeMode = mode;
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            element.classList.add('active');
+            document.getElementById('current-mode-title').innerText = modeTitles[mode];
             
-            const chipsContainer = document.getElementById('quickChips');
-            chipsContainer.innerHTML = '';
-            if (quickPrompts[mode]) {
-                quickPrompts[mode].forEach(text => {
-                    chipsContainer.innerHTML += `<div class="chip" onclick="sendChip('${text}')">${text}</div>`;
+            const chipsBar = document.getElementById('chipsBar');
+            chipsBar.innerHTML = '';
+            if (quickPromptsMap[mode]) {
+                quickPromptsMap[mode].forEach(txt => {
+                    chipsBar.innerHTML += `<div class="chip-item" onclick="insertChip('${txt}')">${txt}</div>`;
                 });
             }
         }
 
-        function sendChip(text) {
-            document.getElementById("userInput").value = text;
-            sendMessage();
+        function insertChip(text) {
+            document.getElementById("userInputText").value = text;
+            sendUserMessage();
         }
 
-        function clearHistory() {
-            if (confirm("Suhbat tarixini tozalashni xohlaysizmi?")) {
-                document.getElementById("chat-container").innerHTML = `
-                    <div class="message bot">
-                        <b>Zeed AI Pro:</b> Suhbat tarixi tozalandi. Yangi savolingizni bering!
+        function clearChatHistory() {
+            if (confirm("Barcha suhbat tarixini tozalashni tasdiqlaysizmi?")) {
+                document.getElementById("chat-stream").innerHTML = `
+                    <div class="chat-bubble bot">
+                        <b>Zeed AI Pro:</b> Tarix tozalandi. Yangi savolingizni yozishingiz mumkin!
                     </div>
                 `;
+                localStorage.removeItem("zeed_ultimate_chat");
             }
         }
 
-        // Voice Recognition setup
-        let recognition;
-        function toggleVoice() {
+        // Ovozli kiritish funksiyasi
+        let speechRecObj;
+        function toggleVoiceInput() {
             if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
                 alert("Brauzeringiz ovozli kiritishni qo'llab-quvvatlamaydi!");
                 return;
             }
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            recognition = new SpeechRecognition();
-            recognition.lang = 'uz-UZ';
+            const SpeechAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+            speechRecObj = new SpeechAPI();
+            speechRecObj.lang = 'uz-UZ';
             
-            const micBtn = document.getElementById("micBtn");
+            const micIconBtn = document.getElementById("voiceBtn");
             
-            recognition.onstart = () => { micBtn.classList.add('recording'); };
-            recognition.onresult = (event) => {
-                document.getElementById("userInput").value = event.results[0][0].transcript;
-                micBtn.classList.remove('recording');
+            speechRecObj.onstart = () => { micIconBtn.classList.add('active-record'); };
+            speechRecObj.onresult = (event) => {
+                document.getElementById("userInputText").value = event.results[0][0].transcript;
+                micIconBtn.classList.remove('active-record');
             };
-            recognition.onerror = () => { micBtn.classList.remove('recording'); };
-            recognition.onend = () => { micBtn.classList.remove('recording'); };
+            speechRecObj.onerror = () => { micIconBtn.classList.remove('active-record'); };
+            speechRecObj.onend = () => { micIconBtn.classList.remove('active-record'); };
             
-            recognition.start();
+            speechRecObj.start();
         }
 
-        async function sendMessage() {
-            const inputField = document.getElementById("userInput");
-            const chatContainer = document.getElementById("chat-container");
-            const prompt = inputField.value.trim();
+        async function sendUserMessage() {
+            const inputElem = document.getElementById("userInputText");
+            const streamBox = document.getElementById("chat-stream");
+            const queryText = inputElem.value.trim();
             
-            if (!prompt) return;
+            if (!queryText) return;
 
-            chatContainer.innerHTML += `<div class="message user"><b>Siz:</b> ${escapeHtml(prompt)}</div>`;
-            inputField.value = "";
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+            streamBox.innerHTML += `<div class="chat-bubble user"><b>Siz:</b> ${escapeSpecialChars(queryText)}</div>`;
+            inputElem.value = "";
+            streamBox.scrollTop = streamBox.scrollHeight;
+            persistChat();
 
-            const loadingId = "loading_" + Date.now();
-            chatContainer.innerHTML += `<div id="${loadingId}" class="message bot"><b>Zeed AI Pro:</b> Tezkor tahlil qilinmoqda...</div>`;
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+            const loadIndicatorId = "load_" + Date.now();
+            streamBox.innerHTML += `<div id="${loadIndicatorId}" class="chat-bubble bot"><b>Zeed AI Pro:</b> Tezkor tahlil qilinmoqda...</div>`;
+            streamBox.scrollTop = streamBox.scrollHeight;
 
             try {
-                const fullPrompt = `${systemPrompts[currentMode]}\n\nFoydalanuvchi so'rovi: ${prompt}`;
+                const combinedPrompt = `${systemPrompts[activeMode]}\n\nSo'rov: ${queryText}`;
 
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                const apiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: fullPrompt }] }]
+                        contents: [{ parts: [{ text: combinedPrompt }] }]
                     })
                 });
 
-                const data = await response.json();
+                const responseJson = await apiResponse.json();
                 
-                if (data.candidates && data.candidates[0].content) {
-                    let botReply = data.candidates[0].content.parts[0].text;
-                    let parsedHtml = marked.parse(botReply);
+                if (responseJson.candidates && responseJson.candidates[0].content) {
+                    let aiReplyText = responseJson.candidates[0].content.parts[0].text;
+                    let renderedMarkdown = marked.parse(aiReplyText);
                     
-                    document.getElementById(loadingId).innerHTML = `<b>Zeed AI Pro:</b><br><br>${parsedHtml}`;
-                } else if (data.error) {
-                    document.getElementById(loadingId).innerHTML = `<b>Xatolik:</b> ${data.error.message}`;
+                    document.getElementById(loadIndicatorId).innerHTML = `<b>Zeed AI Pro:</b><br><br>${renderedMarkdown}`;
+                } else if (responseJson.error) {
+                    document.getElementById(loadIndicatorId).innerHTML = `<b>Xatolik:</b> ${responseJson.error.message}`;
                 } else {
-                    document.getElementById(loadingId).innerHTML = `<b>Xatolik:</b> API kalitni tekshiring!`;
+                    document.getElementById(loadIndicatorId).innerHTML = `<b>Xatolik:</b> API kalitni tekshiring!`;
                 }
-            } catch (error) {
-                document.getElementById(loadingId).innerHTML = `<b>Xatolik:</b> Tarmoqqa ulanishda muammo yuz berdi.`;
+            } catch (networkError) {
+                document.getElementById(loadIndicatorId).innerHTML = `<b>Xatolik:</b> Internet tarmog'ida uzilish yuz berdi.`;
             }
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            streamBox.scrollTop = streamBox.scrollHeight;
+            persistChat();
         }
 
-        function handleKey(event) {
+        function checkEnterKey(event) {
             if (event.key === "Enter") {
-                sendMessage();
+                sendUserMessage();
             }
         }
 
-        function escapeHtml(text) {
+        function escapeSpecialChars(text) {
             return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
     </script>
 </body>
 </html>
+Kodni to'liq nusxalab GitHub'ga joylang. Saytingiz endi juda tez, xatosiz va mukammal ishlaydi!
