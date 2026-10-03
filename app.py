@@ -1,7 +1,7 @@
 import google.generativeai as genai
 import streamlit as st
 
-# Secrets ichidan kalitni qidirish (ikkala variantni ham qo'llab-quvvatlaydi)
+# Secrets ichidan kalitni olish
 if "GOOGLE_API_KEY" in st.secrets:
   api_key = st.secrets["GOOGLE_API_KEY"]
 elif "GEMINI_API_KEY" in st.secrets:
@@ -12,13 +12,12 @@ else:
 
 genai.configure(api_key=api_key)
 
-# Modelni sozlash
-model = genai.GenerativeModel("gemini-1.5-flash")
+# Model nomini to'g'ridan-to'g'ri yozamiz
+model = genai.GenerativeModel("gemini-1.5-flash-latest")
 
-# Zeed AI interfeysi
 st.markdown("# ⚡ Zeed AI")
 st.write(
-    "Salom! Men Zeed AI — sizning shaxsiy sun'iy intellekt yordamchingiz."
+    "Salom! Men Zeed AI — sizning shaxsiy sun'iy intellakt yordamchingiz."
     " Marhamat, savolingizni bering va tezkor javob oling."
 )
 
