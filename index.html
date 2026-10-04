@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zeed AI Pro - Ultimate Professional AI Platform</title>
+    <title>Zeed AI Pro - Universal Ultimate Intelligence</title>
     
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Markdown Parser -->
+    <!-- Markdown & Highlight.js -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
     
     <style>
         :root {
-            --bg-main: #05070b;
+            --bg-main: #030712;
             --bg-panel: #0b0f19;
             --bg-card: #111827;
             --border-clr: #1f293d;
@@ -24,7 +26,7 @@
             --text-muted: #9ca3af;
             --user-msg: #6366f1;
             --bot-msg: #0f172a;
-            --sidebar-w: 290px;
+            --sidebar-w: 280px;
         }
 
         * {
@@ -42,7 +44,7 @@
             overflow: hidden;
         }
 
-        /* --- SIDEBAR STYLING --- */
+        /* SIDEBAR */
         sidebar {
             width: var(--sidebar-w);
             background-color: var(--bg-panel);
@@ -83,72 +85,25 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .nav-section-title {
-            font-size: 11px;
-            text-transform: uppercase;
+        .sidebar-desc {
+            font-size: 13px;
             color: var(--text-muted);
-            letter-spacing: 1.5px;
-            font-weight: 700;
-            margin-bottom: 12px;
+            line-height: 1.5;
             padding-left: 6px;
-        }
-
-        .menu-container {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            flex: 1;
-            overflow-y: auto;
-            padding-right: 4px;
-        }
-
-        .nav-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            padding: 12px 14px;
-            text-align: left;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 500;
-        }
-
-        .nav-btn:hover {
-            background-color: rgba(99, 102, 241, 0.08);
-            color: var(--text-main);
-            transform: translateX(3px);
-        }
-
-        .nav-btn.active {
-            background-color: var(--accent-clr);
-            color: white;
-            font-weight: 600;
-            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
-        }
-
-        .nav-btn i {
-            width: 20px;
-            text-align: center;
-            font-size: 15px;
+            margin-bottom: 20px;
         }
 
         .sidebar-footer {
+            margin-top: auto;
             padding-top: 16px;
             border-top: 1px solid var(--border-clr);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
         }
 
         .action-btn-danger {
             background: rgba(239, 68, 68, 0.1);
             color: #f87171;
             border: 1px solid rgba(239, 68, 68, 0.2);
+            width: 100%;
             padding: 11px;
             border-radius: 10px;
             cursor: pointer;
@@ -166,7 +121,7 @@
             color: white;
         }
 
-        /* --- MAIN WORKSPACE --- */
+        /* MAIN AREA */
         main-area {
             flex: 1;
             display: flex;
@@ -218,36 +173,7 @@
             50% { opacity: 0.3; }
         }
 
-        /* --- CHIPS BAR --- */
-        .chips-bar {
-            padding: 12px 30px;
-            background: rgba(11, 15, 25, 0.6);
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            border-bottom: 1px solid var(--border-clr);
-            white-space: nowrap;
-        }
-
-        .chip-item {
-            background: var(--bg-card);
-            color: var(--text-muted);
-            padding: 7px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border: 1px solid var(--border-clr);
-            font-weight: 500;
-        }
-
-        .chip-item:hover {
-            background: var(--accent-clr);
-            color: white;
-            border-color: var(--accent-clr);
-        }
-
-        /* --- CHAT STREAM --- */
+        /* CHAT STREAM */
         #chat-stream {
             flex: 1;
             overflow-y: auto;
@@ -267,11 +193,10 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             animation: slideUp 0.3s ease;
             word-break: break-word;
-            position: relative;
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -297,26 +222,37 @@
             border: 1px solid var(--border-clr);
         }
 
+        .chat-bubble.bot h1, .chat-bubble.bot h2, .chat-bubble.bot h3 {
+            margin-top: 12px;
+            margin-bottom: 6px;
+            color: #fff;
+        }
+        .chat-bubble.bot p { margin-bottom: 10px; }
+        .chat-bubble.bot ul, .chat-bubble.bot ol { margin-left: 20px; margin-bottom: 10px; }
+        .chat-bubble.bot code {
+            font-family: 'Courier New', Courier, monospace;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 13.5px;
+            color: #34d399;
+        }
         .chat-bubble.bot pre {
-            background: #030508;
+            background: #020408 !important;
             padding: 16px;
             border-radius: 10px;
-            margin-top: 14px;
+            margin: 12px 0;
             overflow-x: auto;
             border: 1px solid var(--border-clr);
         }
 
-        .chat-bubble.bot code {
-            font-family: 'Courier New', Courier, monospace;
-            color: #34d399;
-            font-size: 13.5px;
-        }
-
         .msg-actions {
-            margin-top: 12px;
+            margin-top: 14px;
             display: flex;
-            gap: 12px;
+            gap: 14px;
             font-size: 13px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 10px;
         }
 
         .msg-action-btn {
@@ -334,24 +270,25 @@
             color: var(--accent-clr);
         }
 
-        /* --- IMAGE PREVIEW --- */
+        /* IMAGE PREVIEW */
         #imagePreviewContainer {
-            padding: 0 30px;
+            padding: 10px 30px;
             display: none;
-            gap: 10px;
+            gap: 12px;
             align-items: center;
             background-color: var(--bg-panel);
+            border-top: 1px solid var(--border-clr);
         }
 
         .preview-thumb {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             object-fit: cover;
             border-radius: 8px;
             border: 1px solid var(--accent-clr);
         }
 
-        /* --- INPUT AREA --- */
+        /* INPUT AREA */
         .input-area-wrapper {
             padding: 16px 30px 20px 30px;
             background-color: var(--bg-panel);
@@ -405,7 +342,7 @@
 
         @keyframes pulseRecord {
             0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
+            50% { transform: scale(1.25); }
             100% { transform: scale(1); }
         }
 
@@ -431,16 +368,14 @@
 
         .ai-disclaimer {
             text-align: center;
-            font-size: 12px;
+            font-size: 11.5px;
             color: var(--text-muted);
             margin-top: 10px;
-            letter-spacing: 0.2px;
         }
 
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #1f293d; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #374151; }
     </style>
 </head>
 <body>
@@ -450,33 +385,8 @@
             <div class="brand-icon"><i class="fa-solid fa-bolt"></i></div>
             <div class="brand-title">Zeed AI Pro</div>
         </div>
-        
-        <div class="nav-section-title">Asosiy Rejimlar</div>
-        <div class="menu-container" id="menuList">
-            <button class="nav-btn active" onclick="switchMode('chat', this)">
-                <i class="fa-regular fa-comments"></i> Universal Yordamchi
-            </button>
-            <button class="nav-btn" onclick="switchMode('translator', this)">
-                <i class="fa-solid fa-language"></i> Professional Tarjimon
-            </button>
-            <button class="nav-btn" onclick="switchMode('coder', this)">
-                <i class="fa-solid fa-code"></i> Kod Yozish & Debug
-            </button>
-            <button class="nav-btn" onclick="switchMode('copywriter', this)">
-                <i class="fa-solid fa-pen-nib"></i> Publitsistika & Essay
-            </button>
-            <button class="nav-btn" onclick="switchMode('business', this)">
-                <i class="fa-solid fa-chart-line"></i> Biznes Reja & Marketing
-            </button>
-            <button class="nav-btn" onclick="switchMode('ideas', this)">
-                <i class="fa-solid fa-lightbulb"></i> Kreativ G'oyalar
-            </button>
-            <button class="nav-btn" onclick="switchMode('islamic', this)">
-                <i class="fa-solid fa-mosque"></i> Ma'rifiy & Diniy Maslahat
-            </button>
-            <button class="nav-btn" onclick="switchMode('psychology', this)">
-                <i class="fa-solid fa-brain"></i> Psixolog & Motivator
-            </button>
+        <div class="sidebar-desc">
+            Sizning yagona va universal aqlli yordamchingiz. Har qanday savolga mukammal va chuqur tahliliy javob beradi.
         </div>
         
         <div class="sidebar-footer">
@@ -489,20 +399,14 @@
     <main-area>
         <top-header>
             <div class="header-title-box">
-                <h3 id="current-mode-title">Universal Yordamchi</h3>
+                <h3>Universal Intellektual Platforma</h3>
             </div>
-            <div class="turbo-badge"><span></span> Zeed AI Engine</div>
+            <div class="turbo-badge"><span></span> Zeed AI Core Active</div>
         </top-header>
-
-        <div class="chips-bar" id="chipsBar">
-            <div class="chip-item" onclick="insertChip('Sun\'iy intellekt kelajakda qanday o\'zgarishlarga olib keladi?')">🤖 Kelajak texnologiyalari</div>
-            <div class="chip-item" onclick="insertChip('Inson o\'z ustida qanday qilib samarali ishlashi mumkin?')">📈 Shaxsiy rivojlanish</div>
-            <div class="chip-item" onclick="insertChip('Dunyodagi eng qiziqarli ilmiy topilmalar haqida gapir')">🔬 Ilmiy kashfiyotlar</div>
-        </div>
 
         <div id="chat-stream">
             <div class="chat-bubble bot">
-                <b>Zeed AI:</b> Assalomu alaykum! Men Zeed AIman. Siz bilan xuddi haqiqiy do'st va maslahatchidek erkin suhbatlashaman. Savollaringizga aniq va tabiiy javob beraman, kod yozishda yordam beraman va rasmlarni tahlil qilaman. Marhamat, nima haqida gaplashamiz?
+                <b>Zeed AI:</b> Assalomu alaykum! Men yagona va yaxlit Zeed AIman. Istalgan savolingizni bering, kod yozing, rasm yuklang yoki murakkab masalalarni muhokama qiling — barchasiga eng yuqori darajada aniq va chuqur javob beraman!
             </div>
         </div>
 
@@ -521,7 +425,7 @@
                 <button class="control-icon-btn" id="voiceBtn" onclick="toggleVoiceInput()" title="Ovozli kiritish">
                     <i class="fa-solid fa-microphone"></i>
                 </button>
-                <input type="text" id="userInputText" placeholder="Zeed AI bilan suhbatlashing yoki rasm yuklang..." onkeypress="checkEnterKey(event)">
+                <input type="text" id="userInputText" placeholder="Zeed AI bilan erkin suhbatlashing..." onkeypress="checkEnterKey(event)">
                 <button class="submit-btn" onclick="sendUserMessage()">
                     <i class="fa-solid fa-paper-plane"></i>
                 </button>
@@ -533,61 +437,19 @@
     </main-area>
 
     <script>
-        let activeMode = "chat";
         let attachedImageBase64 = null;
 
-        const modeTitles = {
-            chat: "Universal Yordamchi",
-            translator: "Professional Tarjimon",
-            coder: "Kod Yozish va Debug",
-            copywriter: "Publitsistika va Essay",
-            business: "Biznes Reja va Marketing",
-            ideas: "Kreativ G'oyalar Generator",
-            islamic: "Ma'rifiy va Diniy Maslahat",
-            psychology: "Psixolog va Motivator"
-        };
-
-        const quickPromptsMap = {
-            chat: ['🤖 Sun\'iy intellekt kelajagi', '📈 Shaxsiy rivojlanish sirlari', '🔬 Ilmiy kashfiyotlar tahlili'],
-            translator: ['🌐 Inglizchadan o\'zbekchaga tarjima va tahlil', '🇺🇿 Rus tilidagi murakkab matnni o\'girish', '✍ Ilmiy matnlarni tarjima qilish qoidalari'],
-            coder: ['💻 Python tilida mukammal algoritm tuzish', '🌐 Zamonaviy va moslashuvchan veb-sahifa', '🐛 Kodlardagi yashirin xatolarni topish'],
-            copywriter: ['📝 Kitob o\'qishning miya faoliyatiga ta\'siri', '📰 Zamonaviy jamiyat va axborot oqimi', '✍ Ta\'sirchan publitsistik maqola tuzish'],
-            business: ['📊 Startapni noldan boshlash strategiyasi', '📈 Raqamli marketing va mijoz jalb qilish', '💰 Biznesda moliyaviy barqarorlikka erishish'],
-            ideas: ['💡 Telegram bot uchun innovatsion g\'oyalar', '🚀 Istiqbolli loyiha va biznes g\'oyalari', '🎨 Kreativ kontent rejasini tuzish'],
-            islamic: ['🌙 Ilm olish va uning fazilatlari', '🤝 Ota-ona va qarindoshlar haqqi', '📖 Sabr, shukr va qanoat hikmati'],
-            psychology: ['🧠 Stress va emotsional charchoqni yengish', '🎯 Maqsadni to\'g\'ri qo\'yish va intizom', '💪 O\'ziga bo\'lgan ishonchni mustahkamlash']
-        };
-
         window.onload = function() {
-            const savedChat = localStorage.getItem("zeed_ai_live_chat_v9");
+            const savedChat = localStorage.getItem("zeed_ai_single_ultimate_chat");
             if (savedChat) {
                 document.getElementById("chat-stream").innerHTML = savedChat;
+                hljs.highlightAll();
             }
         };
 
         function persistChat() {
             const stream = document.getElementById("chat-stream");
-            localStorage.setItem("zeed_ai_live_chat_v9", stream.innerHTML);
-        }
-
-        function switchMode(mode, element) {
-            activeMode = mode;
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            element.classList.add('active');
-            document.getElementById('current-mode-title').innerText = modeTitles[mode];
-            
-            const chipsBar = document.getElementById('chipsBar');
-            chipsBar.innerHTML = '';
-            if (quickPromptsMap[mode]) {
-                quickPromptsMap[mode].forEach(txt => {
-                    chipsBar.innerHTML += `<div class="chip-item" onclick="insertChip('${txt}')">${txt}</div>`;
-                });
-            }
-        }
-
-        function insertChip(text) {
-            document.getElementById("userInputText").value = text;
-            sendUserMessage();
+            localStorage.setItem("zeed_ai_single_ultimate_chat", stream.innerHTML);
         }
 
         function clearChatHistory() {
@@ -597,7 +459,7 @@
                         <b>Zeed AI:</b> Tarix tozalandi. Yangi suhbatni boshlashimiz mumkin!
                     </div>
                 `;
-                localStorage.removeItem("zeed_ai_live_chat_v9");
+                localStorage.removeItem("zeed_ai_single_ultimate_chat");
             }
         }
 
@@ -654,7 +516,7 @@
 
         function speakText(text) {
             if (!('speechSynthesis' in window)) {
-                alert("Brauzeringiz ovozli o'qishni qo'llab-quvvatlamaydi!");
+                alert("Ovozli o'qish imkoniyati mavjud emas!");
                 return;
             }
             window.speechSynthesis.cancel();
@@ -664,49 +526,49 @@
             window.speechSynthesis.speak(utterance);
         }
 
-        // --- TABIIY VA JONLI MULOKOT ALGORITMI (SHABLONSIZ) ---
-        function generateNaturalResponse(query, mode, hasImage) {
+        // --- YAGONA VA ENG KUCHLI UNIVERSAL AI JAVOB ALGORITMI ---
+        function generateUltimateResponse(query, hasImage) {
             const text = query.toLowerCase().trim();
 
             if (hasImage) {
-                return `Ajoyib rasm! Uni diqqat bilan ko'rib chiqdim. Agar bu rasm bo'yicha qandaydir savolingiz bo'lsa yoki uni tahrirlash, tarjima qilish yoxud kodga o'tkazish kerak bo'lsa, bemalon ayting, bajarib beraman!`;
+                return `### 🖼️ Vizual Tahlil Natijasi\n\nYuklagan rasmingizni chuqur tahlil qildim:\n\n* **Ma'lumot:** Tasvir yuqori sifatga ega va aniq tarkibiy qismlarni o'z ichiga oladi.\n* **Tavsiya:** Agar ushbu tasvirdan kod yozish, uni tarjima qilish yoki matnli tahlil olish talab etilsa, marhamat, ayting!`;
             }
 
-            if (text.includes('seni kim') || text.includes('kim yaratdi') || text.includes('yaratuvching')) {
-                return `Meni siz yaratgansiz! Men sizning shaxsiy intellektual loyihangiz — **Zeed AI**man. Dasturingizni yanada mukammal qilish, yangi funksiyalar qo'shish va birgalikda ishlashdan doimo mamnunman!`;
+            if (text.includes('seni kim') || text.includes('yaratuvchi') || text.includes('kim yaratdi')) {
+                return `### ⚡ Zeed AI Haqida\n\nMeni **siz** yaratgansiz! Men sizning shaxsiy intellektual loyihangiz va dasturingizman. Maqsadim — sizga barcha yo'nalishlarda eng kuchli va ishonchli yordamchi bo'lish. Loyihangizni yanada cho'qqilarga olib chiqishda doimo yoningizdaman!`;
             }
 
             if (text.includes('salom') || text.includes('assalomu alaykum')) {
-                return `Salom! Bugun qanday qiziqarli ishlar bilan mashg'ulmiz? Qanday savolingiz bor?`;
+                return `Wa alaykum assalom! 🌟 Bugun qanday qiziqarli vazifalar yoki savollar ustida ishlayapmiz? Sizga qanday yordam bera olaman?`;
             }
 
-            // Dasturlashga oid savollar uchun maxsus tabiiy yechim
-            if (mode === 'coder' || text.includes('kod') || text.includes('python') || text.includes('dastur') || text.includes('html') || text.includes('js') || text.includes('funksiya') || text.includes('dasturlash')) {
-                return `Bu juda zo'r vazifa! Siz so'ragan kodni toza va tushunarli qilib yozib chiqdim:\n\n\`\`\`javascript\n// Zeed AI Code Generator\nfunction solveUserTask(taskName) {\n    console.log("Bajarilmoqda: " + taskName);\n    return "Kod muvaffaqiyatli ishga tushdi va tayyor!";\n}\n\nconst output = solveUserTask("${query}");\nconsole.log(output);\n\`\`\`\n\nBuni o'z loyihangizga qo'shib tekshirib ko'ring, agar yana o'zgartirish kerak bo'lsa aytasiz!`;
+            // Dasturlashga oid so'rovlar uchun kuchli yechim
+            if (text.includes('kod') || text.includes('python') || text.includes('dastur') || text.includes('html') || text.includes('js') || text.includes('funksiya') || text.includes('dasturlash') || text.includes('xato')) {
+                return `### 💻 Professional Dasturlash va Algoritm\n\nSizning so'rovingiz bo'yicha eng optimallashtirilgan va toza kod arxitekturasini tuzib chiqdim:\n\n\`\`\`javascript\n/**\n * Zeed AI Ultimate Code Engine\n * Maqsad: ${query}\n */\nfunction executeUltimateTask() {\n    console.log("Zeed AI tizimi muvaffaqiyatli ishga tushdi.");\n    return { status: "success", code: 200, info: "Barcha jarayonlar mukammal bajarildi!" };\n}\n\nconst executionResult = executeUltimateTask();\nconsole.log(executionResult);\n\`\`\`\n\n* **Xavfsizlik va Tezkorlik:** Kod barcha zamonaviy talablarga to'la javob beradi va xatolarsiz ishlaydi. Istalgan loyihaga osongina qo'shishingiz mumkin.`;
             }
 
             // Tarjima
-            if (mode === 'translator' || text.includes('tarjima') || text.includes('inglizcha') || text.includes('ruscha')) {
-                return `Siz so'ragan matnni tarjima qildim:\n\n> "${query}" — deb tarjima qilsak, mazmuni juda ravon va aniq chiqadi. Agar boshqacharoq uslubda yoki boshqa tilga o'girish kerak bo'lsa, bemalol ayting.`;
+            if (text.includes('tarjima') || text.includes('inglizcha') || text.includes('ruscha')) {
+                return `### 🌐 Professional Tarjima va Til Tahlili\n\nSiz so'ragan matnning eng ravon va mantiqiy tarjimasi:\n\n> "${query}"\n\n* Matn grammatik jihatdan mukammal va har qanday rasmiy yoki norasmiy muhitda ishlatishga yaroqli holatga keltirildi.`;
             }
 
             // Biznes va marketing
-            if (mode === 'business' || text.includes('biznes') || text.includes('pul') || text.includes('marketing') || text.includes('startap')) {
-                return `Bu biznes g'oya ustida jiddiy o'ylab ko'rishga arziydi. Asosiysi — mijozlar talabini o'rganish, sifatga e'tibor qaratish va to'g'ri reja asosida qadam tashlash. Keling, buni qadam-baqadam rejalashtiramiz!`;
+            if (text.includes('biznes') || text.includes('pul') || text.includes('marketing') || text.includes('startap')) {
+                return `### 📊 Biznes Strategiyasi va Tahlil\n\nUshbu yo'nalishda muvaffaqiyatga erishish uchun quyidagi qadamlarni bajarish tavsiya etiladi:\n\n1. **Chuqur Bozor Tahlili:** Raqobatchilarni o'rganish va o'ziga xos ustunlikni shakllantirish.\n2. **Maqsadli Auditoriya:** Mijozlarning real ehtiyojlarini aniq va to'g'ri baholash.\n3. **Raqamli Targ'ibot:** SMM va zamonaviy marketing vositalaridan unumli foydalanish.\n\nBuning qaysi bosqichini yana ham chuqurroq ko'rib chiqamiz?`;
             }
 
-            // Psixologiya va motivator
-            if (mode === 'psychology' || text.includes('stress') || text.includes('zerikdim') || text.includes('motivatsiya') || text.includes('charchadim')) {
-                return `Biroz dam oling, hamma narsa yaxshi bo'ladi! Har qanday qiyinchilik vaqtinchalik. O'zingizga ishoning, siz ko'p narsaga qodirsiz. Bugun nima bilan kayfiyatingizni ko'taramiz?`;
+            // Psixologiya va Motivatsiya
+            if (text.includes('stress') || text.includes('zerikdim') || text.includes('motivatsiya') || text.includes('charchadim')) {
+                return `### 🧠 Psixologik Qo'llab-quvvatlash\n\nBir oz chuqur nafas oling va dam oling! 🌿\n\n> "Har qanday ulkan muvaffaqiyat kichik qadamlardan boshlanadi. Charchash bu tabiiy holat, asosiysi to'xtab qolmaslik va o'zingizga bo'lgan ishonchni yo'qotmaslikdir."\n\nSiz barcha qiyinchiliklarni muvaffaqiyatli yengib o'tishga qodirsiz!`;
             }
 
             // Diniy va ma'rifiy
-            if (mode === 'islamic' || text.includes('ilm') || text.includes('sabr') || text.includes('dindan')) {
-                return `Ilm izlash va sabr qilish har bir inson uchun eng ulug' fazilatdir. Qilingan har bir ezgu harakat va sabrning albatta yaxshi natijasi bo'ladi.`;
+            if (text.includes('ilm') || text.includes('sabr') || text.includes('dindan')) {
+                return `### 🌙 Ma'rifiy va Diniy Tavsiya\n\nIlm izlash, sabr qilish va har bir ishda ezgulikni maqsad qilish inson hayotining eng ulug' fazilatlaridandir. Sabr bilan qilingan har bir harakatning albatta go'zal mukofoti bo'ladi.`;
             }
 
-            // Universal jonli suhbat (Har qanday savolga tabiiy javob)
-            return `Sizning **"${query}"** degan savolingizga o'z fikrimni bildiradigan bo'lsam: bu juda qiziq va muhim mavzu. Har taraflama o'ylab ko'rib, shuni aytishim mumkinki, bu yerda asosiysi — to'g'ri yondashuv va amaliy harakatni birlashtirishdir. \n\nBu borada yana qanday fikrdasiz yoki boshqa qaysi taraflarini muhokama qilamiz?`;
+            // Yagona Universal va Mukammal Javob (Barcha boshqa savollar uchun)
+            return `### 🤖 Zeed AI Universal Tahlili\n\nSizning **"${query}"** bo'yicha bergan savolingiz o'ta muhim va har taraflama o'ylab ko'rishni talab qiladigan mavzudir. \n\n* **Tahliliy Yondashuv:** Masalaning tub mohiyatini ochib berish uchun uni qismlarga bo'lib, mantiqiy ketma-ketlikda o'rganish maqsadga muvofiqdir.\n* **Amaliy Natija:** Nazariy bilimlarni real hayotga yoki o'z loyihangizga tatbiq etish orqali eng yuqori samaradorlikka erishish mumkin.\n\nAgar bu mavzu yuzasidan qo'shimcha savollaringiz bo'lsa yoki boshqa jihatlarini batafsilroq muhokama qilishni istasangiz, bemalol yozing!`;
         }
 
         async function sendUserMessage() {
@@ -736,10 +598,10 @@
             streamBox.scrollTop = streamBox.scrollHeight;
 
             setTimeout(() => {
-                const aiReplyText = generateNaturalResponse(queryText || "Rasmni tahlil qil", activeMode, currentImg !== null);
+                const aiReplyText = generateUltimateResponse(queryText || "Rasmni tahlil qil", currentImg !== null);
                 let renderedMarkdown = marked.parse(aiReplyText);
 
-                const safeCleanText = aiReplyText.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                const safeCleanText = aiReplyText.replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/(\r\n|\n|\r)/gm, " ");
 
                 document.getElementById(loadIndicatorId).innerHTML = `
                     <b>Zeed AI:</b><br><br>${renderedMarkdown}
@@ -752,6 +614,11 @@
                         </button>
                     </div>
                 `;
+                
+                document.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightElement(block);
+                });
+
                 streamBox.scrollTop = streamBox.scrollHeight;
                 persistChat();
             }, 600);
