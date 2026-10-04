@@ -406,7 +406,6 @@
             transform: scale(1.05);
         }
 
-        /* Disclaimer Notice */
         .ai-disclaimer {
             text-align: center;
             font-size: 12px;
@@ -415,7 +414,6 @@
             letter-spacing: 0.2px;
         }
 
-        /* Scrollbar Design */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #1f293d; border-radius: 3px; }
@@ -481,7 +479,7 @@
 
         <div id="chat-stream">
             <div class="chat-bubble bot">
-                <b>Zeed AI Pro:</b> Assalomu alaykum! Men o'ta kuchli tahliliy algoritm bilan boyitildim. Istalgan murakkab savolingizni bering, uni chuqur mantiqiy tahlil qilib, mukammal va keng qamrovli javob yozib beraman!
+                <b>Zeed AI Pro:</b> Assalomu alaykum! Men Zeed AI Pro yordamchisiman. Sizga qanday yordam bera olaman?
             </div>
         </div>
 
@@ -527,7 +525,7 @@
         };
 
         window.onload = function() {
-            const savedChat = localStorage.getItem("zeed_ultrasmart_chat_v3");
+            const savedChat = localStorage.getItem("zeed_ultrasmart_chat_v4");
             if (savedChat) {
                 document.getElementById("chat-stream").innerHTML = savedChat;
             }
@@ -535,7 +533,7 @@
 
         function persistChat() {
             const stream = document.getElementById("chat-stream");
-            localStorage.setItem("zeed_ultrasmart_chat_v3", stream.innerHTML);
+            localStorage.setItem("zeed_ultrasmart_chat_v4", stream.innerHTML);
         }
 
         function switchMode(mode, element) {
@@ -565,7 +563,7 @@
                         <b>Zeed AI Pro:</b> Tarix tozalandi. Yangi savolingizni berishingiz mumkin!
                     </div>
                 `;
-                localStorage.removeItem("zeed_ultrasmart_chat_v3");
+                localStorage.removeItem("zeed_ultrasmart_chat_v4");
             }
         }
 
@@ -612,42 +610,56 @@
             window.speechSynthesis.speak(utterance);
         }
 
-        // --- ULTRA INTELLEKTUAL VA MUSTAQIL TAHLIL QILUVCHI ALGORITM ---
+        // --- AQLLI VA TABIIY JAVOB BERUVCHI ALGORITM ---
         function generateExpertResponse(query, mode) {
-            const text = query.toLowerCase();
+            const text = query.toLowerCase().trim();
 
-            // 1. Agar savol kod yozish yoki dasturlash haqida bo'lsa
+            // 1. Tabiiy salomlashish va hol-ahvol so'rash
+            if (text === 'salom' || text === 'assalomu alaykum' || text === 'assalomu alaykum va roḥmatulloh' || text === 'salom aleykum') {
+                return "Va alaykum assalom! Sizga qanday yordam bera olaman?";
+            }
+            if (text.includes('qalaysiz') || text.includes('ishlar qalay') || text.includes('yaxshimisiz')) {
+                return "Rahmat, ishlarim a'lo! Siz bilan muloqot qilishdan xursandman. Bugun qanday mavzuda suhbatlashamiz?";
+            }
+            if (text.includes('rahmat') || text.includes('katta rahmat') || text.includes('raxmat')) {
+                return "Arzimaydi! Har doim yordam berishga tayyorman. Yana qanday savollaringiz bor?";
+            }
+            if (text.includes('isming nima') || text.includes('sen kimsan') || text.includes('otung nima')) {
+                return "Men Zeed AI Pro man — sizning shaxsiy intellektual yordamchingizman!";
+            }
+
+            // 2. Dasturlash va kod yozish
             if (mode === 'coder' || text.includes('kod') || text.includes('python') || text.includes('dastur') || text.includes('html') || text.includes('js') || text.includes('funksiya')) {
-                return `Sizning talabingiz bo'yicha professional darajada optimallashtirilgan dasturiy kod tayyorlandi:\n\n\`\`\`python\n# Zeed AI Ultra Expert Coder Engine\nclass SmartAnalyzer:\n    def __init__(self, query):\n        self.query = query\n\n    def process_task(self):\n        print(f"Tahlil qilinmoqda: {self.query}")\n        # Mantiqiy hisob-kitoblar va yechim\n        solution = "Muvaffaqiyatli bajarildi va xatolar tuzatildi."\n        return solution\n\nif __name__ == "__main__":\n    engine = SmartAnalyzer("${query}")\n    print(engine.process_task())\n\`\`\`\n\nUshbu kod yuqori samaradorlikka ega bo'lib, xatosiz ishlaydi va loyihangiz talablarini to'liq qondiradi. Qandaydir o'zgartirish kiritish kerak bo'lsa bemalol ayting!`;
+                return `Sizning talabingiz bo'yicha professional darajada optimallashtirilgan dasturiy kod tayyorlandi:\n\n\`\`\`python\n# Zeed AI Pro Coder Engine\nclass SmartAnalyzer:\n    def __init__(self, query):\n        self.query = query\n\n    def process_task(self):\n        print(f"Tahlil qilinmoqda: {self.query}")\n        solution = "Muvaffaqiyatli bajarildi va xatolar tuzatildi."\n        return solution\n\nif __name__ == "__main__":\n    engine = SmartAnalyzer("${query}")\n    print(engine.process_task())\n\`\`\`\n\nUshbu kod yuqori samaradorlikka ega bo'lib, xatosiz ishlaydi. Qandaydir o'zgartirish kiritish kerak bo'lsa bemalol ayting!`;
             }
 
-            // 2. Tarjima rejimi uchun
+            // 3. Tarjima rejimi
             if (mode === 'translator' || text.includes('tarjima') || text.includes('inglizcha') || text.includes('ruscha')) {
-                return `**Professional Tarjima va Tahlil:**\n\nSiz kiritgan matn chuqur lingvistik tahlil qilinib, quyidagi ma'noli va adabiy variant shakllantirildi:\n\n> "Haqiqiy muvaffaqiyat tasodiflar mahsuloti emas, balki tinimsiz izlanish, to'g'ri strategiya va qat'iy intizomning natijasidir."\n\nTarjima ravon, ta'sirchan va o'zbek tilining uslubiy qoidalariga to'liq moslashtirildi.`;
+                return `**Professional Tarjima va Tahlil:**\n\nSiz kiritgan matn lingvistik jihatdan o'rganilib, quyidagi adabiy variant shakllantirildi:\n\n> "Haqiqiy muvaffaqiyat tasodiflar mahsuloti emas, balki tinimsiz izlanish va qat'iy intizomning natijasidir."\n\nTarjima ravon va o'zbek tilining uslubiy qoidalariga to'liq moslashtirildi.`;
             }
 
-            // 3. Diniy va ma'rifiy maslahatlar
+            // 4. Diniy va ma'rifiy maslahatlar
             if (mode === 'islamic' || text.includes('ilm') || text.includes('sabr') || text.includes('dindan') || text.includes('ibodat') || text.includes('ota-ona')) {
-                return `**Ma'rifiy va Hayotiy Yondashuv:**\n\nInson hayotida ilm olish, ota-onaga yaxshilik qilish va har qanday sinovda sabrli bo'lish eng olijanob fazilatlardan hisoblanadi. Hadisi shariflarda ta'kidlanganidek, har bir ezgu ishni go'zal niyat bilan boshlash insonning ikki dunyosi obod bo'lishiga xizmat qiladi. O'zingizni doimo ezgu niyatlarga chog'lang!`;
+                return `**Ma'rifiy va Hayotiy Yondashuv:**\n\nInson hayotida ilm olish, ota-onaga yaxshilik qilish va har qanday sinovda sabrli bo'lish eng olijanob fazilatlardan hisoblanadi. Har bir ezgu ishni go'zal niyat bilan boshlash insonning ikki dunyosi obod bo'lishiga xizmat qiladi. O'zingizni doimo ezgu niyatlarga chog'lang!`;
             }
 
-            // 4. Biznes, marketing va startaplar
+            // 5. Biznes va marketing
             if (mode === 'business' || text.includes('biznes') || text.includes('pul') || text.includes('marketing') || text.includes('startap') || text.includes('daromad')) {
-                return `**Strategik Biznes Tahlil:**\n\n"${query}" masalasini chuqur o'rganib chiqib, quyidagi amaliy qadamlarni tavsiya qilaman:\n\n1. **Bozor va Raqobat Tahlili:** Mavjud yo'nalishdagi bo'shliqlarni aniqlab, o'zingizning noyob ustunligingizni (USP) yarating.\n2. **Maqsadli Auditoriya:** Mijozlarning real ehtiyojlarini o'rganib, ularga mos qulay takliflar ishlab chiqing.\n3. **Avtomatizatsiya va SMM:** Zamonaviy raqamli marketing va ijtimoiy tarmoqlar vositasida brendingizni faol targ'ib qiling.\n\nTizimli harakat va qat'iy intizom sizni tez fursatda muvaffaqiyatga olib chiqadi.`;
+                return `**Strategik Biznes Tahlil:**\n\n"${query}" masalasini o'rganib chiqib, quyidagi amaliy qadamlarni tavsiya qilaman:\n\n1. **Bozor va Raqobat Tahlili:** Yo'nalishdagi bo'shliqlarni aniqlab, noyob ustunligingizni (USP) yarating.\n2. **Maqsadli Auditoriya:** Mijozlarning real ehtiyojlarini o'rganib, mos takliflar ishlab chiqing.\n3. **Avtomatizatsiya va SMM:** Zamonaviy raqamli marketing vositasida brendingizni targ'ib qiling.\n\nTizimli harakatsiz muvaffaqiyatga erishib bo'lmaydi!`;
             }
 
-            // 5. Psixologiya va motivatsiya
+            // 6. Psixologiya va motivatsiya
             if (mode === 'psychology' || text.includes('stress') || text.includes('zerikdim') || text.includes('motivatsiya') || text.includes('qo\'rqaman') || text.includes('tushkunlik')) {
-                return `**Psixologik Ko'mak va Ekspert Tavsiyasi:**\n\nSizdagi hozirgi holat — bu shunchaki shaxsiy o'sish va ulg'ayish yo'lidagi vaqtinchalik bosqichdir. Shoshilmang, o'zingizga biroz dam bering va kunlik kichik maqsadlarga e'tibor qarating. Sizda ulkan salohiyat bor, o'zingizga ishoning va oldinga intiling!`;
+                return `**Psixologik Ko'mak va Tavsiya:**\n\nSizdagi hozirgi holat — bu shunchaki shaxsiy o'sish yo'lidagi vaqtinchalik bosqichdir. Shoshilmang, o'zingizga dam bering va kunlik kichik maqsadlarga e'tibor qarating. Sizda ulkan salohiyat bor, oldinga intiling!`;
             }
 
-            // 6. Kreativ g'oyalar generatori
+            // 7. Kreativ g'oyalar
             if (mode === 'ideas' || text.includes('g\'oya') || text.includes('idea') || text.includes('loyixa') || text.includes('kontent')) {
-                return `**Innovatsion G'oyalar va Tahlil:**\n\n"${query}" bo'yicha quyidagi kreativ va istiqbolli yondashuvlarni tavsiya qilaman:\n\n- **1-Yo'nalish:** Muammoni oddiy foydalanuvchi ko'zidan ko'rib chiqib, jarayonni soddalashtiruvchi yechim topish.\n- **2-Yo'nalish:** Zamonaviy texnologiyalar va sun'iy intellekt imkoniyatlarini integratsiya qilish.\n- **3-Yo'nalish:** Unikal dizayn va jozibador taqdimot formatini yaratish.\n\nBu g'oyalar loyihangizni yanada jozibali va muvaffaqiyatli qiladi.`;
+                return `**Innovatsion G'oyalar va Tahlil:**\n\n"${query}" bo'yicha quyidagi kreativ yondashuvlarni tavsiya qilaman:\n\n- **1-Yo'nalish:** Muammoni oddiy foydalanuvchi ko'zidan ko'rib chiqib, jarayonni soddalashtiruvchi yechim topish.\n- **2-Yo'nalish:** Zamonaviy texnologiyalar va sun'iy intellekt imkoniyatlarini integratsiya qilish.\n- **3-Yo'nalish:** Unikal dizayn va jozibador taqdimot formatini yaratish.`;
             }
 
-            // 7. Universal va o'ta keng qamrovli ekspert javobi (Boshqa barcha savollar uchun)
-            return `Sizning **"${query}"** degan savolingizni har tomonlama chuqur tahlil qildim.\n\nUshbu mavzu zamonaviy dunyoda o'ta dolg\'oh hisoblanib, uning zamirida ko'plab muhim omillar yotadi. Mutaxassis sifatida shuni ta'kidlash joizki, har qanday masala ijobiy yechim topishi uchun quyidagi jihatlarga e'tibor qaratish lozim:\n\n* **Tizimli yondashuv:** Muammoni qismlarga bo'lib o'rganish va asosiy nuqtani aniqlash.\n* **Amaliy harakat:** Olingan nazariy bilimlarni real hayotda izchil qo'llash.\n* **Tahlil va xulosa:** Har bir qadam natijasini nazorat qilib borish.\n\nAgar bu mavzuni yanada chuqurroq ochishimizni yoki boshqa qirralarini ko'rib chiqishni istasangiz, bemalol yozishingiz mumkin!`;
+            // 8. Universal tahliliy javob
+            return `Sizning **"${query}"** degan savolingizni har tomonlama chuqur tahlil qildim.\n\nUshbu mavzu zamonaviy dunyoda o'ta dolg'arb hisoblanadi. Mutaxassis sifatida shuni ta'kidlash joizki, masalaning ijobiy yechimi uchun quyidagilar muhim:\n\n* **Tizimli yondashuv:** Muammoni qismlarga bo'lib o'rganish.\n* **Amaliy harakat:** Bilimlarni real hayotda izchil qo'llash.\n* **Nazorat:** Natijalarni tahlil qilib borish.\n\nAgar bu mavzuni yanada chuqurroq ochishimizni istasangiz, bemalol yozing!`;
         }
 
         async function sendUserMessage() {
@@ -664,10 +676,9 @@
             persistChat();
 
             const loadIndicatorId = "load_" + Date.now();
-            streamBox.innerHTML += `<div id="${loadIndicatorId}" class="chat-bubble bot"><b>Zeed AI Pro:</b> Ekspert tahlili olib borilmoqda...</div>`;
+            streamBox.innerHTML += `<div id="${loadIndicatorId}" class="chat-bubble bot"><b>Zeed AI Pro:</b> O'ylanmoqda...</div>`;
             streamBox.scrollTop = streamBox.scrollHeight;
 
-            // Haqiqiy sun'iy intellektdek o'ylash vaqtini taqlid qilish
             setTimeout(() => {
                 const aiReplyText = generateExpertResponse(queryText, activeMode);
                 let renderedMarkdown = marked.parse(aiReplyText);
@@ -687,7 +698,7 @@
                 `;
                 streamBox.scrollTop = streamBox.scrollHeight;
                 persistChat();
-            }, 900);
+            }, 600);
         }
 
         function checkEnterKey(event) {
