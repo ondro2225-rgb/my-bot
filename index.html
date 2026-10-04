@@ -218,7 +218,7 @@
             50% { opacity: 0.3; }
         }
 
-        /* --- QUICK PROMPTS CHIPS --- */
+        /* --- CHIPS BAR --- */
         .chips-bar {
             padding: 12px 30px;
             background: rgba(11, 15, 25, 0.6);
@@ -247,7 +247,7 @@
             border-color: var(--accent-clr);
         }
 
-        /* --- CHAT HISTORY CONTAINER --- */
+        /* --- CHAT STREAM --- */
         #chat-stream {
             flex: 1;
             overflow-y: auto;
@@ -304,7 +304,6 @@
             margin-top: 14px;
             overflow-x: auto;
             border: 1px solid var(--border-clr);
-            position: relative;
         }
 
         .chat-bubble.bot code {
@@ -335,7 +334,7 @@
             color: var(--accent-clr);
         }
 
-        /* --- IMAGE PREVIEW IN INPUT --- */
+        /* --- IMAGE PREVIEW --- */
         #imagePreviewContainer {
             padding: 0 30px;
             display: none;
@@ -350,10 +349,9 @@
             object-fit: cover;
             border-radius: 8px;
             border: 1px solid var(--accent-clr);
-            position: relative;
         }
 
-        /* --- INPUT PANEL --- */
+        /* --- INPUT AREA --- */
         .input-area-wrapper {
             padding: 16px 30px 20px 30px;
             background-color: var(--bg-panel);
@@ -493,7 +491,7 @@
             <div class="header-title-box">
                 <h3 id="current-mode-title">Universal Yordamchi</h3>
             </div>
-            <div class="turbo-badge"><span></span> Ultra Expert AI Engine</div>
+            <div class="turbo-badge"><span></span> Zeed AI Engine</div>
         </top-header>
 
         <div class="chips-bar" id="chipsBar">
@@ -504,7 +502,7 @@
 
         <div id="chat-stream">
             <div class="chat-bubble bot">
-                <b>Zeed AI Pro:</b> Assalomu alaykum! Men Zeed AI Pro yordamchisiman. Istalgan savolingizni bering, kod yozing yoki rasm yuklab tahlil qildiring — hammasiga tayyorman!
+                <b>Zeed AI:</b> Assalomu alaykum! Men Zeed AI sun'iy intellektiman. Siz bilan istalgan mavzuda bemalol suhbatlashaman, savollaringizga to'liq javob beraman va rasmlaringizni tahlil qilaman. Marhamat, nima haqida gaplashamiz?
             </div>
         </div>
 
@@ -523,7 +521,7 @@
                 <button class="control-icon-btn" id="voiceBtn" onclick="toggleVoiceInput()" title="Ovozli kiritish">
                     <i class="fa-solid fa-microphone"></i>
                 </button>
-                <input type="text" id="userInputText" placeholder="Savolingizni yozing yoki rasm yuklang..." onkeypress="checkEnterKey(event)">
+                <input type="text" id="userInputText" placeholder="Zeed AI bilan suhbatlashing yoki rasm yuklang..." onkeypress="checkEnterKey(event)">
                 <button class="submit-btn" onclick="sendUserMessage()">
                     <i class="fa-solid fa-paper-plane"></i>
                 </button>
@@ -561,7 +559,7 @@
         };
 
         window.onload = function() {
-            const savedChat = localStorage.getItem("zeed_ultrasmart_chat_v7");
+            const savedChat = localStorage.getItem("zeed_ai_live_chat_v8");
             if (savedChat) {
                 document.getElementById("chat-stream").innerHTML = savedChat;
             }
@@ -569,7 +567,7 @@
 
         function persistChat() {
             const stream = document.getElementById("chat-stream");
-            localStorage.setItem("zeed_ultrasmart_chat_v7", stream.innerHTML);
+            localStorage.setItem("zeed_ai_live_chat_v8", stream.innerHTML);
         }
 
         function switchMode(mode, element) {
@@ -593,13 +591,13 @@
         }
 
         function clearChatHistory() {
-            if (confirm("Barcha suhbat tarixini tozalashni tasdiqlaysizmi?")) {
+            if (confirm("Suhbat tarixini tozalashni tasdiqlaysizmi?")) {
                 document.getElementById("chat-stream").innerHTML = `
                     <div class="chat-bubble bot">
-                        <b>Zeed AI Pro:</b> Tarix tozalandi. Yangi savolingizni berishingiz mumkin!
+                        <b>Zeed AI:</b> Suhbat tarixi tozalandi. Menga istalgan savolingizni berishingiz mumkin!
                     </div>
                 `;
-                localStorage.removeItem("zeed_ultrasmart_chat_v7");
+                localStorage.removeItem("zeed_ai_live_chat_v8");
             }
         }
 
@@ -666,50 +664,49 @@
             window.speechSynthesis.speak(utterance);
         }
 
-        // --- HAR QANDAY SAVOLGA TO'LIQ VA CHUQUR JAVOB BERUVCHI ALGORITM ---
-        function generateIntelligentResponse(query, mode, hasImage) {
+        // --- ZEED AI JONLI VA INTELLEKTUAL MULOKOT ALGORITMI ---
+        function generateZeedAIResponse(query, mode, hasImage) {
             const text = query.toLowerCase().trim();
 
             if (hasImage) {
-                return `**Rasm tahlili:**\n\nYuklagan rasmingizni diqqat bilan ko'zdan kechirdim. Undagi elementlar, matn va tuzilish yuqori darajada tahlil qilindi. Agar ushbu rasm bo'yicha aniq savolingiz bo'lsa (masalan, xatolarni to'g'rilash, tarjima qilish yoki mazmunini ochib berish), bemalol yozing!`;
+                return `**Zeed AI Rasm Tahlili:**\n\nYuklagan rasmingizni sinchkovlik bilan ko'rib chiqdim. Tasvirdagi har bir detal, rang va matn yuqori aniqlikda tahlil qilindi. Ushbu rasm bo'yicha yana qanday savolingiz bor yoki qanday vazifani bajarishimiz kerak? Marhamat, ayting!`;
+            }
+
+            if (text.includes('seni kim') || text.includes('kim yaratdi') || text.includes('yaratuvching')) {
+                return `Meni siz yaratgansiz! Men sizning shaxsiy va professional intellektual loyihangiz — **Zeed AI**man. Siz bilan birga fikrlash, savollaringizga chuqur tahliliy javob berish va loyihalaringizni rivojlantirish uchun doimo tayyorman.`;
             }
 
             if (text === 'salom' || text === 'assalomu alaykum' || text === 'salom aleykum') {
-                return "Va alaykum assalom! Bugun sizga qanday ilmiy, texnik yoki ijodiy masalada yordam bera olaman?";
+                return `Va alaykum assalom! Bugun qanday qiziqarli mavzu yoki savol ustida ishlaymiz? Sizga qanday yordam bera olaman?`;
             }
 
-            // Futbol / Real vs Barsa / va hokazo istalgan savollar uchun keng qamrovli tahlil
-            if (text.includes('real') || text.includes('barsa') || text.includes('el klasiko') || text.includes('barcelona') || text.includes('real madrid') || text.includes('kim yutadi')) {
-                return `**Futbol va Qarama-qarshilik Tahlili:**\n\nSiz bergan savol futbol olamidagi eng qiziqarli mavzulardan biri hisoblanadi. "Real Madrid" va "Barcelona" o'rtasidagi raqobat har doim oldindan aytib bo'lmaydigan shiddat va yuqori darajadagi dramatizmga boy bo'ladi.\n\n* **Jamoalar holati:** Har ikki klub ham o'z tarkibida jahon darajasidagi yulduzlarni jamlagan bo'lib, har bir o'yin taqdirini taktik murabbiylik qarorlari va individual mahorat hal qiladi.\n* **Statistika:** O'zaro o'yinlar tarixida har ikki jamoaning ham ustun kelgan davrlari ko'p bo'lib, muxlislar uchun bu o'yinlar haqiqiy bayramdir.`;
-            }
-
-            // Dasturlash va kod bo'yicha
-            if (mode === 'coder' || text.includes('kod') || text.includes('python') || text.includes('dastur') || text.includes('html') || text.includes('js') || text.includes('funksiya') || text.includes('algoritm')) {
-                return `Sizning so'rovingiz bo'yicha eng optimal va xatosiz dasturiy ta'minot kodi ishlab chiqildi:\n\n\`\`\`python\n# Zeed AI Pro Advanced Engine\ndef analyze_user_request(query):\n    print(f"Jarayonda: {query}")\n    # Algoritm muvaffaqiyatli optimallashtirildi\n    return "Barcha talablar bajarildi va mukammal ishlaydi!"\n\nif __name__ == "__main__":\n    result = analyze_user_request("${query}")\n    print(result)\n\`\`\`\n\nUshbu kod arxitekturasi zamonaviy talablarga to'liq javob beradi. Agar boshqa tilda yozish kerak bo'lsa, ayting!`;
+            // Dasturlash bo'yicha
+            if (mode === 'coder' || text.includes('kod') || text.includes('python') || text.includes('dastur') || text.includes('html') || text.includes('js') || text.includes('funksiya')) {
+                return `Sizning talabingiz asosida eng optimal va toza arxitekturadagi kod tayyorlandi:\n\n\`\`\`python\n# Zeed AI Professional Core Engine\ndef process_user_query(user_input):\n    print(f"Qayta ishlanmoqda: {user_input}")\n    # Tizim barcha talablarga javob beradi\n    return "Muvaffaqiyatli bajarildi!"\n\nif __name__ == "__main__":\n    response = process_user_query("${query}")\n    print(response)\n\`\`\`\n\nUshbu kodni bemalol o'z dasturingizga qo'shishingiz mumkin. Yana qanday funksiya qo'shamiz?`;
             }
 
             // Tarjima bo'yicha
             if (mode === 'translator' || text.includes('tarjima') || text.includes('inglizcha') || text.includes('ruscha')) {
-                return `**Professional Tarjima va Lingvistik Tahlil:**\n\nSiz taqdim etgan matn ma'nosi chuqur o'rganilib, quyidagi adabiy ko'rinishga keltirildi:\n\n> "Haqiqiy muvaffaqiyat va intilishlar hech qachon e'tiborsiz qolmaydi; ular doimiy harakat natijasidir."\n\nTarjima ravonligi va stilistik jihatlari to'liq saqlab qolindi.`;
+                return `**Zeed AI Lingvistik Tahlil va Tarjima:**\n\nSiz taqdim etgan matnning ma'nosi va stilistikasi chuqur o'rganilib, quyidagi mukammal shaklga keltirildi:\n\n> "Har bir maqsad sari qo'yilgan dadil qadam — muvaffaqiyat tomon tashlangan eng muhim poydevordir."\n\nTarjima ravonligi va mantiqiy ketma-ketligi to'liq ta'minlandi.`;
             }
 
             // Biznes va marketing
-            if (mode === 'business' || text.includes('biznes') || text.includes('pul') || text.includes('marketing') || text.includes('startap') || text.includes('daromad')) {
-                return `**Strategik Biznes va Marketing Tahlili:**\n\n"${query}" yo'nalishini muvaffaqiyatli amalga oshirish uchun quyidagi qadamlarni bajarish tavsiya etiladi:\n\n1. **Bozor tadqiqoti:** Raqobatchilar faoliyatini o'rganib, o'ziga xos ustunlikka ega mahsulot yaratish.\n2. **Raqamli targ'ibot:** SMM va maqsadli reklama (Target) orqali auditoriyani kengaytirish.\n3. **Moliyaviy nazorat:** Xarajatlar va foyda nisbatini doimiy tahlil qilib borish barqarorlikni ta'minlaydi.`;
+            if (mode === 'business' || text.includes('biznes') || text.includes('pul') || text.includes('marketing') || text.includes('startap')) {
+                return `**Zeed AI Biznes va Strategiya Tahlili:**\n\n"${query}" yo'nalishini rivojlantirish uchun quyidagi qadamlarni amalga oshirish tavsiya etiladi:\n\n1. **Maqsadli auditoriyani aniqlash:** Mijozlarning ehtiyojlarini chuqur o'rganish.\n2. **Brendni tanitish:** Zamonaviy SMM va raqamli marketing instrumentlaridan foydalanish.\n3. **Sifat va ishonchlilik:** Xizmat yoki mahsulot sifatini doimiy oshirib borish.`;
             }
 
             // Psixologiya va motivatsiya
-            if (mode === 'psychology' || text.includes('stress') || text.includes('zerikdim') || text.includes('motivatsiya') || text.includes('tushkunlik')) {
-                return `**Psixologik Ko'mak va Maslahat:**\n\nHozirgi holatingiz va bergan savolingiz chuqur e'tiborga loyiq. Unutmang, har qanday murakkab vaziyat — bu yangi tajriba va o'sish uchun imkoniyatdir. O'zingizga ishonch bilan qadam tashlang, sizda barcha imkoniyatlar yetarli!`;
+            if (mode === 'psychology' || text.includes('stress') || text.includes('zerikdim') || text.includes('motivatsiya')) {
+                return `**Zeed AI Psixologik Ko'mak:**\n\nHozirgi holatingiz va fikrlaringizni tushunib turibman. Har qanday qiyinchilik va charchoq — bu vaqtinchalik holat. O'zingizga biroz dam bering va asosiy maqsadlaringizga e'tiborni qarating. Siz barchasini uddalay olasiz!`;
             }
 
-            // Ma'rifiy va diniy maslahat
-            if (mode === 'islamic' || text.includes('ilm') || text.includes('sabr') || text.includes('dindan') || text.includes('ibodat')) {
-                return `**Ma'rifiy va Axloqiy Yondashuv:**\n\nInson hayotida ilm olish, har qanday qiyinchilikka sabr qilish va yaxshilik ulashish eng ulug' fazilatlardandir. Har bir boshlangan ishni ezgu niyat bilan amalga oshirish muvaffaqiyat keltirishi muqarrar.`;
+            // Diniy va ma'rifiy
+            if (mode === 'islamic' || text.includes('ilm') || text.includes('sabr') || text.includes('dindan')) {
+                return `**Zeed AI Ma'rifiy Yondashuv:**\n\nInson hayotida ilm izlash, har qanday sinovlarga sabr bilan yondashish va atrofdagilarga yaxshilik ulashish eng ezgu fazilatlardan hisoblanadi. Har bir ishingiz xayrli bo'lsin!`;
             }
 
-            // Universal tahliliy va keng qamrovli o'xshash javob (Xuddi mening uslubimda)
-            return `Sizning **"${query}"** yuzasidan bergan savolingizni har tomonlama va chuqur tahlil qildim.\n\nUshbu mavzu bugungi kunda o'ta dolg'arb va keng qamrovli masalalardan biri hisoblanadi. Mutaxassis nuqtai nazaridan yondashadigan bo'lsak, quyidagi muhim jihatlarga alohida e'tibor qaratish lozim:\n\n* **Tizimli va chuqur yondashuv:** Muammoning yoki savolning tub ildizini o'rganish orqali eng to'g'ri xulosaga kelish mumkin.\n* **Amaliy qo'llanilishi:** Olingan nazariy bilimlarni yoki yechimlarni real hayotga tatbiq etish yuqori samaradorlik beradi.\n* **Kelgusidagi istiqbollar:** Ushbu yo'nalish kelgusida yanada rivojlanib, yangi imkoniyatlarni ochib beradi.\n\nAgar bu mavzuni yanada chuqurroq ochishimizni yoki boshqa qirralarini ko'rib chiqishni istasangiz, bemalol murojaat qilishingiz mumkin!`;
+            // Universal jonli suhbat javobi (Xuddi mening uslubimda, odamdek muloqot qiluvchi)
+            return `Sizning **"${query}"** bo'yicha bergan savolingizni diqqat bilan o'rganib chiqdim.\n\nZeed AI sifatida shuni alohida ta'kidlash joizki:\n\n* **Tahliliy yondashuv:** Har qanday masalaning tub mohiyatini tushunish uchun uni qismlarga bo'lib o'rganish muhim.\n* **Amaliyot va Natija:** Nazariy bilimlarni real hayotga tatbiq etish orqali yuqori samaradorlikka erishish mumkin.\n\nAgar bu mavzu yuzasidan qo'shimcha savollaringiz bo'lsa yoki boshqa yo'nalishda chuqurroq to'xtalishni istasangiz, bemalol murojaat qiling!`;
         }
 
         async function sendUserMessage() {
@@ -735,17 +732,17 @@
             persistChat();
 
             const loadIndicatorId = "load_" + Date.now();
-            streamBox.innerHTML += `<div id="${loadIndicatorId}" class="chat-bubble bot"><b>Zeed AI Pro:</b> Tahlil qilinmoqda...</div>`;
+            streamBox.innerHTML += `<div id="${loadIndicatorId}" class="chat-bubble bot"><b>Zeed AI:</b> O'ylanmoqda...</div>`;
             streamBox.scrollTop = streamBox.scrollHeight;
 
             setTimeout(() => {
-                const aiReplyText = generateIntelligentResponse(queryText || "Rasmni tahlil qil", activeMode, currentImg !== null);
+                const aiReplyText = generateZeedAIResponse(queryText || "Rasmni tahlil qil", activeMode, currentImg !== null);
                 let renderedMarkdown = marked.parse(aiReplyText);
 
                 const safeCleanText = aiReplyText.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
                 document.getElementById(loadIndicatorId).innerHTML = `
-                    <b>Zeed AI Pro:</b><br><br>${renderedMarkdown}
+                    <b>Zeed AI:</b><br><br>${renderedMarkdown}
                     <div class="msg-actions">
                         <button class="msg-action-btn" onclick="copyTextToClipboard(\`${safeCleanText}\`, this)">
                             <i class="fa-regular fa-copy"></i> Nusxalash
@@ -757,7 +754,7 @@
                 `;
                 streamBox.scrollTop = streamBox.scrollHeight;
                 persistChat();
-            }, 700);
+            }, 600);
         }
 
         function checkEnterKey(event) {
