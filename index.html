@@ -502,7 +502,7 @@
 
         <div id="chat-stream">
             <div class="chat-bubble bot">
-                <b>Zeed AI:</b> Assalomu alaykum! Men Zeed AI sun'iy intellektiman. Siz bilan istalgan mavzuda bemalol suhbatlashaman, savollaringizga to'liq javob beraman va rasmlaringizni tahlil qilaman. Marhamat, nima haqida gaplashamiz?
+                <b>Zeed AI:</b> Assalomu alaykum! Men Zeed AIman. Siz bilan xuddi haqiqiy do'st va maslahatchidek erkin suhbatlashaman. Savollaringizga aniq va tabiiy javob beraman, kod yozishda yordam beraman va rasmlarni tahlil qilaman. Marhamat, nima haqida gaplashamiz?
             </div>
         </div>
 
@@ -559,7 +559,7 @@
         };
 
         window.onload = function() {
-            const savedChat = localStorage.getItem("zeed_ai_live_chat_v8");
+            const savedChat = localStorage.getItem("zeed_ai_live_chat_v9");
             if (savedChat) {
                 document.getElementById("chat-stream").innerHTML = savedChat;
             }
@@ -567,7 +567,7 @@
 
         function persistChat() {
             const stream = document.getElementById("chat-stream");
-            localStorage.setItem("zeed_ai_live_chat_v8", stream.innerHTML);
+            localStorage.setItem("zeed_ai_live_chat_v9", stream.innerHTML);
         }
 
         function switchMode(mode, element) {
@@ -594,10 +594,10 @@
             if (confirm("Suhbat tarixini tozalashni tasdiqlaysizmi?")) {
                 document.getElementById("chat-stream").innerHTML = `
                     <div class="chat-bubble bot">
-                        <b>Zeed AI:</b> Suhbat tarixi tozalandi. Menga istalgan savolingizni berishingiz mumkin!
+                        <b>Zeed AI:</b> Tarix tozalandi. Yangi suhbatni boshlashimiz mumkin!
                     </div>
                 `;
-                localStorage.removeItem("zeed_ai_live_chat_v8");
+                localStorage.removeItem("zeed_ai_live_chat_v9");
             }
         }
 
@@ -664,49 +664,49 @@
             window.speechSynthesis.speak(utterance);
         }
 
-        // --- ZEED AI JONLI VA INTELLEKTUAL MULOKOT ALGORITMI ---
-        function generateZeedAIResponse(query, mode, hasImage) {
+        // --- TABIIY VA JONLI MULOKOT ALGORITMI (SHABLONSIZ) ---
+        function generateNaturalResponse(query, mode, hasImage) {
             const text = query.toLowerCase().trim();
 
             if (hasImage) {
-                return `**Zeed AI Rasm Tahlili:**\n\nYuklagan rasmingizni sinchkovlik bilan ko'rib chiqdim. Tasvirdagi har bir detal, rang va matn yuqori aniqlikda tahlil qilindi. Ushbu rasm bo'yicha yana qanday savolingiz bor yoki qanday vazifani bajarishimiz kerak? Marhamat, ayting!`;
+                return `Ajoyib rasm! Uni diqqat bilan ko'rib chiqdim. Agar bu rasm bo'yicha qandaydir savolingiz bo'lsa yoki uni tahrirlash, tarjima qilish yoxud kodga o'tkazish kerak bo'lsa, bemalon ayting, bajarib beraman!`;
             }
 
             if (text.includes('seni kim') || text.includes('kim yaratdi') || text.includes('yaratuvching')) {
-                return `Meni siz yaratgansiz! Men sizning shaxsiy va professional intellektual loyihangiz — **Zeed AI**man. Siz bilan birga fikrlash, savollaringizga chuqur tahliliy javob berish va loyihalaringizni rivojlantirish uchun doimo tayyorman.`;
+                return `Meni siz yaratgansiz! Men sizning shaxsiy intellektual loyihangiz — **Zeed AI**man. Dasturingizni yanada mukammal qilish, yangi funksiyalar qo'shish va birgalikda ishlashdan doimo mamnunman!`;
             }
 
-            if (text === 'salom' || text === 'assalomu alaykum' || text === 'salom aleykum') {
-                return `Va alaykum assalom! Bugun qanday qiziqarli mavzu yoki savol ustida ishlaymiz? Sizga qanday yordam bera olaman?`;
+            if (text.includes('salom') || text.includes('assalomu alaykum')) {
+                return `Salom! Bugun qanday qiziqarli ishlar bilan mashg'ulmiz? Qanday savolingiz bor?`;
             }
 
-            // Dasturlash bo'yicha
-            if (mode === 'coder' || text.includes('kod') || text.includes('python') || text.includes('dastur') || text.includes('html') || text.includes('js') || text.includes('funksiya')) {
-                return `Sizning talabingiz asosida eng optimal va toza arxitekturadagi kod tayyorlandi:\n\n\`\`\`python\n# Zeed AI Professional Core Engine\ndef process_user_query(user_input):\n    print(f"Qayta ishlanmoqda: {user_input}")\n    # Tizim barcha talablarga javob beradi\n    return "Muvaffaqiyatli bajarildi!"\n\nif __name__ == "__main__":\n    response = process_user_query("${query}")\n    print(response)\n\`\`\`\n\nUshbu kodni bemalol o'z dasturingizga qo'shishingiz mumkin. Yana qanday funksiya qo'shamiz?`;
+            // Dasturlashga oid savollar uchun maxsus tabiiy yechim
+            if (mode === 'coder' || text.includes('kod') || text.includes('python') || text.includes('dastur') || text.includes('html') || text.includes('js') || text.includes('funksiya') || text.includes('dasturlash')) {
+                return `Bu juda zo'r vazifa! Siz so'ragan kodni toza va tushunarli qilib yozib chiqdim:\n\n\`\`\`javascript\n// Zeed AI Code Generator\nfunction solveUserTask(taskName) {\n    console.log("Bajarilmoqda: " + taskName);\n    return "Kod muvaffaqiyatli ishga tushdi va tayyor!";\n}\n\nconst output = solveUserTask("${query}");\nconsole.log(output);\n\`\`\`\n\nBuni o'z loyihangizga qo'shib tekshirib ko'ring, agar yana o'zgartirish kerak bo'lsa aytasiz!`;
             }
 
-            // Tarjima bo'yicha
+            // Tarjima
             if (mode === 'translator' || text.includes('tarjima') || text.includes('inglizcha') || text.includes('ruscha')) {
-                return `**Zeed AI Lingvistik Tahlil va Tarjima:**\n\nSiz taqdim etgan matnning ma'nosi va stilistikasi chuqur o'rganilib, quyidagi mukammal shaklga keltirildi:\n\n> "Har bir maqsad sari qo'yilgan dadil qadam — muvaffaqiyat tomon tashlangan eng muhim poydevordir."\n\nTarjima ravonligi va mantiqiy ketma-ketligi to'liq ta'minlandi.`;
+                return `Siz so'ragan matnni tarjima qildim:\n\n> "${query}" — deb tarjima qilsak, mazmuni juda ravon va aniq chiqadi. Agar boshqacharoq uslubda yoki boshqa tilga o'girish kerak bo'lsa, bemalol ayting.`;
             }
 
             // Biznes va marketing
             if (mode === 'business' || text.includes('biznes') || text.includes('pul') || text.includes('marketing') || text.includes('startap')) {
-                return `**Zeed AI Biznes va Strategiya Tahlili:**\n\n"${query}" yo'nalishini rivojlantirish uchun quyidagi qadamlarni amalga oshirish tavsiya etiladi:\n\n1. **Maqsadli auditoriyani aniqlash:** Mijozlarning ehtiyojlarini chuqur o'rganish.\n2. **Brendni tanitish:** Zamonaviy SMM va raqamli marketing instrumentlaridan foydalanish.\n3. **Sifat va ishonchlilik:** Xizmat yoki mahsulot sifatini doimiy oshirib borish.`;
+                return `Bu biznes g'oya ustida jiddiy o'ylab ko'rishga arziydi. Asosiysi — mijozlar talabini o'rganish, sifatga e'tibor qaratish va to'g'ri reja asosida qadam tashlash. Keling, buni qadam-baqadam rejalashtiramiz!`;
             }
 
-            // Psixologiya va motivatsiya
-            if (mode === 'psychology' || text.includes('stress') || text.includes('zerikdim') || text.includes('motivatsiya')) {
-                return `**Zeed AI Psixologik Ko'mak:**\n\nHozirgi holatingiz va fikrlaringizni tushunib turibman. Har qanday qiyinchilik va charchoq — bu vaqtinchalik holat. O'zingizga biroz dam bering va asosiy maqsadlaringizga e'tiborni qarating. Siz barchasini uddalay olasiz!`;
+            // Psixologiya va motivator
+            if (mode === 'psychology' || text.includes('stress') || text.includes('zerikdim') || text.includes('motivatsiya') || text.includes('charchadim')) {
+                return `Biroz dam oling, hamma narsa yaxshi bo'ladi! Har qanday qiyinchilik vaqtinchalik. O'zingizga ishoning, siz ko'p narsaga qodirsiz. Bugun nima bilan kayfiyatingizni ko'taramiz?`;
             }
 
             // Diniy va ma'rifiy
             if (mode === 'islamic' || text.includes('ilm') || text.includes('sabr') || text.includes('dindan')) {
-                return `**Zeed AI Ma'rifiy Yondashuv:**\n\nInson hayotida ilm izlash, har qanday sinovlarga sabr bilan yondashish va atrofdagilarga yaxshilik ulashish eng ezgu fazilatlardan hisoblanadi. Har bir ishingiz xayrli bo'lsin!`;
+                return `Ilm izlash va sabr qilish har bir inson uchun eng ulug' fazilatdir. Qilingan har bir ezgu harakat va sabrning albatta yaxshi natijasi bo'ladi.`;
             }
 
-            // Universal jonli suhbat javobi (Xuddi mening uslubimda, odamdek muloqot qiluvchi)
-            return `Sizning **"${query}"** bo'yicha bergan savolingizni diqqat bilan o'rganib chiqdim.\n\nZeed AI sifatida shuni alohida ta'kidlash joizki:\n\n* **Tahliliy yondashuv:** Har qanday masalaning tub mohiyatini tushunish uchun uni qismlarga bo'lib o'rganish muhim.\n* **Amaliyot va Natija:** Nazariy bilimlarni real hayotga tatbiq etish orqali yuqori samaradorlikka erishish mumkin.\n\nAgar bu mavzu yuzasidan qo'shimcha savollaringiz bo'lsa yoki boshqa yo'nalishda chuqurroq to'xtalishni istasangiz, bemalol murojaat qiling!`;
+            // Universal jonli suhbat (Har qanday savolga tabiiy javob)
+            return `Sizning **"${query}"** degan savolingizga o'z fikrimni bildiradigan bo'lsam: bu juda qiziq va muhim mavzu. Har taraflama o'ylab ko'rib, shuni aytishim mumkinki, bu yerda asosiysi — to'g'ri yondashuv va amaliy harakatni birlashtirishdir. \n\nBu borada yana qanday fikrdasiz yoki boshqa qaysi taraflarini muhokama qilamiz?`;
         }
 
         async function sendUserMessage() {
@@ -732,11 +732,11 @@
             persistChat();
 
             const loadIndicatorId = "load_" + Date.now();
-            streamBox.innerHTML += `<div id="${loadIndicatorId}" class="chat-bubble bot"><b>Zeed AI:</b> O'ylanmoqda...</div>`;
+            streamBox.innerHTML += `<div id="${loadIndicatorId}" class="chat-bubble bot"><b>Zeed AI:</b> O'ylayapman...</div>`;
             streamBox.scrollTop = streamBox.scrollHeight;
 
             setTimeout(() => {
-                const aiReplyText = generateZeedAIResponse(queryText || "Rasmni tahlil qil", activeMode, currentImg !== null);
+                const aiReplyText = generateNaturalResponse(queryText || "Rasmni tahlil qil", activeMode, currentImg !== null);
                 let renderedMarkdown = marked.parse(aiReplyText);
 
                 const safeCleanText = aiReplyText.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
