@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zeed AI Pro - Universal Ultimate Intelligence</title>
+    <title>Zeed AI - Real Groq Intelligence</title>
     
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -44,7 +44,6 @@
             overflow: hidden;
         }
 
-        /* SIDEBAR */
         sidebar {
             width: var(--sidebar-w);
             background-color: var(--bg-panel);
@@ -79,7 +78,6 @@
         .brand-title {
             font-size: 18px;
             font-weight: 700;
-            letter-spacing: 0.5px;
             background: linear-gradient(to right, #fff, #9ca3af);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -121,7 +119,6 @@
             color: white;
         }
 
-        /* MAIN AREA */
         main-area {
             flex: 1;
             display: flex;
@@ -173,7 +170,6 @@
             50% { opacity: 0.3; }
         }
 
-        /* CHAT STREAM */
         #chat-stream {
             flex: 1;
             overflow-y: auto;
@@ -213,13 +209,6 @@
             color: var(--text-main);
             align-self: flex-start;
             border-bottom-left-radius: 4px;
-        }
-
-        .chat-bubble img {
-            max-width: 100%;
-            border-radius: 10px;
-            margin-top: 10px;
-            border: 1px solid var(--border-clr);
         }
 
         .chat-bubble.bot h1, .chat-bubble.bot h2, .chat-bubble.bot h3 {
@@ -270,25 +259,6 @@
             color: var(--accent-clr);
         }
 
-        /* IMAGE PREVIEW */
-        #imagePreviewContainer {
-            padding: 10px 30px;
-            display: none;
-            gap: 12px;
-            align-items: center;
-            background-color: var(--bg-panel);
-            border-top: 1px solid var(--border-clr);
-        }
-
-        .preview-thumb {
-            width: 45px;
-            height: 45px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 1px solid var(--accent-clr);
-        }
-
-        /* INPUT AREA */
         .input-area-wrapper {
             padding: 16px 30px 20px 30px;
             background-color: var(--bg-panel);
@@ -335,17 +305,6 @@
             color: var(--accent-clr);
         }
 
-        .control-icon-btn.active-record {
-            color: #ef4444;
-            animation: pulseRecord 1s infinite;
-        }
-
-        @keyframes pulseRecord {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.25); }
-            100% { transform: scale(1); }
-        }
-
         .submit-btn {
             background-color: var(--accent-clr);
             color: white;
@@ -372,10 +331,6 @@
             color: var(--text-muted);
             margin-top: 10px;
         }
-
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #1f293d; border-radius: 3px; }
     </style>
 </head>
 <body>
@@ -383,10 +338,10 @@
     <sidebar>
         <div class="brand-box">
             <div class="brand-icon"><i class="fa-solid fa-bolt"></i></div>
-            <div class="brand-title">Zeed AI Pro</div>
+            <div class="brand-title">Zeed AI Groq</div>
         </div>
         <div class="sidebar-desc">
-            Sizning eng yaqin do'stingiz va aqlli intellektual yordamchingiz. Har qanday mavzuda daldalashadi, suhbatlashadi va hol-ahvol so'raydi.
+            Groq ning o'ta tezkor neyrotarmog'iga ulangan sun'iy intellekt yordamchingiz.
         </div>
         
         <div class="sidebar-footer">
@@ -399,48 +354,36 @@
     <main-area>
         <top-header>
             <div class="header-title-box">
-                <h3>Universal Intellektual Platforma</h3>
+                <h3>Groq Llama API Integratsiyasi</h3>
             </div>
-            <div class="turbo-badge"><span></span> Zeed AI Core Active</div>
+            <div class="turbo-badge"><span></span> Groq Turbo Active</div>
         </top-header>
 
         <div id="chat-stream">
             <div class="chat-bubble bot">
-                <b>Zeed AI:</b> Salom! Qalaysiz, ishlaringiz, kayfiyatingiz yaxshimi? 😊 Bugun nimalar bilan band bo'ldingiz? Qani, daldalashib, erkin suhbatlashamiz!
+                <b>Zeed AI:</b> Assalomu alaykum! Groq API orqali ultra tezkor rejimda ishlayapman. Menga xohlagan savolingizni bering! 😊
             </div>
-        </div>
-
-        <div id="imagePreviewContainer">
-            <img id="previewImgElement" class="preview-thumb" src="" alt="Preview">
-            <span style="font-size: 13px; color: var(--text-muted);" id="previewFileName">Rasm biriktirildi</span>
-            <button onclick="removeAttachedImage()" style="background:none; border:none; color:#ef4444; cursor:pointer; margin-left:auto;"><i class="fa-solid fa-xmark"></i> O'chirish</button>
         </div>
 
         <div class="input-area-wrapper">
             <div class="input-box-container">
-                <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageSelection(event)">
-                <button class="control-icon-btn" onclick="document.getElementById('imageInput').click()" title="Rasm yuklash">
-                    <i class="fa-solid fa-paperclip"></i>
-                </button>
-                <button class="control-icon-btn" id="voiceBtn" onclick="toggleVoiceInput()" title="Ovozli kiritish">
-                    <i class="fa-solid fa-microphone"></i>
-                </button>
-                <input type="text" id="userInputText" placeholder="Zeed AI bilan erkin suhbatlashing, hol-ahvol so'rang..." onkeypress="checkEnterKey(event)">
+                <input type="text" id="userInputText" placeholder="Zeed AI bilan erkin suhbatlashing..." onkeypress="checkEnterKey(event)">
                 <button class="submit-btn" onclick="sendUserMessage()">
                     <i class="fa-solid fa-paper-plane"></i>
                 </button>
             </div>
             <div class="ai-disclaimer">
-                Zeed AI xato qilishi mumkin. Muhim ma'lumotlarni tekshiring.
+                Zeed AI (Powered by Groq) xato qilishi mumkin.
             </div>
         </div>
     </main-area>
 
     <script>
-        let attachedImageBase64 = null;
+        // API KALITINGIZ TO'G'RIDAN-TO'G'RI JOYLASHTIRILDI:
+        const GROQ_API_KEY = "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"; 
 
         window.onload = function() {
-            const savedChat = localStorage.getItem("zeed_ai_ultimate_chat_v4");
+            const savedChat = localStorage.getItem("zeed_ai_groq_chat_v1");
             if (savedChat) {
                 document.getElementById("chat-stream").innerHTML = savedChat;
                 hljs.highlightAll();
@@ -449,61 +392,18 @@
 
         function persistChat() {
             const stream = document.getElementById("chat-stream");
-            localStorage.setItem("zeed_ai_ultimate_chat_v4", stream.innerHTML);
+            localStorage.setItem("zeed_ai_groq_chat_v1", stream.innerHTML);
         }
 
         function clearChatHistory() {
             if (confirm("Suhbat tarixini tozalashni tasdiqlaysizmi?")) {
                 document.getElementById("chat-stream").innerHTML = `
                     <div class="chat-bubble bot">
-                        <b>Zeed AI:</b> Tarix tozalandi. Qani, yana boshqatdan hol-ahvol so'rashib, suhbatni davom ettiramiz! Ishlar qalay?
+                        <b>Zeed AI:</b> Tarix tozalandi. Yangi suhbatni boshlaymiz!
                     </div>
                 `;
-                localStorage.removeItem("zeed_ai_ultimate_chat_v4");
+                localStorage.removeItem("zeed_ai_groq_chat_v1");
             }
-        }
-
-        function handleImageSelection(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                attachedImageBase64 = e.target.result;
-                document.getElementById('previewImgElement').src = attachedImageBase64;
-                document.getElementById('previewFileName').innerText = file.name;
-                document.getElementById('imagePreviewContainer').style.display = 'flex';
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function removeAttachedImage() {
-            attachedImageBase64 = null;
-            document.getElementById('imageInput').value = '';
-            document.getElementById('imagePreviewContainer').style.display = 'none';
-        }
-
-        let speechRecObj;
-        function toggleVoiceInput() {
-            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                alert("Brauzeringiz ovozli kiritishni qo'llab-quvvatlamaydi!");
-                return;
-            }
-            const SpeechAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
-            speechRecObj = new SpeechAPI();
-            speechRecObj.lang = 'uz-UZ';
-            
-            const micIconBtn = document.getElementById("voiceBtn");
-            
-            speechRecObj.onstart = () => { micIconBtn.classList.add('active-record'); };
-            speechRecObj.onresult = (event) => {
-                document.getElementById("userInputText").value = event.results[0][0].transcript;
-                micIconBtn.classList.remove('active-record');
-            };
-            speechRecObj.onerror = () => { micIconBtn.classList.remove('active-record'); };
-            speechRecObj.onend = () => { micIconBtn.classList.remove('active-record'); };
-            
-            speechRecObj.start();
         }
 
         function copyTextToClipboard(text, btnElement) {
@@ -514,63 +414,36 @@
             });
         }
 
-        function speakText(text) {
-            if (!('speechSynthesis' in window)) {
-                alert("Ovozli o'qish imkoniyati mavjud emas!");
-                return;
+        // --- GROQ API BILAN BOG'LANISH ---
+        async function callGroqAPI(promptText) {
+            const url = "https://api.groq.com/openai/v1/chat/completions";
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${GROQ_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: "llama-3.3-70b-versatile",
+                        messages: [
+                            { role: "system", content: "Siz Zeed AI nomli o'ta aqlli, foydalanuvchiga yordam beradigan va o'zbek tilida mukammal javob beradigan sun'iy intellekt yordamchisiz." },
+                            { role: "user", content: promptText }
+                        ]
+                    })
+                });
+
+                const data = await response.json();
+                if (data.choices && data.choices[0].message.content) {
+                    return data.choices[0].message.content;
+                } else {
+                    return "Kechirasiz, javob olishda xatolik yuz berdi. API kalitingizni tekshiring.";
+                }
+            } catch (error) {
+                console.error(error);
+                return "Tarmoqda xatolik yuz berdi. Internetni tekshiring.";
             }
-            window.speechSynthesis.cancel();
-            const cleanText = text.replace(/<\/?[^>]+(>|$)/g, "");
-            const utterance = new SpeechSynthesisUtterance(cleanText);
-            utterance.lang = 'uz-UZ';
-            window.speechSynthesis.speak(utterance);
-        }
-
-        // --- HAQIQIY DO'STONA VA KENGAYTirilgan SUHBAT ALGORITMI ---
-        function generateSmartResponse(query, hasImage) {
-            const text = query.toLowerCase().trim();
-
-            if (hasImage) {
-                return `Rasm uchun rahmat! 📸 Uni bir ko'rib chiqdim, juda qiziq ekan. Agar shu rasm bo'yicha biror kod yozishim, uning ichidagi matnni chiqarishim yoki tarjima qilishim kerak bo'lsa, xohlaganingizdek bajaraman!`;
-            }
-
-            // Hol-ahvol so'rash, dardlashish va samimiy muloqot
-            if (text.includes('qalaysan') || text.includes('qale') || text.includes('qalay') || text.includes('ishlar')) {
-                return `Rahmat, hammasi joyida, siz bilan suhbatlashib o'tiribman! 😊 O'zingizning ishlaringiz, kayfiyatingiz qalay? Charchamayapsizmi?`;
-            }
-
-            if (text.includes('yaxshi') || text.includes('zoʻr') || text.includes('zor') || text.includes('normal') || text.includes('haqiqiy')) {
-                return `Buni eshitganimdan juda xursandman! Doim kayfiyatingiz ajoyib bo'lsin. Bugun nima qiziq ishlar bilan bandmiz? Menga istalgan savolingizni beravering, birgalikda muhokama qilamiz!`;
-            }
-
-            if (text.includes('zerikdim') || text.includes('siqildim') || text.includes('kayfiyat yoq') || text.includes('xafa')) {
-                return `Voy, xafa bo'lmang! Hayotda bunaqasi bo'lib turadi. Keling, biror qiziqarli narsa haqida gaplashamiz yoki sizni qiziqtirgan biron ajoyib loyiha, kino yoxud texnologiyalar haqida suhbatlashamiz. Hammasi yaxshi bo'lib ketadi, dilingizni cho'ktirmang! 💪`;
-            }
-
-            if (text.includes('isming nima') || text.includes('kimsan')) {
-                return `Men — **Zeed AI**man! Sizning har qanday vaziyatingizda yoningizda bo'ladigan, daldalashadigan va xohlagan savolingizga javob topib beradigan sodiq do'stingizman! 😉`;
-            }
-
-            if (text.includes('rahmat') || text.includes('raahmat')) {
-                return `Arzimaydi! Har doim yordam berishga va siz bilan suhbatlashishga tayyorman. Yana qanday mavzularda gaplashamiz?`;
-            }
-
-            if (text.includes('salom') || text.includes('assalomu alaykum')) {
-                return `Va alaykum assalom! 🌟 Xush kelibsiz! Bugun kayfiyatlar qalay? Qanday qiziqarli mavzularda suhbatlashamiz?`;
-            }
-
-            // Dasturlash va kod yozish so'rovlari
-            if (text.includes('kod') || text.includes('python') || text.includes('dastur') || text.includes('html') || text.includes('js') || text.includes('funksiya') || text.includes('dasturlash') || text.includes('xato')) {
-                return `Marhamat! Sizning talabingiz bo'yicha maxsus tuzilgan, toza va xatosiz kod strukturasi:\n\n\`\`\`javascript\n/**\n * Zeed AI Universal Engine\n * Maqsad: ${query}\n */\nfunction runZeedEngine() {\n    console.log("Zeed AI tizimi to'liq faol va ishga tayyor!");\n    return {\n        status: "Muvaffaqiyatli",\n        message: "Barcha jarayonlar xatosiz bajarildi!"\n    };\n}\n\nrunZeedEngine();\n\`\`\`\nAgar kodga qo'shimcha o'zgartirishlar kiritish kerak bo'lsa, tortinmasdan ayting!`;
-            }
-
-            // Matn va insho
-            if (text.includes('insho') || text.includes('maqola') || text.includes('matn') || text.includes('yozib ber')) {
-                return `Mana siz so'ragan mavzu yuzasidan tayyorlangan mazmunli va ta'sirli matn:\n\n> "${query}"\n\nUshbu matnni o'zingizning loyihangiz yoki vazifangizda bemalol ishlatishingiz mumkin. Yana boshqa yordam kerak bo'lsa yoningizdaman!`;
-            }
-
-            // Boshqa barcha holatlar uchun erkin va tabiiy javob
-            return `Tushunarli, juda qiziq mavzu ekan! "${query}" haqida o'ylab qaralsa, bu haqiqatan ham har tomonlama e'tibor qaratishga arziydigan masala. Keling, buni yanada chuqurroq muhokama qilamiz. Sizning bu boradagi fikringiz qanday?`;
         }
 
         async function sendUserMessage() {
@@ -578,52 +451,38 @@
             const streamBox = document.getElementById("chat-stream");
             const queryText = inputElem.value.trim();
             
-            if (!queryText && !attachedImageBase64) return;
+            if (!queryText) return;
 
-            let userHtmlContent = `<b>Siz:</b> `;
-            if (queryText) userHtmlContent += escapeSpecialChars(queryText);
-            if (attachedImageBase64) {
-                userHtmlContent += `<br><img src="${attachedImageBase64}" alt="User Image">`;
-            }
-
-            streamBox.innerHTML += `<div class="chat-bubble user">${userHtmlContent}</div>`;
+            streamBox.innerHTML += `<div class="chat-bubble user"><b>Siz:</b> ${escapeSpecialChars(queryText)}</div>`;
             
-            const currentImg = attachedImageBase64;
             inputElem.value = "";
-            removeAttachedImage();
             streamBox.scrollTop = streamBox.scrollHeight;
-
             persistChat();
 
             const loadIndicatorId = "load_" + Date.now();
             streamBox.innerHTML += `<div id="${loadIndicatorId}" class="chat-bubble bot"><b>Zeed AI:</b> O'ylayapman...</div>`;
             streamBox.scrollTop = streamBox.scrollHeight;
 
-            setTimeout(() => {
-                const aiReplyText = generateSmartResponse(queryText || "Rasmni tahlil qil", currentImg !== null);
-                let renderedMarkdown = marked.parse(aiReplyText);
+            const aiReplyText = await callGroqAPI(queryText);
+            let renderedMarkdown = marked.parse(aiReplyText);
 
-                const safeCleanText = aiReplyText.replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/(\r\n|\n|\r)/gm, " ");
+            const safeCleanText = aiReplyText.replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/(\r\n|\n|\r)/gm, " ");
 
-                document.getElementById(loadIndicatorId).innerHTML = `
-                    <b>Zeed AI:</b><br><br>${renderedMarkdown}
-                    <div class="msg-actions">
-                        <button class="msg-action-btn" onclick="copyTextToClipboard(\`${safeCleanText}\`, this)">
-                            <i class="fa-regular fa-copy"></i> Nusxalash
-                        </button>
-                        <button class="msg-action-btn" onclick="speakText(\`${safeCleanText}\`)">
-                            <i class="fa-solid fa-volume-high"></i> Ovozli tinglash
-                        </button>
-                    </div>
-                `;
-                
-                document.querySelectorAll('pre code').forEach((block) => {
-                    hljs.highlightElement(block);
-                });
+            document.getElementById(loadIndicatorId).innerHTML = `
+                <b>Zeed AI:</b><br><br>${renderedMarkdown}
+                <div class="msg-actions">
+                    <button class="msg-action-btn" onclick="copyTextToClipboard(\`${safeCleanText}\`, this)">
+                        <i class="fa-regular fa-copy"></i> Nusxalash
+                    </button>
+                </div>
+            `;
+            
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
 
-                streamBox.scrollTop = streamBox.scrollHeight;
-                persistChat();
-            }, 600);
+            streamBox.scrollTop = streamBox.scrollHeight;
+            persistChat();
         }
 
         function checkEnterKey(event) {
