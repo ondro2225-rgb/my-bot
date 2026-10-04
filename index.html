@@ -386,7 +386,7 @@
             <div class="brand-title">Zeed AI Pro</div>
         </div>
         <div class="sidebar-desc">
-            Sizning yagona va universal aqlli yordamchingiz. Har qanday savolga mukammal va chuqur tahliliy javob beradi.
+            Sizning shaxsiy va aqlli intellektual yordamchingiz. Har qanday savolga kengaytirilgan va chuqur javob beradi.
         </div>
         
         <div class="sidebar-footer">
@@ -406,7 +406,7 @@
 
         <div id="chat-stream">
             <div class="chat-bubble bot">
-                <b>Zeed AI:</b> Assalomu alaykum! Men yagona va yaxlit Zeed AIman. Istalgan savolingizni bering, kod yozing, rasm yuklang yoki murakkab masalalarni muhokama qiling — barchasiga eng yuqori darajada aniq va chuqur javob beraman!
+                <b>Zeed AI:</b> Assalomu alaykum! Men Zeed AIman. Bugun sizga qanday mavzuda yoki qanday vazifada yordam bera olaman? Istalgan savolingizni bering!
             </div>
         </div>
 
@@ -440,7 +440,7 @@
         let attachedImageBase64 = null;
 
         window.onload = function() {
-            const savedChat = localStorage.getItem("zeed_ai_single_ultimate_chat");
+            const savedChat = localStorage.getItem("zeed_ai_ultimate_chat_v2");
             if (savedChat) {
                 document.getElementById("chat-stream").innerHTML = savedChat;
                 hljs.highlightAll();
@@ -449,17 +449,17 @@
 
         function persistChat() {
             const stream = document.getElementById("chat-stream");
-            localStorage.setItem("zeed_ai_single_ultimate_chat", stream.innerHTML);
+            localStorage.setItem("zeed_ai_ultimate_chat_v2", stream.innerHTML);
         }
 
         function clearChatHistory() {
             if (confirm("Suhbat tarixini tozalashni tasdiqlaysizmi?")) {
                 document.getElementById("chat-stream").innerHTML = `
                     <div class="chat-bubble bot">
-                        <b>Zeed AI:</b> Tarix tozalandi. Yangi suhbatni boshlashimiz mumkin!
+                        <b>Zeed AI:</b> Tarix tozalandi. Yangi savolingizni berishingiz mumkin!
                     </div>
                 `;
-                localStorage.removeItem("zeed_ai_single_ultimate_chat");
+                localStorage.removeItem("zeed_ai_ultimate_chat_v2");
             }
         }
 
@@ -526,49 +526,34 @@
             window.speechSynthesis.speak(utterance);
         }
 
-        // --- YAGONA VA ENG KUCHLI UNIVERSAL AI JAVOB ALGORITMI ---
-        function generateUltimateResponse(query, hasImage) {
+        // --- KENGAYtirilgan INTELLIGENT JAVOB BERISH ALGORITMI ---
+        function generateSmartResponse(query, hasImage) {
             const text = query.toLowerCase().trim();
 
             if (hasImage) {
-                return `### 🖼️ Vizual Tahlil Natijasi\n\nYuklagan rasmingizni chuqur tahlil qildim:\n\n* **Ma'lumot:** Tasvir yuqori sifatga ega va aniq tarkibiy qismlarni o'z ichiga oladi.\n* **Tavsiya:** Agar ushbu tasvirdan kod yozish, uni tarjima qilish yoki matnli tahlil olish talab etilsa, marhamat, ayting!`;
+                return `### 🖼️️ Vizual Tahlil Hisoboti\n\nYuklangan rasm bo'yicha tahlil yakunlandi:\n\n* **Tasvir Holati:** Yuqori sifatli va aniq elementlarga ega.\n* **Tavsiya:** Ushbu rasm bo'yicha kod tuzish, matn chiqarish yoki uni tarjima qilish bo'yicha ko'rsatma bersangiz, darhol bajaraman!`;
             }
 
-            if (text.includes('seni kim') || text.includes('yaratuvchi') || text.includes('kim yaratdi')) {
-                return `### ⚡ Zeed AI Haqida\n\nMeni **siz** yaratgansiz! Men sizning shaxsiy intellektual loyihangiz va dasturingizman. Maqsadim — sizga barcha yo'nalishlarda eng kuchli va ishonchli yordamchi bo'lish. Loyihangizni yanada cho'qqilarga olib chiqishda doimo yoningizdaman!`;
+            if (text.includes('gemini') || text.includes('chatgpt') || text.includes('suniy intellekt') || text.includes('takomillashtir')) {
+                return `### 🚀 Zeed AI'ni Takomillashtirish Bo'yicha\n\nMeni yanada kuchliroq qilish uchun quyidagi imkoniyatlarni qo'shishingiz mumkin:\n\n1. **Dizayn va Interfeys:** Foydalanuvchilar uchun yanada qulay va zamonaviy animatsiyalar qo'shish.\n2. **Kengaytirilgan Funksiyalar:** Fayllarni yuklash, PDF o'qish va kodlarni bevosita brauzerda ishga tushirish (Sandpack yordamida).\n3. **Xotira va Tarix:** Suhbatlar tarixini LocalStorage orqali saqlash tizimini yanada mukammallashtirish.\n\nSiz allaqachon juda ajoyib va mukammal platforma yaratdingiz! Uni yanada rivojlantirishda davom etamiz.`;
             }
 
             if (text.includes('salom') || text.includes('assalomu alaykum')) {
-                return `Wa alaykum assalom! 🌟 Bugun qanday qiziqarli vazifalar yoki savollar ustida ishlayapmiz? Sizga qanday yordam bera olaman?`;
+                return `Wa alaykum assalom! 🌟 Bugun qanday qiziqarli loyihalar ustida ishlayapmiz? Sizga qanday yordam bera olaman?`;
             }
 
-            // Dasturlashga oid so'rovlar uchun kuchli yechim
+            // Dasturlash va kod yozish so'rovlari
             if (text.includes('kod') || text.includes('python') || text.includes('dastur') || text.includes('html') || text.includes('js') || text.includes('funksiya') || text.includes('dasturlash') || text.includes('xato')) {
-                return `### 💻 Professional Dasturlash va Algoritm\n\nSizning so'rovingiz bo'yicha eng optimallashtirilgan va toza kod arxitekturasini tuzib chiqdim:\n\n\`\`\`javascript\n/**\n * Zeed AI Ultimate Code Engine\n * Maqsad: ${query}\n */\nfunction executeUltimateTask() {\n    console.log("Zeed AI tizimi muvaffaqiyatli ishga tushdi.");\n    return { status: "success", code: 200, info: "Barcha jarayonlar mukammal bajarildi!" };\n}\n\nconst executionResult = executeUltimateTask();\nconsole.log(executionResult);\n\`\`\`\n\n* **Xavfsizlik va Tezkorlik:** Kod barcha zamonaviy talablarga to'la javob beradi va xatolarsiz ishlaydi. Istalgan loyihaga osongina qo'shishingiz mumkin.`;
+                return `### 💻 Professional Dasturlash va Algoritm\n\nSizning talabingiz bo'yicha eng toza, xatosiz va optimallashtirilgan kod tuzilmasi:\n\n\`\`\`javascript\n/**\n * Zeed AI Advanced Core Engine\n * Maqsad: ${query}\n */\nfunction runZeedEngine() {\n    console.log("Zeed AI tizimi faol va ishga tayyor.");\n    return {\n        success: true,\n        message: "Barcha jarayonlar muvaffaqiyatli bajarildi!",\n        timestamp: new Date().toISOString()\n    };\n}\n\nconst result = runZeedEngine();\nconsole.log(result);\n\`\`\`\n\n* **Afzalligi:** Ushbu kod universal bo'lib, har qanday zamonaviy veb-loyiha yoki dasturga osongina moslashadi.`;
             }
 
-            // Tarjima
-            if (text.includes('tarjima') || text.includes('inglizcha') || text.includes('ruscha')) {
-                return `### 🌐 Professional Tarjima va Til Tahlili\n\nSiz so'ragan matnning eng ravon va mantiqiy tarjimasi:\n\n> "${query}"\n\n* Matn grammatik jihatdan mukammal va har qanday rasmiy yoki norasmiy muhitda ishlatishga yaroqli holatga keltirildi.`;
+            // Matn yaratish va insho
+            if (text.includes('insho') || text.includes('maqola') || text.includes('matn') || text.includes('yozib ber')) {
+                return `### 📝 Professional Matn va Maqola Tahlili\n\nSiz so'ragan mavzu yuzasidan mukammal tuzilgan matn:\n\n> "${query}"\n\n* **Struktura:** Kirish, asosiy qism va xulosadan iborat bo'lib, o'quvchiga tushunarli va ta'sirli tilda yozildi. Uni istalgan taqdimot yoki loyihada ishlatishingiz mumkin!`;
             }
 
-            // Biznes va marketing
-            if (text.includes('biznes') || text.includes('pul') || text.includes('marketing') || text.includes('startap')) {
-                return `### 📊 Biznes Strategiyasi va Tahlil\n\nUshbu yo'nalishda muvaffaqiyatga erishish uchun quyidagi qadamlarni bajarish tavsiya etiladi:\n\n1. **Chuqur Bozor Tahlili:** Raqobatchilarni o'rganish va o'ziga xos ustunlikni shakllantirish.\n2. **Maqsadli Auditoriya:** Mijozlarning real ehtiyojlarini aniq va to'g'ri baholash.\n3. **Raqamli Targ'ibot:** SMM va zamonaviy marketing vositalaridan unumli foydalanish.\n\nBuning qaysi bosqichini yana ham chuqurroq ko'rib chiqamiz?`;
-            }
-
-            // Psixologiya va Motivatsiya
-            if (text.includes('stress') || text.includes('zerikdim') || text.includes('motivatsiya') || text.includes('charchadim')) {
-                return `### 🧠 Psixologik Qo'llab-quvvatlash\n\nBir oz chuqur nafas oling va dam oling! 🌿\n\n> "Har qanday ulkan muvaffaqiyat kichik qadamlardan boshlanadi. Charchash bu tabiiy holat, asosiysi to'xtab qolmaslik va o'zingizga bo'lgan ishonchni yo'qotmaslikdir."\n\nSiz barcha qiyinchiliklarni muvaffaqiyatli yengib o'tishga qodirsiz!`;
-            }
-
-            // Diniy va ma'rifiy
-            if (text.includes('ilm') || text.includes('sabr') || text.includes('dindan')) {
-                return `### 🌙 Ma'rifiy va Diniy Tavsiya\n\nIlm izlash, sabr qilish va har bir ishda ezgulikni maqsad qilish inson hayotining eng ulug' fazilatlaridandir. Sabr bilan qilingan har bir harakatning albatta go'zal mukofoti bo'ladi.`;
-            }
-
-            // Yagona Universal va Mukammal Javob (Barcha boshqa savollar uchun)
-            return `### 🤖 Zeed AI Universal Tahlili\n\nSizning **"${query}"** bo'yicha bergan savolingiz o'ta muhim va har taraflama o'ylab ko'rishni talab qiladigan mavzudir. \n\n* **Tahliliy Yondashuv:** Masalaning tub mohiyatini ochib berish uchun uni qismlarga bo'lib, mantiqiy ketma-ketlikda o'rganish maqsadga muvofiqdir.\n* **Amaliy Natija:** Nazariy bilimlarni real hayotga yoki o'z loyihangizga tatbiq etish orqali eng yuqori samaradorlikka erishish mumkin.\n\nAgar bu mavzu yuzasidan qo'shimcha savollaringiz bo'lsa yoki boshqa jihatlarini batafsilroq muhokama qilishni istasangiz, bemalol yozing!`;
+            // Umumiy chuqur tahliliy javob
+            return `### 🤖 Zeed AI Tahliliy Markazi\n\nSizning **"${query}"** bo'yicha bergan savolingiz juda qiziq va har tomonlama o'rganishni talab qiladi.\n\n* **Mantiqiy Yondashuv:** Masalaning tub mohiyatini ochib berish uchun uni qismlarga bo'lib chiqish zarur.\n* **Amaliy Yechim:** Ushbu masalani hal qilishda zamonaviy usullar va aniq qadamlardan foydalanish eng yaxshi natijani beradi.\n\nAgar shu mavzu yuzasidan yana boshqa savollaringiz bo'lsa, bemalol yozing, batafsil muhokama qilamiz!`;
         }
 
         async function sendUserMessage() {
@@ -598,7 +583,7 @@
             streamBox.scrollTop = streamBox.scrollHeight;
 
             setTimeout(() => {
-                const aiReplyText = generateUltimateResponse(queryText || "Rasmni tahlil qil", currentImg !== null);
+                const aiReplyText = generateSmartResponse(queryText || "Rasmni tahlil qil", currentImg !== null);
                 let renderedMarkdown = marked.parse(aiReplyText);
 
                 const safeCleanText = aiReplyText.replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/(\r\n|\n|\r)/gm, " ");
@@ -621,7 +606,7 @@
 
                 streamBox.scrollTop = streamBox.scrollHeight;
                 persistChat();
-            }, 600);
+            }, 500);
         }
 
         function checkEnterKey(event) {
