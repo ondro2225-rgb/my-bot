@@ -66,7 +66,7 @@
                 </div>
             </div>
 
-            <!-- Result Box -->
+            <!-- Result Box (Hidden by default) -->
             <div id="resultBox" class="hidden mt-6 p-4 rounded-xl border text-sm transition-all">
                 <div id="resultContent" class="flex items-start space-x-3">
                     <!-- Dinamik natija shu yerga chiqadi -->
@@ -85,12 +85,22 @@
         function analyzeData(targetString) {
             const resultBox = document.getElementById('resultBox');
             const resultContent = document.getElementById('resultContent');
-            const lowerInput = targetString.toLowerCase();
+            const lowerInput = targetString.toLowerCase().trim();
+
+            if (!lowerInput) {
+                resultBox.classList.add('hidden');
+                return;
+            }
 
             resultBox.classList.remove('hidden');
 
-            // Xavfli belgilar, so'zlar va fayl kengaytmalari
-            const dangerSignatures = ['.apk', '.exe', '.bat', '.scr', 'bonus', 'gift', 'hadiya', 'pul', 'lotereya', 'free', 'win', 'click-pay', 'aksiya', 'yutuq', 'fotolar', 'suratlar'];
+            // Xavfli belgilar, so'zlar va fayl kengaytmalari bazasi
+            const dangerSignatures = [
+                '.apk', '.exe', '.bat', '.scr', '.pif', 
+                'bonus', 'gift', 'hadiya', 'pul', 'lotereya', 
+                'free', 'win', 'click-pay', 'aksiya', 'yutuq', 
+                'fotolar', 'suratlar', 'telegram-bonus', 'sovgla'
+            ];
             let isDanger = false;
 
             for (let sig of dangerSignatures) {
@@ -100,7 +110,7 @@
                 }
             }
 
-            if (isDanger || lowerInput.length < 3) {
+            if (isDanger) {
                 resultBox.className = "mt-6 p-4 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 transition-all";
                 resultContent.innerHTML = `
                     <i class="fa-solid fa-triangle-exclamation text-rose-500 text-xl mt-0.5"></i>
@@ -122,8 +132,8 @@
         }
 
         function checkSafety() {
-            const input = document.getElementById('userInput').value.trim();
-            if (!input) {
+            const input = document.getElementById('userInput').value;
+            if (!input.trim()) {
                 alert("Iltimos, tekshirish uchun havola, bot nomi yoki matn kiriting!");
                 return;
             }
