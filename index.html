@@ -36,7 +36,7 @@
             <div class="mb-4">
                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Havola (URL) yoki Bot nomi:</label>
                 <div class="flex gap-2">
-                    <input type="text" id="userInput" placeholder="Masalan: https://t.cloud-bonus.uz yoki toydan_foto.apk" 
+                    <input type="text" id="userInput" placeholder="Masalan: https://t.cloud-bonus.uz yoki 1xbet..." 
                         class="flex-grow bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:border-indigo-500 transition text-sm">
                     <button onclick="checkSafety()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-6 py-3 rounded-xl transition shadow-lg text-sm flex items-center justify-center shrink-0">
                         <i class="fa-solid fa-magnifying-glass mr-2"></i> Tekshirish
@@ -66,7 +66,7 @@
                 </div>
             </div>
 
-            <!-- Result Box (Hidden by default) -->
+            <!-- Result Box -->
             <div id="resultBox" class="hidden mt-6 p-4 rounded-xl border text-sm transition-all">
                 <div id="resultContent" class="flex items-start space-x-3">
                     <!-- Dinamik natija shu yerga chiqadi -->
@@ -94,12 +94,13 @@
 
             resultBox.classList.remove('hidden');
 
-            // Xavfli belgilar, so'zlar va fayl kengaytmalari bazasi
+            // Kengaytirilgan xavfli va qimor/firibgarlik bazasi
             const dangerSignatures = [
                 '.apk', '.exe', '.bat', '.scr', '.pif', 
                 'bonus', 'gift', 'hadiya', 'pul', 'lotereya', 
                 'free', 'win', 'click-pay', 'aksiya', 'yutuq', 
-                'fotolar', 'suratlar', 'telegram-bonus', 'sovgla'
+                'fotolar', 'suratlar', 'telegram-bonus', 'sovgla',
+                '1xbet', 'qimor', 'stavka', 'bet', 'pin-up', 'melbet', 'mostbet', 'casino'
             ];
             let isDanger = false;
 
@@ -115,8 +116,8 @@
                 resultContent.innerHTML = `
                     <i class="fa-solid fa-triangle-exclamation text-rose-500 text-xl mt-0.5"></i>
                     <div>
-                        <strong class="block font-bold text-rose-400 mb-1">DIQQAT! Xavfli Fayl yoki Firibgarlik Belgisi!</strong>
-                        <p class="text-xs text-rose-300/80">Bu obyektda (apk/zararli dastur yoki shubhali havola) shaxsiy ma'lumotlaringizni o'g'irlaydigan yoki telefoningizni boshqaradigan virus bo'lishi mumkin. O'rnatmang!</p>
+                        <strong class="block font-bold text-rose-400 mb-1">DIQQAT! Xavfli yoki Qimor/Firibgarlik Obyekti!</strong>
+                        <p class="text-xs text-rose-300/80">Bu obyektda moliyaviy xavf, pul yo'qotish xavfi yoki zararli dastur (virus) alomatlari aniqlandi. Ehtiyot bo'ling!</p>
                     </div>
                 `;
             } else {
