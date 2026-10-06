@@ -1,8 +1,3 @@
-Zo'r! Mana shu tashlagan kalitingiz AQ.Ab8RN6JviSwegrM-NvuNJPFJgPlnYwHIjnygMUnAtSZeBN7ReA bilan Zeed AI ilovamiz to'liq tayyor bo'ladi.
-
-Quyida ilovaning to'liq, o'zingizning API kalitingiz o'rnatilgan yakuniy kodi keltirilgan. Uni butunlay nusxalab, faylingizga (masalan, index.html) joylab qo'yasiz:
-
-HTML
 <!DOCTYPE html>
 <html lang="uz">
 <head>
@@ -16,7 +11,6 @@ HTML
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Custom scrollbar for clean UI */
         ::-webkit-scrollbar {
             width: 6px;
         }
@@ -66,9 +60,7 @@ HTML
         </div>
 
         <!-- Chat History List -->
-        <div id="chatHistoryList" class="flex-1 overflow-y-auto p-3 space-y-2 text-sm text-slate-300">
-            <!-- Dynamically populated -->
-        </div>
+        <div id="chatHistoryList" class="flex-1 overflow-y-auto p-3 space-y-2 text-sm text-slate-300"></div>
 
         <div class="p-4 border-t border-slate-800 text-xs text-slate-500 flex items-center justify-between">
             <span>Zeed AI v1.0</span>
@@ -96,7 +88,6 @@ HTML
 
         <!-- Chat Messages Container -->
         <div id="chatContainer" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
-            <!-- Welcome Screen / Empty State -->
             <div id="welcomeScreen" class="h-full flex flex-col items-center justify-center text-center max-w-md mx-auto space-y-4">
                 <div class="w-16 h-16 bg-indigo-600/10 border border-indigo-500/20 rounded-2xl flex items-center justify-center text-indigo-400 text-2xl shadow-xl">
                     <i class="fa-solid fa-robot"></i>
@@ -124,14 +115,12 @@ HTML
 
     <!-- JavaScript Logic -->
     <script>
-        // API Configuration (Gemini 1.5 Flash)
         const API_KEY = "AQ.Ab8RN6JviSwegrM-NvuNJPFJgPlnYwHIjnygMUnAtSZeBN7ReA";
         const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
         let chats = JSON.parse(localStorage.getItem('zeed_ai_chats')) || [];
         let currentChatId = localStorage.getItem('zeed_ai_current_chat_id') || null;
 
-        // Initialize App
         document.addEventListener('DOMContentLoaded', () => {
             if (chats.length === 0) {
                 startNewChat();
@@ -273,7 +262,6 @@ HTML
             input.value = '';
             input.style.height = 'auto';
 
-            // Remove welcome screen if present
             const welcome = document.getElementById('welcomeScreen');
             if (welcome) welcome.remove();
 
@@ -284,17 +272,14 @@ HTML
                 renderChatHistoryList();
             }
 
-            // User message
             appendMessageToDOM('user', text, true);
             chat.messages.push({ role: 'user', text });
             saveAndRefresh();
 
-            // Typing indicator / Loading bubble
             const loadingId = 'loading_' + Date.now();
             appendLoadingToDOM(loadingId);
 
             try {
-                // Prepare API history format
                 const contents = chat.messages.map(m => ({
                     role: m.role === 'user' ? 'user' : 'model',
                     parts: [{ text: m.text }]
