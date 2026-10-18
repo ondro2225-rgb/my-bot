@@ -30,13 +30,8 @@ body {
 
 .pricing-header p {
     color: #5f6368;
-    font-size: 13px;
+    font-size: 14px;
     margin-bottom: 20px;
-}
-
-.pricing-header p a {
-    color: #1a73e8;
-    text-decoration: none;
 }
 
 /* Toggle Button */
@@ -159,6 +154,7 @@ body {
     height: 38px;
 }
 
+/* Tugmalar */
 .btn-primary {
     width: 100%;
     padding: 12px;
@@ -175,6 +171,24 @@ body {
 
 .btn-primary:hover {
     background: #0842a0;
+}
+
+.btn-secondary {
+    width: 100%;
+    padding: 12px;
+    border-radius: 24px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    background: #e8f0fe;
+    color: #1a73e8;
+    margin-bottom: 24px;
+    transition: background 0.2s;
+}
+
+.btn-secondary:hover {
+    background: #d2e3fc;
 }
 
 .features {
