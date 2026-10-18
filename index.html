@@ -87,24 +87,17 @@
             chatBox.scrollTop = chatBox.scrollHeight;
 
             try {
-                const response = await fetch('https://text.pollinations.ai/', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        messages: [{ role: 'user', content: messageText }],
-                        model: 'openai'
-                    })
-                });
-
+                // To'g'ridan-to'g'ri ishlaydigan ochiq proxy orqali javob olish
+                const response = await fetch(`https://kaas.pollinations.ai/prompt/${encodeURIComponent(messageText)}`);
                 const replyText = await response.text();
 
                 if (replyText) {
                     aiMsg.innerHTML = '<b>Zeed AI:</b> ' + replyText.replace(/\n/g, '<br>');
                 } else {
-                    aiMsg.innerHTML = '<b>Zeed AI:</b> Javob olib bo\'lmadi.';
+                    aiMsg.innerHTML = '<b>Zeed AI:</b> Javob kelmadi, qayta urinib ko\'ring.';
                 }
             } catch (error) {
-                aiMsg.innerHTML = '<b>Zeed AI:</b> Server bilan bog\'lanishda xatolik yuz berdi.';
+                aiMsg.innerHTML = '<b>Zeed AI:</b> Ulanishda xatolik yuz berdi.';
             }
 
             chatBox.scrollTop = chatBox.scrollHeight;
