@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zeed AI — O'zbekcha Sun'iy Intellekt va Chat</title>
-    <meta name="description" content="Zeed AI bilan bepul va cheksiz muloqot qiling, matnlar yozing.">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -34,7 +33,6 @@
         </div>
     </section>
 
-    <!-- Tariflar Bo'limi -->
     <section class="pricing-section">
         <div class="pricing-header">
             <h2>Tarifingizga kengroq ruxsat uchun yuksaltiring <span>Zeed AI Pro</span></h2>
@@ -66,7 +64,6 @@
         </div>
     </section>
 
-    <!-- Chat JavaScript kodi (API Kalitsiz ishlaydi) -->
     <script>
         async function sendMessage() {
             const input = document.getElementById('userInput');
@@ -75,7 +72,6 @@
 
             const chatBox = document.getElementById('chatBox');
 
-            // Foydalanuvchi xabari
             const userMsg = document.createElement('div');
             userMsg.className = 'message user-message';
             userMsg.textContent = messageText;
@@ -84,7 +80,6 @@
             input.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // AI javobini kutish ko'rsatkichi
             const aiMsg = document.createElement('div');
             aiMsg.className = 'message ai-message';
             aiMsg.innerHTML = '<i>Zeed AI o\'ylamoqda...</i>';
@@ -92,7 +87,6 @@
             chatBox.scrollTop = chatBox.scrollHeight;
 
             try {
-                // Kalitsiz ishlaydigan xavfsiz AI API so'rovi
                 const response = await fetch('https://text.pollinations.ai/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
