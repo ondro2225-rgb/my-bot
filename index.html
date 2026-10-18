@@ -4,21 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Google Qidiruv (SEO) uchun sarlavha va tavsif -->
+    <!-- Google Qidiruv (SEO) -->
     <title>Zeed AI — O'zbekcha Sun'iy Intellekt va Chat</title>
-    <meta name="description" content="Zeed AI bilan bepul va cheksiz muloqot qiling, matnlar yozing va yuqori sifatli rasmlar yarating. Eng tezkor sun'iy intellekt xizmati.">
-    <meta name="keywords" content="Zeed AI, Uzbek AI, sun'iy intellekt, uzbekcha chat, AI bot, rasm chizish">
+    <meta name="description" content="Zeed AI bilan bepul va cheksiz muloqot qiling, matnlar yozing va yuqori sifatli rasmlar yarating.">
+    <meta name="keywords" content="Zeed AI, Uzbek AI, sun'iy intellekt, uzbekcha chat, AI bot">
     
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- Yuqori menyu (Navbar) -->
+    <header class="navbar">
+        <div class="logo">Zeed <span>AI</span></div>
+    </header>
+
+    <!-- AI Chat Bo'limi -->
+    <section class="chat-section">
+        <div class="chat-container">
+            <div class="chat-header">
+                <h3>Zeed AI Chat</h3>
+                <p>Savollaringizni bering, matn yarating yoki g'oyalar oling!</p>
+            </div>
+            
+            <div class="chat-box" id="chatBox">
+                <div class="message ai-message">
+                    Salom! Men <b>Zeed AI</b>man. Sizga qanday yordam bera olaman?
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <input type="text" id="userInput" placeholder="Nimadir yozing..." onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()">Yuborish</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tariflar Bo'limi -->
     <section class="pricing-section">
         <div class="pricing-header">
             <h2>Tarifingizga kengroq ruxsat uchun yuksaltiring <span>Zeed AI Pro</span></h2>
             <p>Istalganingizda bekor qiling. Zeed AI'da asosiy imkoniyatlar har doim bepul va cheksiz!</p>
             
-            <!-- Oylik / Yillik tugmalari -->
             <div class="billing-toggle">
                 <button class="toggle-btn active">Oylik</button>
                 <button class="toggle-btn">Yillik obuna</button>
@@ -27,7 +53,7 @@
         </div>
 
         <div class="pricing-grid">
-            <!-- 1-Tarif: Free (Bepul) -->
+            <!-- 1-Tarif: Free -->
             <div class="pricing-card">
                 <h3>Zeed Free</h3>
                 <p class="storage">⚡ Standart tezlik</p>
@@ -35,7 +61,7 @@
                     <span class="current-price">0 soʻm<span>/oy</span></span>
                 </div>
                 <p class="sub-text">Har doim bepul va cheksiz</p>
-                <button class="btn-secondary">Hozir foydalanish</button>
+                <button class="btn-secondary" onclick="scrollToChat()">Hozir foydalanish</button>
                 <ul class="features">
                     <li>✦ <b>Asosiy model</b></li>
                     <li>✓ <b>Cheksiz savol-javob</b><br>Kunlik chegarasiz muloqot va matn yaratish</li>
@@ -43,7 +69,7 @@
                 </ul>
             </div>
 
-            <!-- 2-Tarif: AI Pro (Tavsiya etilgan) -->
+            <!-- 2-Tarif: Zeed Pro -->
             <div class="pricing-card recommended">
                 <span class="badge">TAVSIYA ETILGAN</span>
                 <h3>Zeed Pro</h3>
@@ -62,7 +88,7 @@
                 </ul>
             </div>
 
-            <!-- 3-Tarif: AI Ultra -->
+            <!-- 3-Tarif: Zeed Ultra -->
             <div class="pricing-card">
                 <h3>Zeed Ultra</h3>
                 <p class="storage">🔥 Maksimal quvvat va tezlik</p>
@@ -82,5 +108,43 @@
         </div>
     </section>
 
+    <!-- Chat JavaScript Kodlari -->
+    <script>
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const messageText = input.value.trim();
+            if (messageText === '') return;
+
+            const chatBox = document.getElementById('chatBox');
+
+            // Foydalanuvchi xabarini qo'shish
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user-message';
+            userMsg.textContent = messageText;
+            chatBox.appendChild(userMsg);
+
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // AI Javobi (Simulyatsiya)
+            setTimeout(() => {
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'message ai-message';
+                aiMsg.innerHTML = '<b>Zeed AI:</b> Sizning "' + messageText + '" so\'rovingiz qabul qilindi!';
+                chatBox.appendChild(aiMsg);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 800);
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function scrollToChat() {
+            document.querySelector('.chat-section').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
 </body>
 </html>
