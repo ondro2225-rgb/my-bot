@@ -3,22 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Google Qidiruv (SEO) -->
     <title>Zeed AI — O'zbekcha Sun'iy Intellekt va Chat</title>
-    <meta name="description" content="Zeed AI bilan bepul va cheksiz muloqot qiling, matnlar yozing va yuqori sifatli rasmlar yarating.">
-    <meta name="keywords" content="Zeed AI, Uzbek AI, sun'iy intellekt, uzbekcha chat, AI bot">
-    
+    <meta name="description" content="Zeed AI bilan bepul va cheksiz muloqot qiling, matnlar yozing.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Yuqori menyu (Navbar) -->
     <header class="navbar">
         <div class="logo">Zeed <span>AI</span></div>
     </header>
 
-    <!-- AI Chat Bo'limi -->
     <section class="chat-section">
         <div class="chat-container">
             <div class="chat-header">
@@ -44,80 +39,45 @@
         <div class="pricing-header">
             <h2>Tarifingizga kengroq ruxsat uchun yuksaltiring <span>Zeed AI Pro</span></h2>
             <p>Istalganingizda bekor qiling. Zeed AI'da asosiy imkoniyatlar har doim bepul va cheksiz!</p>
-            
-            <div class="billing-toggle">
-                <button class="toggle-btn active">Oylik</button>
-                <button class="toggle-btn">Yillik obuna</button>
-            </div>
-            <p class="save-tag">Yillik to‘lov bilan yanada ko‘proq tejang</p>
         </div>
 
         <div class="pricing-grid">
-            <!-- 1-Tarif: Free -->
             <div class="pricing-card">
                 <h3>Zeed Free</h3>
                 <p class="storage">⚡ Standart tezlik</p>
-                <div class="price-box">
-                    <span class="current-price">0 soʻm<span>/oy</span></span>
-                </div>
+                <div class="price-box"><span class="current-price">0 soʻm<span>/oy</span></span></div>
                 <p class="sub-text">Har doim bepul va cheksiz</p>
                 <button class="btn-secondary" onclick="scrollToChat()">Hozir foydalanish</button>
                 <ul class="features">
-                    <li>✦ <b>Asosiy model</b></li>
-                    <li>✓ <b>Cheksiz savol-javob</b><br>Kunlik chegarasiz muloqot va matn yaratish</li>
-                    <li>✓ <b>Cheksiz rasm chizish</b><br>Standart tezlik va sifatda rasm generatsiyasi</li>
+                    <li>✓ <b>Cheksiz savol-javob</b></li>
                 </ul>
             </div>
 
-            <!-- 2-Tarif: Zeed Pro -->
             <div class="pricing-card recommended">
                 <span class="badge">TAVSIYA ETILGAN</span>
                 <h3>Zeed Pro</h3>
-                <p class="storage">🚀 Turbo tezlik + HD Sifat</p>
-                <div class="price-box">
-                    <span class="old-price">59 880 soʻm</span>
-                    <span class="current-price">15 480 soʻm<span>/oy</span></span>
-                </div>
-                <p class="sub-text">Chegirma bilan birinchi oy uchun</p>
+                <p class="storage">🚀 Turbo tezlik</p>
+                <div class="price-box"><span class="current-price">15 480 soʻm<span>/oy</span></span></div>
                 <button class="btn-primary">Zeed Pro olish</button>
                 <ul class="features">
-                    <li>✦ <b>Takomillashtirilgan model</b></li>
-                    <li>✓ <b>2x Tezroq javoblar</b><br>Kutib qolmasdan darhol javob olish imkoniyati</li>
-                    <li>✓ <b>Yuqori sifatli rasmlar</b><br>4K va yanada aniq detallashgan rasmlar chizish</li>
-                    <li>✓ <b>Kengaytirilgan xotira</b><br>Uzun matnlar va fayllar bilan ishlash</li>
-                </ul>
-            </div>
-
-            <!-- 3-Tarif: Zeed Ultra -->
-            <div class="pricing-card">
-                <h3>Zeed Ultra</h3>
-                <p class="storage">🔥 Maksimal quvvat va tezlik</p>
-                <div class="price-box">
-                    <span class="start-label">Boshlangʻich narx</span>
-                    <span class="current-price">59 880 soʻm<span>/oy</span></span>
-                </div>
-                <div class="spacer"></div>
-                <button class="btn-primary">Zeed Ultra olish</button>
-                <ul class="features">
-                    <li>✦ <b>Eng kuchli neyrotarmoq</b></li>
-                    <li>✓ <b>5x Maksimal tezlik</b><br>Murakkab topshiriqlar va kodlarni lahzada bajarish</li>
-                    <li>✓ <b>Eksklyuziv rasm va video modellari</b><br>Ultra-realistik kontent yaratish</li>
-                    <li>✓ <b>Prioritetli server</b><br>Yuqori yuklama paytida ham to'xtovsiz ishlash</li>
+                    <li>✓ <b>2x Tezroq javoblar</b></li>
                 </ul>
             </div>
         </div>
     </section>
 
-    <!-- Chat JavaScript Kodlari -->
+    <!-- Chat JavaScript kodi -->
     <script>
-        function sendMessage() {
+        const API_KEY = "AQ.Ab8RN6Jb1nValB1Po-2AT62cVIVv6c5Z1Fnb5tXX2ImXSOFzcQ";
+
+        async function sendMessage() {
             const input = document.getElementById('userInput');
             const messageText = input.value.trim();
             if (messageText === '') return;
 
             const chatBox = document.getElementById('chatBox');
 
-            // Foydalanuvchi xabarini qo'shish
+            // Foydalanuvchi xabari
             const userMsg = document.createElement('div');
             userMsg.className = 'message user-message';
             userMsg.textContent = messageText;
@@ -126,20 +86,46 @@
             input.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // AI Javobi (Simulyatsiya)
-            setTimeout(() => {
-                const aiMsg = document.createElement('div');
-                aiMsg.className = 'message ai-message';
-                aiMsg.innerHTML = '<b>Zeed AI:</b> Sizning "' + messageText + '" so\'rovingiz qabul qilindi!';
-                chatBox.appendChild(aiMsg);
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 800);
+            // Kutish ko'rsatkichi
+            const aiMsg = document.createElement('div');
+            aiMsg.className = 'message ai-message';
+            aiMsg.innerHTML = '<i>Zeed AI o\'ylamoqda...</i>';
+            chatBox.appendChild(aiMsg);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            try {
+                // Gemini API so'rovi
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json' 
+                    },
+                    body: JSON.stringify({ 
+                        contents: [{ 
+                            parts: [{ text: messageText }] 
+                        }] 
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    const replyText = data.candidates[0].content.parts[0].text;
+                    aiMsg.innerHTML = '<b>Zeed AI:</b> ' + replyText.replace(/\n/g, '<br>');
+                } else if (data.error) {
+                    aiMsg.innerHTML = '<b>Zeed AI:</b> Xatolik: ' + (data.error.message || 'API kalitda muammo bor');
+                } else {
+                    aiMsg.innerHTML = '<b>Zeed AI:</b> Javob olib bo\'lmadi.';
+                }
+            } catch (error) {
+                aiMsg.innerHTML = '<b>Zeed AI:</b> Server bilan bog\'lanishda xatolik yuz berdi.';
+            }
+
+            chatBox.scrollTop = chatBox.scrollHeight;
         }
 
         function handleKeyPress(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
+            if (e.key === 'Enter') sendMessage();
         }
 
         function scrollToChat() {
