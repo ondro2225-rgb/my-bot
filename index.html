@@ -72,7 +72,6 @@
 
             const chatBox = document.getElementById('chatBox');
 
-            // Foydalanuvchi xabari
             const userMsg = document.createElement('div');
             userMsg.className = 'message user-message';
             userMsg.textContent = messageText;
@@ -81,29 +80,30 @@
             input.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Kutish ko'rsatkichi
             const aiMsg = document.createElement('div');
             aiMsg.className = 'message ai-message';
             aiMsg.innerHTML = '<i>Zeed AI o\'ylamoqda...</i>';
             chatBox.appendChild(aiMsg);
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Xatolarsiz ishlaydigan aqlli javob mexanizmi
+            // Xatosiz, darhol javob beruvchi tizim
             setTimeout(() => {
-                let reply = "Tushundim! Bu juda qiziq mavzu. Zeed AI sizga bu borada yordam berishga tayyor.";
-                
+                let reply = "Ajoyib savol! Zeed AI sizga har doim yordam berishga tayyor.";
                 const lower = messageText.toLowerCase();
-                if (lower.includes('salom') || lower.includes('assalomu')) {
-                    reply = "Salomatmisiz! Bugun sizga qanday yordam bera olaman?";
-                } else if (lower.includes('isming') || lower.includes('kim')) {
-                    reply = "Men — Zeed AI, sizning shaxsiy sun'iy intellekt yordamchingizman!";
-                } else if (lower.includes('kod') || lower.includes('html')) {
-                    reply = "Albatta, veb-dasturlash va HTML/CSS bo'yicha istalgan savolingizni berishingiz mumkin.";
+
+                if (lower.includes('salom') || lower.includes('assalom')) {
+                    reply = "Assalomu alaykum! Xush kelibsiz. Sizga qanday yordam bera olaman?";
+                } else if (lower.includes('kim') || lower.includes('isming')) {
+                    reply = "Men Zeed AI man — sizning shaxsiy sun'iy intellekt yordamchingizman!";
+                } else if (lower.includes('oyun') || lower.includes('o\'yin') || lower.includes('game')) {
+                    reply = "O'yinlar haqida gaplashamizmi? PUBG, Mobile Legends yoki FC Mobile — qaysi biri sizga yoqadi?";
+                } else if (lower.includes('youtube') || lower.includes('kanal')) {
+                    reply = "YouTube kanal ochish juda ajoyib g'oya! Bolalar uchun kontent va o'yin videolari hozir juda ommabop.";
                 }
 
                 aiMsg.innerHTML = '<b>Zeed AI:</b> ' + reply;
                 chatBox.scrollTop = chatBox.scrollHeight;
-            }, 800);
+            }, 500);
         }
 
         function handleKeyPress(e) {
